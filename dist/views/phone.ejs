@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>登陆</title>
+    <link rel="stylesheet" href="/website/libs/reset.css">
+    <link rel="stylesheet" href="/website/libs/bootstrap.min.css">
+    <style>
+        .container {
+            padding-top: 16rem;
+            position: relative;
+        }
+
+        .logo {
+            position: absolute;
+            left: 50%;
+            top: 4rem;
+            transform: translateX(-50%);
+            width: 8rem;
+            height: 8rem;
+            background: red url(/website/images/logo.jpg) no-repeat center;
+            background-size: contain;
+            border: 1px solid #999;
+            border-radius: 50%;
+        }
+
+        label {
+            font-size: 1.45rem;
+        }
+
+        .form-control {
+            font-size: 1.45rem;
+            height: 4rem;
+            line-height: 1.2;
+        }
+
+        /* 登陆失败 */
+
+        .wrong {
+            color: #d51719;
+            font-size: 1.12rem;
+        }
+
+        .btn-success {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container" role="form">
+    <div class="logo"></div>
+
+    <form class="form" role=form method="post" action="/auth">
+        <div class="form-group">
+            <label for="username">用户名：</label>
+            <input type="tel" class="form-control" name="username" id="account" placeholder="请输入账号">
+        </div>
+        <div class="form-group">
+            <label for="password">密码：</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码">
+        </div>
+        <% if(message){ %>
+        <p class="wrong">账号或密码错误！请重新输入</p>
+        <% } %>
+        <button type="submit" class="btn btn-success btn-block btn-lg">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+    </form>
+</div>
+
+</body>
+
+</html>

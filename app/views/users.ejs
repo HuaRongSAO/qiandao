@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>成员信息</title>
+    <!-- <link rel="alternate icon" type="image/png" href="assets/i/favicon.png"> -->
+    <link rel="stylesheet" href="/system/libs/bootstrap.min.css">
+    <link rel="stylesheet" href="/system/css/members.css">
+    <link href="//cdn.bootcss.com/layer/3.0.1/skin/default/layer.min.css" rel="stylesheet">
+</head>
+
+<body>
+<% include layout/fixTop.ejs %>
+<!-- <div class="space-h50"></div> -->
+<div id="wrap">
+    <!-- 侧边栏开始 -->
+    <% include layout/leftNav.ejs %>
+    <!-- 侧边栏结束 -->
+    <!-- 正文开始 -->
+    <div class="main">
+        <!-- 路径导航 -->
+        <ol class="breadcrumb">
+            <li class="active">成员信息</li>
+        </ol>
+        <!-- 显示table的详情 -->
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>用户名</th>
+                <th>科室</th>
+                <th>职称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for (var i = 0;i < users.length;i++){
+                if(users[i].role == 0) continue
+            %>
+            <tr>
+                <td><%= users[i].work_number %></td>
+                <td><%= users[i].username %></td>
+                <td><%= users[i].department %></td>
+                <!--<td><%= users[i].job %></td>-->
+                <td><%= users[i].jobname %></td>
+                <td>
+                    <!--<button key="<%= users[i]._id %>" class=" find-btn btn btn-link btn-sm"><i-->
+                                <!--class="glyphicon glyphicon-search"></i> 查看-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>-->
+                    <button key="<%= users[i]._id %>" class="delete-user btn btn-link btn-sm"><i
+                                class="glyphicon glyphicon-trash"></i> 删除
+                    </button>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+        <!-- 所有页码 -->
+        <div class="btn-toolbar text-center">
+            <div id="pagebar" class="btn-group btn-group-md"></div>
+        </div>
+    </div>
+</div>
+<script src="/system/libs/jquery-2.1.4.js"></script>
+<script src="/system/libs/bootstrap.min.js"></script>
+<script src="/system/libs/jquery.pagination.js"></script>
+<script src="//cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+<script>
+    $(function () {
+        $('.find-btn').click(function () {
+            var userid = $(this).attr('key');
+            var _this = $(this);
+            console.log('clink')
+            $.get("/admin/users/find/" + userid, function (result) {
+                if (result.state) {
+                    layer.msg(result.msg, {icon: 1});
+                    console.info(result.user)
+                    return
+                }
+                layer.msg(result.msg, {icon: 2});
+            })
+        })
+
+        $('.delete-user').click(function () {
+            var userid = $(this).attr('key');
+            var _this = $(this)
+            layer.confirm('确定删除该用户？', {
+                btn: ['删除', '取消']
+            }, function () {
+                $.get("/admin/users/remove/" + userid, function (result) {
+                    if (result.state) {
+                        layer.msg(result.msg, {icon: 1});
+                        _this.parent().parent().remove();
+                        return
+                    }
+                    layer.msg(result.msg, {icon: 2});
+                });
+            }, function () {
+                return
+            });
+        })
+
+        var URL = location.href;//初始值
+        $('#pagebar').pagination({
+            totalData: <%= count %>,//总数据条数
+            showData: 20,//每页数据条数
+            current: <%= page %>,//当前页
+            jump: false,//跳转
+            coping: true,//开启首页尾页
+            homePage: '首页',
+            endPage: '末页',
+            prevContent: '上页',
+            nextContent: '下页',
+            callback: function (obj) {
+                //添加hash值
+                var index = obj.getCurrent();//参数为当前页
+                var u = URL.split('?');
+                console.log(u)
+                location.href = u[0] + '?page=' + index;
+            }
+        });
+
+    })
+</script>
+
+</body>
+
+</html>

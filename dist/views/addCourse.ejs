@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>新建课程</title>
+    <link rel="stylesheet" href="/system/libs/bootstrap.min.css">
+    <link rel="stylesheet" href="/system/libs/bootstrap-fileinput.min.css">
+    <link rel="stylesheet" href="/system/libs/jquery.trumbowyg.css">
+    <link href="//cdn.bootcss.com/layer/3.0.1/skin/default/layer.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/system/css/addCourse.css">
+    <style>
+        .trumbowyg-box {
+            margin-left: 0;
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+<% include layout/fixTop.ejs %>
+<!-- <div class="space-h50"></div> -->
+<div id="wrap">
+    <!-- 侧边栏开始 -->
+    <% include layout/leftNav.ejs %>
+    <!-- 侧边栏结束 -->
+    <!-- 正文开始 -->
+    <div class="main container">
+        <!-- 路径导航 -->
+        <ol class="breadcrumb">
+            <li class="active">新建课程</li>
+        </ol>
+        <!-- 上传按钮组件 -->
+        <!--<form  action="/tasks/new" enctype="multipart/form-data" method="post">-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <!-- h3标签原是label标签 -->
+                    <label>选择文件：</label>
+                    <!-- 如果需要文件多选,只需要在input标签加属性 multiple -->
+                    <input name="file" id="upload"
+                           class="file" type="file"
+                           data-show-caption="true"
+                           data-show-upload="false"
+                           data-show-preview="false"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>课程名称：</label>
+                    <input name="title" type="text" class="form-control course-title">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <label>课程描述：</label>
+                <div id="editor" name="descript">
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 50px;">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label style="margin-left: 15px;">设置起始日期：&nbsp;&nbsp;</label>
+                    <input name="startDate" class="form-control" type="text" id="start-date">
+                </div>
+
+                <div class="form-group">
+                    <label style="margin-left: 15px;">设置结束日期：&nbsp;&nbsp;</label>
+                    <input name="endDate" class="form-control" type="text" id="end-date">
+                </div>
+
+                <button id="confirm" class="btn btn-success" style="margin-left: 45px;" data-loading-text="正在发布...">
+                    确认上传并发布
+                </button>
+            </div>
+        </div>
+        <!--</form>-->
+    </div>
+</div>
+<script src="/system/libs/jquery-2.1.4.js"></script>
+<script src="/system/libs/bootstrap.min.js"></script>
+<script src="/system/libs/bootstrap-uploadfile.min.js"></script>
+<script src="/system/libs/bootstrap-language-zh.js"></script>
+<script src="/system/libs/jquery.trumbowyg.js"></script>
+<script src="/system/libs/jquery.trumbowyg.lang.zh_cn.js"></script>
+<script src="//cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+<script>
+    $('#editor').trumbowyg({
+        lang: 'zh_cn'
+    });
+</script>
+<script src="/system/libs/laydate.js"></script>
+<script>
+    laydate({
+        elem: '#start-date'
+    });
+    laydate({
+        elem: '#end-date'
+    });
+</script>
+<script src="/system/libs/button.js"></script>
+<script>
+    $(function () {
+        $('#confirm').click(function () {
+
+            var title = $('.course-title').val();
+            var descript = $('#editor').html();
+            var startDate = $('#start-date').val();
+            var endDate = $('#end-date').val();
+            var data = new FormData();
+            files = $("#upload")[0].files;
+            var filepath = $("#upload").val()
+            var extStart = filepath.lastIndexOf(".");
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            if (ext == ".mp4" || ext == ".MP4" || ext == ".pdf" || ext == ".PDF") {
+            }else {
+                layer.msg('只允许上传mp4和pdf文件');
+                return false
+            }
+            if (!title) {
+                layer.msg('请完善课程名称！');
+                $('.course-title').parent().addClass('has-error')
+                return false
+            }
+            if (!startDate) {
+                layer.msg('请完善开始时间！');
+                $('#start-date').parent().addClass('has-error')
+                return false
+            }
+            if (!endDate) {
+                layer.msg('请完善结束时间！');
+                $('#end-date').parent().addClass('has-error')
+                return false
+            }
+
+
+            if (files) {
+                data.append("file", files[0]);
+                data.append("title", title);
+                data.append("descript", descript);
+                data.append("start", startDate);
+                data.append("end", endDate);
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: '/admin/tasks/new',
+                    data: data,
+                    contentType: false,
+                    processData: false,
+                    success: function (data, textStatus) {
+                        layer.msg(data.msg, {icon: 4});
+                        setTimeout(function () {
+                            window.location.href = '/admin'
+                        }, 1000)
+                    }
+                })
+            }
+        })
+    })
+</script>
+</body>
+
+</html>

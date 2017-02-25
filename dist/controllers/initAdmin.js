@@ -1,0 +1,58 @@
+'use strict';
+
+var _userModel = require('./../models/userModel');
+
+var _userModel2 = _interopRequireDefault(_userModel);
+
+var _db = require('./../models/db');
+
+var _db2 = _interopRequireDefault(_db);
+
+var _users = require('./users.json');
+
+var _users2 = _interopRequireDefault(_users);
+
+var _md = require('md5');
+
+var _md2 = _interopRequireDefault(_md);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _db2.default)();
+
+var admin = (0, _userModel2.default)({
+    username: 'admin',
+    password: (0, _md2.default)('123456'),
+    work_number: 1,
+    role: 0
+});
+
+// save the user
+admin.save().then(function (doc) {
+    console.log('创建成功');
+    console.log(doc);
+}).catch(function (err) {
+    console.log(err);
+});
+
+// console.log(users)
+for (var i = 0; i < _users2.default.length; i++) {
+    (0, _userModel2.default)({
+        username: _users2.default[i].username,
+        password: (0, _md2.default)('123456'),
+        work_number: i,
+        department: _users2.default[i].department,
+        birthday: _users2.default[i].birthday,
+        job: _users2.default[i].job,
+        jobname: _users2.default[i].jobname,
+        role: 2,
+        number: i,
+        created_at: new Date(),
+        updated_at: new Date()
+    }).save().then(function (doc) {
+        console.log('创建成功');
+        console.log(doc);
+    }).catch(function (err) {
+        console.log(err);
+    });
+}

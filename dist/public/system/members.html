@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>成员信息</title>
+    <!-- <link rel="alternate icon" type="image/png" href="assets/i/favicon.png"> -->
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="css/members.css">
+</head>
+
+<body>
+    <div id="topFix">
+        <strong>Admin</strong>
+        <small>后台管理系统</small>
+        <div class="text">
+            <span>
+                <i class="glyphicon glyphicon-user"></i> 你好，管理员A
+            </span>
+            <button class="btn btn-primary btn-sm logout">
+                <i class="glyphicon glyphicon-off"></i> 退出
+            </button>
+        </div>
+    </div>
+    <!-- <div class="space-h50"></div> -->
+    <div id="wrap">
+        <!-- 侧边栏开始 -->
+        <div class="sidebar">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
+                <li class="active">
+                    <a href="#list1" data-toggle="collapse">课程管理</a>
+                    <ol id="list1" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="allCourses.html">全部课程</a></li>
+                        <li><a href="addCourse.html">新建课程</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list2" data-toggle="collapse">用户管理</a>
+                    <ol id="list2" class="nav nav-pills nav-stacked collapse in">
+                        <li class="bg-info"><a href="javascript:;">成员信息</a></li>
+                        <!-- <li><a href="#">编辑</a></li> -->
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <!-- 侧边栏结束 -->
+        <!-- 正文开始 -->
+        <div class="main">
+            <!-- 路径导航 -->
+            <ol class="breadcrumb">
+                <li class="active">成员信息</li>
+            </ol>
+            <!-- 显示table的详情 -->
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>用户名</th>
+                        <th>账号</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>用户1</td>
+                        <td>c123</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>用户2</td>
+                        <td>c123</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>用户3</td>
+                        <td>c123</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>用户N</td>
+                        <td>c123</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>用户N</td>
+                        <td>b456</td>
+                        <td>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>
+                            <button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 所有页码 -->
+            <div class="btn-toolbar text-center">
+                <div id="pagebar" class="btn-group btn-group-md"></div>
+            </div>
+        </div>
+    </div>
+    <script src="libs/jquery-2.1.4.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    <script src="libs/jquery.pagination.js"></script>
+    <script>
+    $(function() {
+        // 事件委托-查看
+        /*$('table').on('click', '.check', function() {
+            console.log($(this).index())
+        });*/
+
+        // 事件委托-删除
+        /*$('table').on('click', '.delete', function() {
+            //询问框
+            layer.confirm('您是如何看待前端开发？', {
+                btn: ['重要', '奇葩'] //按钮
+            }, function() {
+                layer.msg('的确很重要', {
+                    icon: 1
+                });
+            }, function() {
+                layer.msg('也可以这样', {
+                    time: 20000, //20s后自动关闭
+                    btn: ['明白了', '知道了']
+                });
+            });
+        });*/
+        $('#pagebar').pagination({
+            totalData: 40, //总数据条数
+            showData: 20, //每页数据条数
+            coping: true, //首页和尾页
+            homePage: '首页',
+            endPage: '末页',
+            prevContent: '上页',
+            nextContent: '下页'
+        });
+
+    })
+    </script>
+    <script>
+    $(function() {
+        // 删除一条表格信息
+
+    })
+    </script>
+</body>
+
+</html>

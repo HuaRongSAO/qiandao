@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>课程</title>
+    <!-- <link rel="alternate icon" type="image/png" href="assets/i/favicon.png"> -->
+    <link rel="stylesheet" href="/website/libs/reset.css">
+    <link rel="stylesheet" href="/website/libs/bootstrap.min.css">
+    <link rel="stylesheet" href="/website/css/article.css">
+
+</head>
+
+<body>
+<header>
+    <div class="logo"></div>
+    <div id="user">
+        <span id="username"><%= user.username %></span>，欢迎你！
+    </div>
+</header>
+<%
+Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+if(task._id){ %>
+<div class="container">
+    <h1><%= task.title %></h1>
+    <p class="tips">
+        温馨提示：本课程将于
+        <span id="endDate"><%= task.end.Format("yyyy-MM-dd") %></span> 结束,逾期将不记录学习，请即时完成！
+    </p>
+    <p class="article">
+        <%- task.content %>
+    </p>
+    <div class="tab">
+        <div class="item active">课程内容</div>
+        <div class="item">查看完成情况</div>
+    </div>
+    <!-- 内容 -->
+    <div class="block">
+        <%
+
+        if (task.file){
+        if(task.file.indexOf('.mp4') >= 0){
+        %>
+        <!-- video -->
+        <div>
+            <video width="100%" height="auto" preload="metadata" controls>
+                <source src="<%= task.file %>" type="video/mp4">
+            </video>
+            <a class="download" download="(xxx).mp4" href="<%= task.file %>">下载此视频</a>
+        </div>
+        <%
+        }
+        if(task.file.indexOf('.pdf') >= 0 || task.file.indexOf('.PDF') >= 0){
+        %>
+        <!-- pdf -->
+        <div>
+            <a id="preview" onclick="window.open('/website/preview/viewer.html?file=<%= task.file %>');">
+                <span>点击预览课件</span>
+            </a>
+            <a class="download" download="(xxx).pdf" href="<%= task.file %>">下载此pdf文件</a>
+        </div>
+        <%
+        }
+
+        } %>
+
+        <div class="complete" style="padding-bottom: 15px">
+            <span>点击确认后即完成</span>
+            <div class="btn btn-danger btn-block btn-lg">已完成观看，请点此确认</div>
+            <i></i>
+        </div>
+
+    </div>
+
+
+    <table class="block table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>用户名</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%
+            var isFinish = false;
+            var w = [];
+            var n = [];
+            for (var i = 0; i < users.length; i++) {
+                var obj = users[i];
+                var uid = obj._id;
+                var isExist = false;
+                for (var j = 0; j < finish.length; j++) {
+                    if (finish[j].user_id == user._id) {
+                        isFinish = true
+                    }
+                    var fid = finish[j].user_id;
+                    if (fid == uid) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (!isExist) {
+                    n.push(obj);
+                }
+            }
+            for (var i = 0; i < users.length; i++) {
+                for (var j = 0; j < finish.length; j++) {
+                    if (users[i]._id == finish[j].user_id) {
+                        w.push(users[i])
+                    }
+                }
+            }
+
+        for(var i = 0;i < w.length;i++){
+        %>
+        <tr>
+            <td><%= w[i].username %></td>
+            <td>完成</td>
+        </tr>
+        <%
+        }
+        for(var i = 0;i < n.length;i++){
+        %>
+        <tr>
+            <td><%= n[i].username %></td>
+            <td key="<%= n[i].username %>" class="false">未完成</td>
+        </tr>
+        <%
+        }
+        %>
+        </tbody>
+    </table>
+</div>
+<% }else{
+%>
+<div class="container">
+    <p class="text-center text-danger">暂时还没有课程！</p>
+</div>
+    <%
+    } %>
+    <script src="/website/libs/zepto.min.js"></script>
+    <script>
+        $(function () {
+
+            // 切换
+            $('.item').on('click', function () {
+                var index = $(this).index();
+
+                $('.item').removeClass('active');
+                $(this).addClass('active');
+
+                // 内容切换
+                $('.block').hide();
+                if (index === 1) {
+                    $('table').css('display', 'table');
+                } else {
+                    $('.block').eq(0).show();
+                }
+            });
+
+            (function () {
+                var isFinish ;
+                <%if(isFinish){ %>
+                    var isFinish = <%= isFinish %>
+                    <%}%>
+                if (isFinish) {
+                    $('.btn-danger').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
+
+                    $('.complete i').show();
+                }
+                $('.btn-danger').on('click', function () {
+                    $('td[key="<%= user.username %>"]').text('完成').removeClass('false')
+                    $('.btn-danger').off('click')
+                    if (isFinish) return;
+                    // ajax成功
+                    $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
+                    $.get("/user/article/finish/<%= task._id %>", function (result) {
+                        if (result.state) {
+                            $('.complete i').show();
+                        }
+                    });
+
+                })
+            })();
+
+        })
+    </script>
+</body>
+
+</html>

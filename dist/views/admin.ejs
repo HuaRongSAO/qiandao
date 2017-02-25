@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>全部课程</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="system/css/allCourses.css">
+    <link href="//cdn.bootcss.com/layer/3.0.1/skin/default/layer.min.css" rel="stylesheet">
+</head>
+
+<body>
+<% include layout/fixTop.ejs %>
+<!-- <div class="space-h50"></div> -->
+<div id="wrap">
+    <!-- 侧边栏开始 -->
+
+    <% include layout/leftNav.ejs %>
+
+    <!-- 侧边栏结束 -->
+    <!-- 正文开始 -->
+    <div class="main">
+        <!-- 路径导航 -->
+        <ol class="breadcrumb">
+            <li class="active">全部课程</li>
+        </ol>
+        <!-- 显示table的详情 -->
+        <div>
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>课程名称</th>
+                    <th>状态</th>
+                    <th>发布日期</th>
+                    <th>截止日期</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+                Date.prototype.Format = function (fmt) { //author: meizz
+                    var o = {
+                        "M+": this.getMonth() + 1, //月份
+                        "d+": this.getDate(), //日
+                        "h+": this.getHours(), //小时
+                        "m+": this.getMinutes(), //分
+                        "s+": this.getSeconds(), //秒
+                        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                        "S": this.getMilliseconds() //毫秒
+                    };
+                    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                    for (var k in o)
+                        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                    return fmt;
+                }
+                %>
+                <% var d = new Date().getTime();
+                for(var i = 0;i < tasks.length;i++){
+                %>
+                <tr>
+                    <td><%= i %></td>
+                    <td><%= tasks[i].title %></td>
+                    <td>
+                        <% if (d <= (tasks[i].end).getTime()){ %>
+                        <span class="label label-danger">进行中</span>
+                        <% } else { %>
+
+                        <span class="label label-primary disabled">结束了</span>
+                        <% } %>
+
+                    </td>
+
+                    <td><%= tasks[i].created_at.Format("yyyy-MM-dd") %></td>
+                    <td><%= tasks[i].end.Format("yyyy-MM-dd") %></td>
+                    <td>
+                        <!--<botton key="<%= tasks[i]._id %>" class="find-btn btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</botton>-->
+                        <botton key="<%= tasks[i]._id %>" class="delete-btn btn btn-link btn-sm "><i
+                                    class="glyphicon glyphicon-trash"></i> 删除</botton>
+                    </td>
+                </tr>
+                <% } %>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- 所有页码 -->
+        <div class="btn-toolbar text-center">
+            <div id="pagebar" class="btn-group btn-group-md"></div>
+        </div>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="system/libs/jquery.pagination.js"></script>
+<script src="//cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+<script>
+    $(function () {
+
+        $('.find-btn').click(function () {
+            var userid = $(this).attr('key');
+            var _this = $(this);
+            $.get("/admin/tasks/find/" + userid, function (result) {
+                if (result.state) {
+                    layer.msg(result.msg, {icon: 1});
+                    console.info(result.task)
+                    return
+                }
+                layer.msg(result.msg, {icon: 2});
+            })
+        })
+
+        $('.delete-btn').click(function () {
+            var userid = $(this).attr('key');
+            var _this = $(this)
+            layer.confirm('确定删除该课程？', {
+                btn: ['删除','取消']
+            }, function(){
+                $.get("/admin/tasks/remove/"+userid, function(result){
+                    if(result.state){
+                        layer.msg(result.msg, {icon: 1});
+                        _this.parent().parent().remove();
+                        return
+                    }
+                    layer.msg(result.msg, {icon: 2});
+                });
+            }, function(){
+                return
+            });
+        })
+
+
+        var URL = location.href;//初始值
+        var count = <%= count %>;
+        var page = <%= page %>;
+        $('#pagebar').pagination({
+            totalData: count,//总数据条数
+            showData: 20,//每页数据条数
+            current: page,//当前页
+            jump: false,//跳转
+            coping: true,//开启首页尾页
+            homePage: '首页',
+            endPage: '末页',
+            prevContent: '上页',
+            nextContent: '下页',
+            callback: function (obj) {
+                //添加hash值
+                var index = obj.getCurrent();//参数为当前页
+                var u = URL.split('?');
+                location.href = u[0] + '?page=' + index;
+            }
+        });
+
+    })
+</script>
+</body>
+
+</html>

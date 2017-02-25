@@ -1,0 +1,36 @@
+{
+  "name": "qiandao",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./app/bin/www --exec babel-node",
+    "dist": "gulp dist"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "core-js": "^2.4.1",
+    "debug": "~2.2.0",
+    "ejs": "~2.5.2",
+    "express": "~4.14.0",
+    "express-session": "^1.14.2",
+    "formidable": "^1.0.17",
+    "md5": "^2.2.1",
+    "mongoose": "^4.7.7",
+    "morgan": "~1.7.0",
+    "mpromise": "^0.5.5",
+    "nodemon": "^1.11.0",
+    "serve-favicon": "~2.3.0",
+    "silly-datetime": "^0.1.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-sourcemaps": "^2.4.0"
+  }
+}

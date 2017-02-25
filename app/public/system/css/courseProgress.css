@@ -1,0 +1,21 @@
+@import url(common.css);
+
+/*上下篇课程*/
+#top-btn{
+    position: absolute;
+    right: 20px;
+    top: 50px;
+}
+
+/* 发布/截止日期*/
+.date{
+    margin-bottom: 4px;
+}
+.date span{
+    padding: 0 20px;
+}
+/* 通知气泡的样式 */
+/* .badge{
+    background-color: #d9534f;;
+    color: #fff;
+} */
