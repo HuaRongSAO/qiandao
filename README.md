@@ -3,7 +3,6 @@ node v6 以上
 
 mongodb v3 以上
 
-mp2
 
 # 运行
 
@@ -17,7 +16,7 @@ mp2
 
 安装依赖 ： cnpm i
 
-运行编译： cnpm start dist
+运行编译： cnpm run dist
 
 p部署到生产环境服务器： pm2 start /dist/bin/www
  
