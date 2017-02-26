@@ -53,7 +53,6 @@
                 <li class="active">全部课程</li>
             </ol>
             <!-- 显示table的详情 -->
-            <div>
                 <table class="table table-striped table-bordered table-hover table-condensed">
                     <thead>
                         <tr>
@@ -308,7 +307,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
             <!-- 所有页码 -->
             <div class="btn-toolbar text-center">
                 <div id="pagebar" class="btn-group btn-group-md"></div>
@@ -322,25 +320,21 @@
     <script>
     $(function() {
         // 事件委托-查看
-        $('table').on('click', '.check', function() {
-            console.log($(this).index())
-        });
+        $('table').on('click', '.check', function(e) {
+            var nowIndex = $(".check").index(this);//当前按钮的索引
+            
+            window.location.href = 'courseProgress.html';//跳转
+            alert(nowIndex);
+        })  // 事件委托-删除
+            .on('click', '.delete', function() {
+                var nowIndex = $(".delete").index(this);//当前按钮的索引  
 
-        // 事件委托-删除
-        $('table').on('click', '.delete', function() {
-            /*//询问框
-            layer.confirm('您是如何看待前端开发？', {
-                btn: ['重要', '奇葩'] //按钮
-            }, function() {
-                layer.msg('的确很重要', {
-                    icon: 1
-                });
-            }, function() {
-                layer.msg('也可以这样', {
-                    time: 20000, //20s后自动关闭
-                    btn: ['明白了', '知道了']
-                });
-            });*/
+                if (window.confirm("是否删除(index="+nowIndex+")的数据")) {
+                    // ajax
+
+                    alert("删除成功！");
+                    location.reload();
+                }
         });
 
         // 参考http://www.jq22.com/yanshi5697

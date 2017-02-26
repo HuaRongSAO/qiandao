@@ -21,9 +21,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
     <title>课程</title>
-    <!-- <link rel="alternate icon" type="image/png" href="assets/i/favicon.png"> -->
     <link rel="stylesheet" href="/website/libs/reset.css">
-    <link rel="stylesheet" href="/website/libs/bootstrap.min.css">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/website/css/article.css">
 
 </head>
@@ -33,6 +32,7 @@
     <div class="logo"></div>
     <div id="user">
         <span id="username"><%= user.username %></span>，欢迎你！
+        <a href="/user/out"><span class="logout">退 出</span></a>
     </div>
 </header>
 <%
@@ -142,19 +142,20 @@ if(task._id){ %>
                 }
             }
 
-        for(var i = 0;i < w.length;i++){
-        %>
-        <tr>
-            <td><%= w[i].username %></td>
-            <td>完成</td>
-        </tr>
-        <%
-        }
+
         for(var i = 0;i < n.length;i++){
         %>
         <tr>
             <td><%= n[i].username %></td>
             <td key="<%= n[i].username %>" class="false">未完成</td>
+        </tr>
+        <%
+        }
+        for(var i = 0;i < w.length;i++){
+        %>
+        <tr>
+            <td><%= w[i].username %></td>
+            <td>完成</td>
         </tr>
         <%
         }
@@ -169,7 +170,7 @@ if(task._id){ %>
 </div>
     <%
     } %>
-    <script src="/website/libs/zepto.min.js"></script>
+<script src="//cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
     <script>
         $(function () {
 
@@ -201,10 +202,12 @@ if(task._id){ %>
                 }
                 $('.btn-danger').on('click', function () {
                     $('td[key="<%= user.username %>"]').text('完成').removeClass('false')
+
                     $('.btn-danger').off('click')
                     if (isFinish) return;
                     // ajax成功
                     $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
+
                     $.get("/user/article/finish/<%= task._id %>", function (result) {
                         if (result.state) {
                             $('.complete i').show();

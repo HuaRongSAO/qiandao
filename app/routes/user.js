@@ -8,13 +8,11 @@ let userRouter = express.Router()
 userRouter.get('/article/', function (req, res, next) {
 
     var p1 = new Promise(function (resolve, reject) {
-        console.log('task')
         findNewestTask().then(function (task) {
             resolve(task);
         })
     });
     var p2 = new Promise(function (resolve, reject) {
-        console.log('users')
         let json = {department: req.session.user.department}
         findUser(json).then(function (users) {
             resolve(users)
@@ -22,7 +20,6 @@ userRouter.get('/article/', function (req, res, next) {
     });
 
     Promise.all([p1, p2]).then(function (results) {
-        console.log(results)
         let task = results[0];
         if(task == null){
             task = {}
@@ -47,9 +44,13 @@ userRouter.get('/article/finish/:taskid', function (req, res) {
         department: req.session.user.department,
         user_id: req.session.user._id
     }).then(function (task) {
-        console.log(task)
         res.json({state: true, msg: '完成课程'})
     })
+})
+
+userRouter.get('/out',function (req, res)  {
+    req.session.user = '';
+    res.redirect('/')
 })
 
 

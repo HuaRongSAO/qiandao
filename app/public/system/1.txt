@@ -1,0 +1,16 @@
+system文件夹下的改动:
+
+	/images/
+		添加logo.gif图片、删除logo.jpg、替换bg.jpg
+
+	/login.html
+		添加link中favicon
+		删除输入框状态 i标签、class="has-feedback"、 has-success、has-error
+		注释忘记密码
+		添加登陆错误提示(使用visibility:hidden)
+		--拷贝内联样式覆盖原样式
+
+
+* 需要的其他改动:
+		/login.html
+			登陆出错提示

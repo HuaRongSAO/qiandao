@@ -5,7 +5,8 @@ import path from 'path'
 import sd from 'silly-datetime'
 import {findTaskByPage, countTask, deleteTaskById, findTask, creatTask} from './../controllers/taskController'
 import {countUsers, findUsersPage, deleteUser, findUser} from './../controllers/userController'
-
+import setArray from './../controllers/util'
+import {findRelation} from './../controllers/relationController'
 
 let masterRouter = express.Router()
 //管理员页面路由控制
@@ -48,6 +49,68 @@ masterRouter.get('/tasks/find/:taskid', function (req, res, next) {
         res.json({state: false, msg: '没有找到课程！'})
     })
 });
+//课程详细情形
+masterRouter.get('/tasks/info/:taskid', function (req, res, next) {
+    let objectJson = {'_id': req.params.taskid}
+    var p1 = new Promise(function (resolve, reject) {
+        findTask(objectJson).then(function (task) {
+            resolve(task);
+        })
+    });
+    var p2 = new Promise(function (resolve, reject) {
+        findUser().then(function (users) {
+            resolve(users)
+        })
+    });
+
+    Promise.all([p1, p2]).then(function (results) {
+
+        let task = results[0];
+        if (task == null) {
+            task = {}
+        }
+        let users = results[1];
+        let json = {task_id: task[0]._id}
+        findRelation(json).then(function (finish) {
+            let user = {}
+            let a = []//wancheng
+            let b = []//weiwancheng
+            let isSame =false;
+
+            for (let i=0;i<users.length;i++){
+                for(let j=0;j<finish.length;j++){
+                    if(users[i]._id == finish[j].user_id){
+                        isSame = true;
+                        user =users[i]
+                        user.wan = finish[j].created_at
+                        break
+                    }
+                }
+                if(isSame){
+                    a.push(user)
+                    isSame = false
+                }else {
+                    b.push(users[i])
+                }
+            }
+            for(let i in a){
+                console.log(a[i])
+                b.push(a[i]);
+            }
+            console.log(b[b.length-1])
+            return b
+        }).then(function (arr) {
+
+
+            res.render('courseProgress',{users:arr,task:task[0],user:req.session.user})
+        })
+    }).catch(function (r) {
+        console.log(r);
+    });
+
+
+
+});
 //课程页面
 masterRouter.get('/tasks/add', function (req, res, next) {
     res.render('addCourse')
@@ -67,7 +130,7 @@ masterRouter.post('/tasks/new', function (req, res, next) {
             throw err;
         }
         console.log(files)
-        if ( files.file.name) {
+        if (files.file.name) {
             let ttt = sd.format(new Date(), 'YYYYMMDDHHmmss');
             let ran = parseInt(Math.random() * 89999 + 10000);
             let extname = files.file.name;
@@ -138,10 +201,8 @@ masterRouter.get('/users/remove/:userid', function (req, res, next) {
 masterRouter.get('/users/find/:userid', function (req, res, next) {
 
 
-
     let objectJson = {'_id': req.params.userid}
     findUser(objectJson).then(function (user) {
-        console.log(user)
         res.json({state: true, msg: '查找到用户！', user: user})
     }).catch(function (err) {
         res.json({state: false, msg: '删除失败！'})

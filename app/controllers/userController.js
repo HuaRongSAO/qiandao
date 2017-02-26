@@ -16,7 +16,6 @@ function saveUser(json) {
         work_number: 1,
         role: 0
     }).save().then(function (doc) {
-        console.log(doc)
         return doc
     }).catch(function (err) {
         console.log(err)
@@ -35,7 +34,6 @@ function findUser(queryJson) {
 // 查询所有用户
 function findAllUser() {
     return User.find().then(function (doc) {
-        // console.log(doc)
         return doc
     }).catch(function (err) {
         console.log('错误' + err)

@@ -21,11 +21,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
     <title>课程</title>
-    <!-- <link rel="alternate icon" type="image/png" href="assets/i/favicon.png"> -->
+    <link rel="Shortcut Icon" href="images/logo.gif">
     <link rel="stylesheet" href="libs/reset.css">
     <link rel="stylesheet" href="libs/bootstrap.min.css">
     <link rel="stylesheet" href="css/article.css">
-
 </head>
 
 <body>
@@ -41,6 +40,7 @@
     </header>
     <div class="container">
         <h1>二甲双胍：让你也可以活到120岁的“长生药”</h1>
+        <hr>
         <p class="tips">
             温馨提示：本课程将于
             <span id="endDate">2017-01-22 24:00:00</span> 结束,逾期将不记录学习，请即时完成！
@@ -110,28 +110,8 @@
             </tbody>
         </table>
     </div>
-    <!-- 登录弹窗 -->
-    <div class="dialog">
-        <div class="box">
-            <p class="title">登 陆</p>
-            <hr>
-            <div class="form-group">
-                <label for="username">用户名：</label>
-                <input type="text" class="form-control" name="account" id="account" placeholder="请输入账号">
-            </div>
-            <div class="form-group">
-                <label for="password">密码：</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码">
-            </div>
-            <p class="wrong">
-                <span>xx</span>错误！请重新输入
-            </p>
-            <button class="btn btn-success btn-lg signin">登 陆</button>
-            <button class="btn btn-default btn-lg cancle shutdown">取消</button>
-            <i class="shutdown"></i>
-        </div>
-    </div>
-    <script src="/website/libs/zepto.min.js"></script>
+    <script src="libs/zepto.min.js"></script>
+    <script src="libs/fastclick.js"></script>
     <script>
     $(function() {
         // fastclick
@@ -139,15 +119,8 @@
 
         // 登陆弹窗
         $('.login').on('click', function() {
-            // 验证是否已登陆
-            // 未登陆
-            $('.dialog').show();
-
-            // 登陆成功
             $(this).hide();
             $('.greeting').show();
-            // 登陆成功是否重载页面
-            // location.reload();
         });
 
         // 退出
@@ -204,17 +177,6 @@
                 // ...
             })
         })();
-
-        // 关闭登陆窗
-        $('.dialog').on('click', '.shutdown', function() {
-            $('#password').val('');
-            $('.dialog').hide();
-        }).on('touchmove', function(event) {
-            // 阻止默认滚动
-            event.preventDefault();
-        });
-
-        // 
     })
     </script>
 </body>

@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html>
+<%include layout/head.ejs%>
+    <link href="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/css/fileinput.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/Trumbowyg/2.4.3/ui/trumbowyg.min.css" rel="stylesheet">
 
-<head lang="zh-cn">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>新建课程</title>
-    <link rel="stylesheet" href="/system/libs/bootstrap.min.css">
-    <link rel="stylesheet" href="/system/libs/bootstrap-fileinput.min.css">
-    <link rel="stylesheet" href="/system/libs/jquery.trumbowyg.css">
-    <link href="//cdn.bootcss.com/layer/3.0.1/skin/default/layer.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/system/css/addCourse.css">
     <style>
         .trumbowyg-box {
@@ -79,13 +72,13 @@
         <!--</form>-->
     </div>
 </div>
-<script src="/system/libs/jquery-2.1.4.js"></script>
-<script src="/system/libs/bootstrap.min.js"></script>
-<script src="/system/libs/bootstrap-uploadfile.min.js"></script>
-<script src="/system/libs/bootstrap-language-zh.js"></script>
-<script src="/system/libs/jquery.trumbowyg.js"></script>
-<script src="/system/libs/jquery.trumbowyg.lang.zh_cn.js"></script>
-<script src="//cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+
+<% include layout/script.ejs%>
+<script src="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/js/fileinput.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/js/locales/zh.min.js"></script>
+<script src="//cdn.bootcss.com/Trumbowyg/2.4.3/trumbowyg.min.js"></script>
+<script src="//cdn.bootcss.com/Trumbowyg/2.4.3/langs/zh_cn.min.js"></script>
+
 <script>
     $('#editor').trumbowyg({
         lang: 'zh_cn'

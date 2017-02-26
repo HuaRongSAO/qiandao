@@ -9,7 +9,6 @@ function createTaskAndUsers(json) {
         user_id: json.user_id,
         created_at: new Date()
     }).save().then(function (doc) {
-        console.log(doc)
         return doc
     }).catch(function (err) {
         console.log(err)
