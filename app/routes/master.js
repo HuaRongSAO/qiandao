@@ -4,8 +4,8 @@ import fs from 'fs'
 import path from 'path'
 import sd from 'silly-datetime'
 import {findTaskByPage, countTask, deleteTaskById, findTask, creatTask} from './../controllers/taskController'
-import {countUsers, findUsersPage, deleteUser, findUser} from './../controllers/userController'
-import setArray from './../controllers/util'
+import {countUsers, findUsersPage, deleteUser, findUser, updateUser} from './../controllers/userController'
+import md5 from 'md5'
 import {findRelation} from './../controllers/relationController'
 
 let masterRouter = express.Router()
@@ -75,39 +75,38 @@ masterRouter.get('/tasks/info/:taskid', function (req, res, next) {
             let user = {}
             let a = []//wancheng
             let b = []//weiwancheng
-            let isSame =false;
+            let isSame = false;
 
-            for (let i=0;i<users.length;i++){
-                for(let j=0;j<finish.length;j++){
-                    if(users[i]._id == finish[j].user_id){
+            for (let i = 0; i < users.length; i++) {
+                for (let j = 0; j < finish.length; j++) {
+                    if (users[i]._id == finish[j].user_id) {
                         isSame = true;
-                        user =users[i]
+                        user = users[i]
                         user.wan = finish[j].created_at
                         break
                     }
                 }
-                if(isSame){
+                if (isSame) {
                     a.push(user)
                     isSame = false
-                }else {
+                } else {
                     b.push(users[i])
                 }
             }
-            for(let i in a){
+            for (let i in a) {
                 console.log(a[i])
                 b.push(a[i]);
             }
-            console.log(b[b.length-1])
+            console.log(b[b.length - 1])
             return b
         }).then(function (arr) {
 
 
-            res.render('courseProgress',{users:arr,task:task[0],user:req.session.user})
+            res.render('courseProgress', {users: arr, task: task[0], user: req.session.user})
         })
     }).catch(function (r) {
         console.log(r);
     });
-
 
 
 });
@@ -130,7 +129,7 @@ masterRouter.post('/tasks/new', function (req, res, next) {
             throw err;
         }
         console.log(files)
-        if (files.file.name) {
+        if (files.file) {
             let ttt = sd.format(new Date(), 'YYYYMMDDHHmmss');
             let ran = parseInt(Math.random() * 89999 + 10000);
             let extname = files.file.name;
@@ -199,8 +198,6 @@ masterRouter.get('/users/remove/:userid', function (req, res, next) {
     })
 });
 masterRouter.get('/users/find/:userid', function (req, res, next) {
-
-
     let objectJson = {'_id': req.params.userid}
     findUser(objectJson).then(function (user) {
         res.json({state: true, msg: '查找到用户！', user: user})
@@ -209,6 +206,42 @@ masterRouter.get('/users/find/:userid', function (req, res, next) {
     })
 
 });
+masterRouter.get('/password', function (req, res, next) {
+    res.render('password')
+});
+masterRouter.post('/password', function (req, res, next) {
+    console.log(req.body)
+    let oldP = md5(req.body.oldPassword);
+    let newP = md5(req.body.newPassword);
+    let query = {_id: req.session.user._id}
+    let updateJson = {password: newP}
+    console.log(query)
+    console.log(updateJson)
+    if (oldP != req.session.user.password) {
+        res.json({state: false, data: '', msg: '原密码错误！'})
+    }
+    updateUser(query, updateJson).then(function (result) {
+        if (result.nModified == 0) {
+            res.json({state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！'})
+        }
+        res.json({state: true, data: '', msg: '修改成功！'})
+    }).catch(function (err) {
+        res.json({state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！'})
+    })
+});
 
-
+masterRouter.post('/users/password', function (req, res, next) {
+    console.log(req.body)
+    let query = {_id: req.body.uid}
+    let updateJson = {password: md5(req.body.password)}
+    console.log(query + updateJson)
+    updateUser(query, updateJson).then(function (result) {
+        if (result.nModified == 0) {
+            res.json({state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！'})
+        }
+        res.json({state: true, data: '', msg: '修改成功！'})
+    }).catch(function (err) {
+        res.json({state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！'})
+    })
+});
 export default masterRouter

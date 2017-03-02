@@ -1,6 +1,7 @@
 import express from 'express'
+import md5 from 'md5'
 import {findNewestTask} from './../controllers/taskController'
-import {findUser} from './../controllers/userController'
+import {findUser,updateUser} from './../controllers/userController'
 import {findRelation, createTaskAndUsers} from './../controllers/relationController'
 let userRouter = express.Router()
 
@@ -47,10 +48,26 @@ userRouter.get('/article/finish/:taskid', function (req, res) {
         res.json({state: true, msg: '完成课程'})
     })
 })
-
+//退出
 userRouter.get('/out',function (req, res)  {
     req.session.user = '';
     res.redirect('/')
+})
+//修改密码
+
+userRouter.post('/update/:uid',function (req, res)  {
+    let query = {_id:req.params.uid,password:md5(req.body.oldPassword)}
+    let updateJson = {password:md5(req.body.newPassword)}
+
+    updateUser(query,updateJson).then(function (result,resolve) {
+        if(result.nModified == 0) {
+            res.json({state:false,data:'',msg:'原密码错误！请重新输入或者联系管理员修改密码！'})
+        }
+        res.json({state:true,data:'',msg:'修改成功！'})
+    }).catch(function (err) {
+        res.json({state:false,data:'',msg:'原密码错误！请重新输入或者联系管理员修改密码！'})
+    })
+
 })
 
 

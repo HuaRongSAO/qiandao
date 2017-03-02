@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
@@ -109,6 +109,83 @@
                 </tr>
             </tbody>
         </table>
+        <!--课后练习-->
+        <div id="questions">
+            <h3>课后练习</h3>
+            <div>
+                <h4><span>1、</span>请问：1+1=？</h4>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="q1"><span>A) </span>选项1选项1</label>
+                    <label>
+                        <input type="radio" name="q1"><span>B) </span>选项2选项2选项2选项2选项2</label>
+                    <label>
+                        <input type="radio" name="q1"><span>C) </span>选项3选项3选项3选项3</label>
+                    <label>
+                        <input type="radio" name="q1"><span>D) </span>选项4选项4选项4</label>
+                </div>
+            </div>
+            <div>
+                <h4><span>5、</span>请问：1+1=？</h4>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="q2"><span>A) </span>选项1选项1</label>
+                    <label>
+                        <input type="radio" name="q2"><span>B) </span>选项2选项2选项2选项2选项2</label>
+                    <label>
+                        <input type="radio" name="q2"><span>C) </span>选项3选项3选项3选项3</label>
+                    <label>
+                        <input type="radio" name="q2"><span>D) </span>选项4选项4选项4</label>
+                </div>
+            </div>
+            <div>
+                <h4><span>5、</span>请问：1+1=？</h4>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="q3"><span>A) </span>选项1选项1</label>
+                    <label>
+                        <input type="radio" name="q3"><span>B) </span>选项2选项2选项2选项2选项2</label>
+                    <label>
+                        <input type="radio" name="q3"><span>C) </span>选项3选项3选项3选项3</label>
+                    <label>
+                        <input type="radio" name="q3"><span>D) </span>选项4选项4选项4</label>
+                </div>
+            </div>
+            <!--提交按钮-->
+            <div class="answerBtn">
+                <span class="caution">*题目有遗漏，请检查再提交~</span>
+                <div class="btn btn-danger btn-block btn-lg">提 交 答 案</div>
+                <i></i>
+            </div>
+        </div>
+    </div>
+    <!-- 个人中心 -->
+    <div class="user-center"></div>
+    <!-- 弹窗 -->
+    <div id="manage">
+        <div class="container">
+            <h4>个人中心</h4>
+            <h5>- 修改密码 -</h5>
+            <hr>
+            <div class="form-inline">
+                <div class="form-group">
+                    <label>旧密码：</label>
+                    <input type="password" class="form-control" name="" placeholder="旧密码">
+                </div>
+                <div class="form-group">
+                    <label>新密码：</label><span>(必须不少于6位)</span>
+                    <input type="password" class="form-control" name="" placeholder="新密码">
+                </div>
+                <div class="form-group">
+                    <label>再输入一次新密码：</label>
+                    <input type="password" class="form-control" name="" placeholder="重复新密码">
+                </div>
+            </div>
+            <div class="pull-right">
+                <div class="btn btn-primary">确认修改</div>
+                <div class="btn btn-default">取消</div>
+            </div>
+        </div>
     </div>
     <script src="libs/zepto.min.js"></script>
     <script src="libs/fastclick.js"></script>
@@ -132,41 +209,27 @@
         // 切换
         $('.item').on('click', function() {
             var index = $(this).index();
+            var blocks = $('.block');
 
             $('.item').removeClass('active');
             $(this).addClass('active');
 
             // 内容切换
-            $('.block').hide();
+            blocks.hide();
             if (index === 1) {
                 /* 未登录弹窗 */
 
                 /* 已登录且成功*/
                 $('table').css('display', 'table');
             } else {
-                $('.block').eq(0).show();
+                blocks.eq(0).show();
             }
         });
-
-        // 文件下载.    *需要后台
-        /*(function() {
-            function downloadFile(fileName, content) {
-                var aLink = document.createElement('a');
-                var blob = new Blob([content]);
-                var evt = document.createEvent("HTMLEvents");
-                evt.initEvent("click", false, false);
-                aLink.download = fileName;
-                aLink.href = URL.createObjectURL(blob);
-                aLink.dispatchEvent(evt);
-            };
-
-            downloadFile();
-        })();*/
 
         // 已完成
         (function() {
             var isFinish = false;
-            $('.btn-danger').on('click', function() {
+            $('.complete .btn-danger').on('click', function() {
                 if (isFinish) return;
                 // ajax成功
                 $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
@@ -177,6 +240,92 @@
                 // ...
             })
         })();
+
+        //   提交答案(function() {
+        (function() {
+            var isFinish = false;
+            var L = $('.radio').length;
+            $('#questions .btn-danger').on('click', function() {
+                //                未打完返回
+                var len = $('input:checked').length;
+
+                if (isFinish) return;
+                if (len < L) {
+                    $('.caution').show();
+                    return
+                };
+                // ajax成功
+                $(this).removeClass('btn-danger').addClass('btn-default active').text('已 交 卷');
+                $('.answerBtn i').show();
+                isFinish = true;
+
+                //   提交后不再提供选择
+                $('[type="radio"]').prop('disabled', true);
+                $('.caution').hide();
+
+                // ajax失败
+                // ...
+            })
+        })();
+
+        // 修改密码
+        (function() {
+            var oManage = $('#manage');
+            var $inputs = oManage.find('input');
+            var oldPassword = $inputs.eq(0);
+            var newPassword = $inputs.eq(1);
+            var newPasswordRepeat = $inputs.eq(2);
+            var minLen = 6;//密码最少是6位数
+
+            $('.user-center').on('click', function() {
+                oManage.toggle();
+                $inputs.val('');//清空值
+            });
+
+            // 取消按钮
+            oManage.add('.btn-default').on('click',function(){
+                oManage.hide();
+                $inputs.val('');//清空值
+            });
+
+            // 去空格
+            $inputs.on('keyup',function(){
+                oldPassword.val(oldPassword.val().trim());
+                newPassword.val(newPassword.val().trim());
+                newPasswordRepeat.val(newPasswordRepeat.val().trim());
+            })
+
+            // 确认按钮
+            oManage.find('.btn-primary').on('click',function(){
+                var oldPasswordValue = oldPassword.val();
+                var newPasswordValue = newPassword.val();
+                var newPasswordRepeatValue = newPasswordRepeat.val();
+
+                if (newPasswordValue.length<minLen || oldPasswordValue.length < minLen) {//新旧密码长度小于6
+                    alert("请检查密码长度是否满足要求！");
+                    return
+                }else{
+                    if (newPasswordValue === newPasswordRepeatValue) {//重复密码错误时
+
+                        alert("成功！新密码是："+newPasswordRepeatValue)//可以提交修改了！！
+
+                    }else{
+                        alert("密码不一致！");
+                        return
+                    }
+                };
+            });
+
+            //阻止冒泡
+            oManage.find('.container').on('click',function(e){
+                e.stopPropagation();
+            });
+            //阻止默认
+            oManage.on('touchmove', function(e) {
+                e.preventDefault();
+            });
+        })();
+
     })
     </script>
 </body>

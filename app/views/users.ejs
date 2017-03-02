@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html>
+<% include layout/head.ejs %>
+<link rel="stylesheet" href="/system/css/members.css">
 
-<head lang="zh-cn">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>成员信息</title>
-    <!-- <link rel="alternate icon" type="image/png" href="assets/i/favicon.png"> -->
-    <link rel="stylesheet" href="/system/libs/bootstrap.min.css">
-    <link rel="stylesheet" href="/system/css/members.css">
-    <link href="//cdn.bootcss.com/layer/3.0.1/skin/default/layer.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -37,7 +29,7 @@
             </thead>
             <tbody>
             <% for (var i = 0;i < users.length;i++){
-                if(users[i].role == 0) continue
+                if (users[i].role == 0) continue
             %>
             <tr>
                 <td><%= users[i].work_number %></td>
@@ -46,9 +38,9 @@
                 <!--<td><%= users[i].job %></td>-->
                 <td><%= users[i].jobname %></td>
                 <td>
-                    <!--<button key="<%= users[i]._id %>" class=" find-btn btn btn-link btn-sm"><i-->
-                                <!--class="glyphicon glyphicon-search"></i> 查看-->
-                    <!--</button>-->
+                    <button key="<%= users[i]._id %>" class=" find-btn btn btn-link btn-sm"><i
+                                class="glyphicon glyphicon-search"></i> 修改密码
+                    </button>
                     <!--<button class="btn btn-link btn-sm"><i class="glyphicon glyphicon-pencil"></i> 编辑</button>-->
                     <button key="<%= users[i]._id %>" class="delete-user btn btn-link btn-sm"><i
                                 class="glyphicon glyphicon-trash"></i> 删除
@@ -64,24 +56,32 @@
         </div>
     </div>
 </div>
-<script src="/system/libs/jquery-2.1.4.js"></script>
-<script src="/system/libs/bootstrap.min.js"></script>
+<% include layout/script.ejs %>
 <script src="/system/libs/jquery.pagination.js"></script>
-<script src="//cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
 <script>
     $(function () {
         $('.find-btn').click(function () {
             var userid = $(this).attr('key');
             var _this = $(this);
-            console.log('clink')
-            $.get("/admin/users/find/" + userid, function (result) {
-                if (result.state) {
-                    layer.msg(result.msg, {icon: 1});
-                    console.info(result.user)
-                    return
-                }
-                layer.msg(result.msg, {icon: 2});
-            })
+
+            layer.prompt({title: '请输入密码', formType: 1}, function (pass, index) {
+                var params = {password: pass, uid: userid}
+                var _url = '/admin/users/password'
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: _url,
+                    data: params,
+                    success: function (data) {
+                        layer.close(index);
+                        layer.msg('修改成功！', {icon: 1});
+                    }
+                })
+
+
+            });
+
+
         })
 
         $('.delete-user').click(function () {

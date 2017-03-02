@@ -17,9 +17,7 @@ function grantAuthorization(req, res, next) {
             }
         } else {
             req.session.auth = false
-            res.render('login', {
-                message: '账户或者密码错误'
-            })
+            res.render('uaredirect', {message: null})
         }
     }).catch((err) => {
         throw err

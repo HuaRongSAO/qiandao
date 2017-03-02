@@ -6,7 +6,8 @@ export {
     findAllUser,
     countUsers,
     findUsersPage,
-    deleteUser
+    deleteUser,
+    updateUser
 }
 // 创建用户
 function saveUser(json) {
@@ -24,7 +25,7 @@ function saveUser(json) {
 }
 // 查询用户
 function findUser(queryJson) {
-    return User.find(queryJson).then(function (user) {
+    return User.find(queryJson).sort({_id: 1}).then(function (user) {
         return user
     }).catch(function (err) {
         console.log('错 误' + err)
@@ -33,7 +34,7 @@ function findUser(queryJson) {
 }
 // 查询所有用户
 function findAllUser() {
-    return User.find().then(function (doc) {
+    return User.find().sort({_id: 1}).then(function (doc) {
         return doc
     }).catch(function (err) {
         console.log('错误' + err)
@@ -44,23 +45,31 @@ function findAllUser() {
 //分页查询用户
 function findUsersPage({page = 1, limit = 20}) {
     let _skip = ( page - 1) * limit;
-    return User.find().limit(limit).skip(_skip).then(function (users) {
+    return User.find().limit(limit).skip(_skip).sort({_id: -1}).then(function (users) {
         return users
-    }).catch((err) => (console.log("查找用户：" + err)))
+    }).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 
 //统计用户总数
 function countUsers() {
     return User.find().count().then(function (count) {
         return count
-    }).catch((err) => (console.log("统计用户：" + err)))
+    }).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 
 //更新用户信息
-function updateUser(json, updata) {
-    return User.update(json).then(function (doc) {
-        console.log(doc)
+function updateUser(query, json) {
+    return User.where(query).update(json).then(function (doc) {
         return doc
+    }).catch(function (err) {
+        console.log(err);
+        throw err
     })
 }
 
@@ -68,6 +77,9 @@ function updateUser(json, updata) {
 function deleteUser(objectid) {
     return User.remove(objectid).then(function (doc) {
         return doc
-    }).catch((err) => (console.log("删除用户：" + err)))
+    }).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 
 }

@@ -1,14 +1,14 @@
-<%include layout/head.ejs%>
-    <link href="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/css/fileinput.min.css" rel="stylesheet">
-    <link href="//cdn.bootcss.com/Trumbowyg/2.4.3/ui/trumbowyg.min.css" rel="stylesheet">
+<% include layout/head.ejs %>
+<link href="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/css/fileinput.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/Trumbowyg/2.4.3/ui/trumbowyg.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="/system/css/addCourse.css">
-    <style>
-        .trumbowyg-box {
-            margin-left: 0;
-            margin-top: 0;
-        }
-    </style>
+<link rel="stylesheet" href="/system/css/addCourse.css">
+<style>
+    .trumbowyg-box {
+        margin-left: 0;
+        margin-top: 0;
+    }
+</style>
 </head>
 
 <body>
@@ -73,7 +73,7 @@
     </div>
 </div>
 
-<% include layout/script.ejs%>
+<% include layout/script.ejs %>
 <script src="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/js/fileinput.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/js/locales/zh.min.js"></script>
 <script src="//cdn.bootcss.com/Trumbowyg/2.4.3/trumbowyg.min.js"></script>
@@ -107,10 +107,12 @@
             var filepath = $("#upload").val()
             var extStart = filepath.lastIndexOf(".");
             var ext = filepath.substring(extStart, filepath.length).toUpperCase();
-            if (ext == ".mp4" || ext == ".MP4" || ext == ".pdf" || ext == ".PDF") {
-            }else {
-                layer.msg('只允许上传mp4和pdf文件');
-                return false
+            if (filepath) {
+                if (ext == ".mp4" || ext == ".MP4" || ext == ".pdf" || ext == ".PDF") {
+                } else {
+                    layer.msg('只允许上传mp4和pdf文件');
+                    return false
+                }
             }
             if (!title) {
                 layer.msg('请完善课程名称！');
@@ -135,6 +137,7 @@
                 data.append("descript", descript);
                 data.append("start", startDate);
                 data.append("end", endDate);
+                layer.load(1);
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
@@ -143,9 +146,10 @@
                     contentType: false,
                     processData: false,
                     success: function (data, textStatus) {
-                        layer.msg(data.msg, {icon: 4});
+                        layer.msg(data.msg, {icon: 1});
                         setTimeout(function () {
                             window.location.href = '/admin'
+                            layer.closeAll('loading');
                         }, 1000)
                     }
                 })

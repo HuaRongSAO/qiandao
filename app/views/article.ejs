@@ -31,7 +31,7 @@
 <header>
     <div class="logo"></div>
     <div id="user">
-        <span id="username"><%= user.username %></span>，欢迎你！
+        <span id="username" uid="<%= user._id %>"><%= user.username %></span>，欢迎你！
         <a href="/user/out"><span class="logout">退 出</span></a>
     </div>
 </header>
@@ -68,7 +68,6 @@ if(task._id){ %>
     <!-- 内容 -->
     <div class="block">
         <%
-
         if (task.file){
         if(task.file.indexOf('.mp4') >= 0){
         %>
@@ -168,57 +167,162 @@ if(task._id){ %>
 <div class="container">
     <p class="text-center text-danger">暂时还没有课程！</p>
 </div>
-    <%
-    } %>
+<%
+} %>
+<!-- 个人中心 -->
+<div class="user-center"></div>
+<div id="manage">
+    <div class="container">
+        <h4>个人中心</h4>
+        <h5>- 修改密码 -</h5>
+        <hr>
+        <div class="form-inline">
+            <div class="form-group">
+                <label>旧密码：</label>
+                <input type="password" class="form-control" name="" placeholder="旧密码">
+            </div>
+            <div class="form-group">
+                <label>新密码：</label><span>(必须不少于6位)</span>
+                <input type="password" class="form-control" name="" placeholder="新密码">
+            </div>
+            <div class="form-group">
+                <label>再输入一次新密码：</label>
+                <input type="password" class="form-control" name="" placeholder="重复新密码">
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="btn btn-primary">确认修改</div>
+            <div class="btn btn-default">取消</div>
+        </div>
+    </div>
+</div>
 <script src="//cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
-    <script>
-        $(function () {
+<script>
+    $(function () {
 
-            // 切换
-            $('.item').on('click', function () {
-                var index = $(this).index();
+        // 切换
+        $('.item').on('click', function () {
+            var index = $(this).index();
 
-                $('.item').removeClass('active');
-                $(this).addClass('active');
+            $('.item').removeClass('active');
+            $(this).addClass('active');
 
-                // 内容切换
-                $('.block').hide();
-                if (index === 1) {
-                    $('table').css('display', 'table');
-                } else {
-                    $('.block').eq(0).show();
-                }
+            // 内容切换
+            $('.block').hide();
+            if (index === 1) {
+                $('table').css('display', 'table');
+            } else {
+                $('.block').eq(0).show();
+            }
+        });
+
+        (function () {
+            var isFinish;
+            <% if(isFinish){ %>
+            var isFinish = <%= isFinish %>
+            <% } %>
+            if (isFinish) {
+                $('.btn-danger').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
+
+                $('.complete i').show();
+            }
+            $('.btn-danger').on('click', function () {
+                $('td[key="<%= user.username %>"]').text('完成').removeClass('false')
+
+                $('.btn-danger').off('click')
+                if (isFinish) return;
+                // ajax成功
+                $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
+
+                $.get("/user/article/finish/<%= task._id %>", function (result) {
+                    if (result.state) {
+                        $('.complete i').show();
+                    }
+                });
+
+            })
+        })();
+        //修改密码
+        (function () {
+            var oManage = $('#manage');
+            var $inputs = oManage.find('input');
+            var oldPassword = $inputs.eq(0);
+            var newPassword = $inputs.eq(1);
+            var newPasswordRepeat = $inputs.eq(2);
+            var minLen = 6;//密码最少是6位数
+
+            $('.user-center').on('click', function () {
+                oManage.toggle();
+                $inputs.val('');//清空值
             });
 
-            (function () {
-                var isFinish ;
-                <%if(isFinish){ %>
-                    var isFinish = <%= isFinish %>
-                    <%}%>
-                if (isFinish) {
-                    $('.btn-danger').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
+            // 取消按钮
+            oManage.add('.btn-default').on('click', function () {
+                oManage.hide();
+                $inputs.val('');//清空值
+            });
 
-                    $('.complete i').show();
+            // 去空格
+            $inputs.on('keyup', function () {
+                oldPassword.val(oldPassword.val().trim());
+                newPassword.val(newPassword.val().trim());
+                newPasswordRepeat.val(newPasswordRepeat.val().trim());
+            })
+
+            // 确认按钮
+            oManage.find('.btn-primary').on('click', function () {
+                var oldPasswordValue = oldPassword.val();
+                var newPasswordValue = newPassword.val();
+                var newPasswordRepeatValue = newPasswordRepeat.val();
+
+                if (newPasswordValue.length < minLen || oldPasswordValue.length < minLen) {//新旧密码长度小于6
+                    alert("请检查密码长度是否满足要求！");
+                    return
+                } else {
+                    if (newPasswordValue === newPasswordRepeatValue) {//重复密码错误时
+                        var _url = '/user/update/' + $('#username').attr('uid');
+                        var params = {}
+                        params.oldPassword = oldPasswordValue;
+                        params.newPassword = newPasswordValue;
+                        $.ajax({
+                            type: 'post',
+                            url: _url,
+                            data: params,
+                            success: function (data) {
+                                console.log(data)
+                                var _data = JSON.parse(data)
+                                if (_data.state) {
+                                    alert('修改成功！')
+                                    oManage.toggle();
+                                } else {
+                                    alert('原密码错误！请重新输入或者联系管理员修改密码！')
+                                }
+
+                            }
+
+                        });
+
+
+                    } else {
+                        alert("密码不一致！");
+                        return
+                    }
                 }
-                $('.btn-danger').on('click', function () {
-                    $('td[key="<%= user.username %>"]').text('完成').removeClass('false')
+                ;
+            });
 
-                    $('.btn-danger').off('click')
-                    if (isFinish) return;
-                    // ajax成功
-                    $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
+            //阻止冒泡
+            oManage.find('.container').on('click', function (e) {
+                e.stopPropagation();
+            });
+            //阻止默认
+            oManage.on('touchmove', function (e) {
+                e.preventDefault();
+            });
+        })();
 
-                    $.get("/user/article/finish/<%= task._id %>", function (result) {
-                        if (result.state) {
-                            $('.complete i').show();
-                        }
-                    });
-
-                })
-            })();
-
-        })
-    </script>
+    })
+</script>
 </body>
 
 </html>

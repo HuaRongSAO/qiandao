@@ -26,13 +26,11 @@ var userRouter = _express2.default.Router();
 userRouter.get('/article/', function (req, res, next) {
 
     var p1 = new _promise2.default(function (resolve, reject) {
-        console.log('task');
         (0, _taskController.findNewestTask)().then(function (task) {
             resolve(task);
         });
     });
     var p2 = new _promise2.default(function (resolve, reject) {
-        console.log('users');
         var json = { department: req.session.user.department };
         (0, _userController.findUser)(json).then(function (users) {
             resolve(users);
@@ -40,7 +38,6 @@ userRouter.get('/article/', function (req, res, next) {
     });
 
     _promise2.default.all([p1, p2]).then(function (results) {
-        console.log(results);
         var task = results[0];
         if (task == null) {
             task = {};
@@ -65,9 +62,13 @@ userRouter.get('/article/finish/:taskid', function (req, res) {
         department: req.session.user.department,
         user_id: req.session.user._id
     }).then(function (task) {
-        console.log(task);
         res.json({ state: true, msg: '完成课程' });
     });
+});
+
+userRouter.get('/out', function (req, res) {
+    req.session.user = '';
+    res.redirect('/');
 });
 
 exports.default = userRouter;

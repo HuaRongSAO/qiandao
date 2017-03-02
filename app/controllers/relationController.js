@@ -16,6 +16,9 @@ function createTaskAndUsers(json) {
     });
 }
 function findRelation(json) {
-    return TaskAndUsers.find(json)
+    return TaskAndUsers.find(json).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 

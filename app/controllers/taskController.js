@@ -13,40 +13,61 @@ function creatTask(json) {
         start:json.start,
         end: json.end,
         created_at: sd.format(new Date(), 'YYYY-MM-DD')
-    }).save()
+    }).save().catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 
 //查找任务
 function findTask(json) {
     return Task.find(json).then(function (doc) {
         return doc
+    }).catch(function (err) {
+        console.log(err);
+        throw err
     })
 }
 function findNewestTask() {
     return Task.findOne().sort({_id: -1}).then(function (task) {
         return task
-    }).catch((err) => (console.log("查找任务：" + err)))
+    }).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 //发现所有的任务
 function findTaskByPage({page = 0, limit = 20}) {
     let _skip =( page-1) * limit;
     return Task.find().limit(limit).skip(_skip).sort({_id: -1}).then(function (tasks) {
         return tasks
-    }).catch((err) => (console.log("查找任务：" + err)))
+    }).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 function findAllTask() {
     return Task.find().then(function (doc) {
         return doc
-    }).catch((err) => (console.log("查找任务：" + err)))
+    }).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 function countTask() {
     return Task.find().count().then(function (count) {
         return count
-    });
+    }).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 //删除课程
 function deleteTaskById(objectid) {
-    return  Task.remove(objectid)
+    return  Task.remove(objectid).catch(function (err) {
+        console.log(err);
+        throw err
+    })
 }
 
 // countTask()

@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head lang="zh-cn">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>全部课程</title>
-    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="system/css/allCourses.css">
-    <link href="//cdn.bootcss.com/layer/3.0.1/skin/default/layer.min.css" rel="stylesheet">
+<% include layout/head.ejs %>
+<link rel="stylesheet" href="system/css/allCourses.css">
 </head>
 
 <body>
@@ -75,9 +67,11 @@
                     <td><%= tasks[i].created_at.Format("yyyy-MM-dd") %></td>
                     <td><%= tasks[i].end.Format("yyyy-MM-dd") %></td>
                     <td>
-                        <!--<botton key="<%= tasks[i]._id %>" class="find-btn btn btn-link btn-sm"><i class="glyphicon glyphicon-search"></i> 查看</botton>-->
+                        <a href="/admin/tasks/info/<%= tasks[i]._id %>" class="find-btn btn btn-link btn-sm"><i
+                                    class="glyphicon glyphicon-search"></i> 查看</a>
                         <botton key="<%= tasks[i]._id %>" class="delete-btn btn btn-link btn-sm "><i
-                                    class="glyphicon glyphicon-trash"></i> 删除</botton>
+                                    class="glyphicon glyphicon-trash"></i> 删除
+                        </botton>
                     </td>
                 </tr>
                 <% } %>
@@ -91,41 +85,27 @@
         </div>
     </div>
 </div>
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<% include layout/script.ejs %>
 <script src="system/libs/jquery.pagination.js"></script>
-<script src="//cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
 <script>
     $(function () {
 
-        $('.find-btn').click(function () {
-            var userid = $(this).attr('key');
-            var _this = $(this);
-            $.get("/admin/tasks/find/" + userid, function (result) {
-                if (result.state) {
-                    layer.msg(result.msg, {icon: 1});
-                    console.info(result.task)
-                    return
-                }
-                layer.msg(result.msg, {icon: 2});
-            })
-        })
 
         $('.delete-btn').click(function () {
             var userid = $(this).attr('key');
             var _this = $(this)
             layer.confirm('确定删除该课程？', {
-                btn: ['删除','取消']
-            }, function(){
-                $.get("/admin/tasks/remove/"+userid, function(result){
-                    if(result.state){
+                btn: ['删除', '取消']
+            }, function () {
+                $.get("/admin/tasks/remove/" + userid, function (result) {
+                    if (result.state) {
                         layer.msg(result.msg, {icon: 1});
                         _this.parent().parent().remove();
                         return
                     }
                     layer.msg(result.msg, {icon: 2});
                 });
-            }, function(){
+            }, function () {
                 return
             });
         })
