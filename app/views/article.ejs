@@ -96,7 +96,7 @@ if(task._id){ %>
 
         <div class="complete" style="padding-bottom: 15px">
             <span>点击确认后即完成</span>
-            <div class="btn btn-danger btn-block btn-lg">已完成观看，请点此确认</div>
+            <div id="subComplete" class="btn btn-danger btn-block btn-lg">已完成观看，请点此确认</div>
             <i></i>
         </div>
 
@@ -169,6 +169,10 @@ if(task._id){ %>
 </div>
 <%
 } %>
+
+<!--加载问题-->
+<% include layout/questions.ejs %>
+
 <!-- 个人中心 -->
 <div class="user-center"></div>
 <div id="manage">
@@ -197,6 +201,7 @@ if(task._id){ %>
     </div>
 </div>
 <script src="//cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
+<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
 <script>
     $(function () {
 
@@ -215,25 +220,25 @@ if(task._id){ %>
                 $('.block').eq(0).show();
             }
         });
-
+        //完成课程
         (function () {
             var isFinish;
             <% if(isFinish){ %>
             var isFinish = <%= isFinish %>
             <% } %>
             if (isFinish) {
-                $('.btn-danger').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
-
+                $('#subComplete').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
                 $('.complete i').show();
+            }else{
+                $('#questions').hide();
             }
-            $('.btn-danger').on('click', function () {
+            $('#subComplete').on('click', function () {
                 $('td[key="<%= user.username %>"]').text('完成').removeClass('false')
-
-                $('.btn-danger').off('click')
+                $('#questions').show();
+                $('#subComplete').off('click')
                 if (isFinish) return;
                 // ajax成功
                 $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
-
                 $.get("/user/article/finish/<%= task._id %>", function (result) {
                     if (result.state) {
                         $('.complete i').show();
@@ -289,7 +294,6 @@ if(task._id){ %>
                             url: _url,
                             data: params,
                             success: function (data) {
-                                console.log(data)
                                 var _data = JSON.parse(data)
                                 if (_data.state) {
                                     alert('修改成功！')
@@ -297,18 +301,13 @@ if(task._id){ %>
                                 } else {
                                     alert('原密码错误！请重新输入或者联系管理员修改密码！')
                                 }
-
                             }
-
                         });
-
-
                     } else {
                         alert("密码不一致！");
                         return
                     }
                 }
-                ;
             });
 
             //阻止冒泡
@@ -320,6 +319,38 @@ if(task._id){ %>
                 e.preventDefault();
             });
         })();
+
+
+        //   提交答案(function() {
+        (function() {
+
+            var isFinish = false;
+            var L = $('.radio').length;
+
+            $('#subQuestions').on('click', function() {
+                console.log('run')
+                //                未打完返回
+                var len = $('input:checked').length;
+
+                if (isFinish) return;
+                if (len < L) {
+                    $('.caution').show();
+                    return
+                };
+                // ajax成功
+                $(this).removeClass('btn-danger').addClass('btn-default active').text('已 交 卷');
+                $('.answerBtn i').show();
+                isFinish = true;
+
+                //   提交后不再提供选择
+                $('[type="radio"]').prop('disabled', true);
+                $('.caution').hide();
+
+                // ajax失败
+                // ...
+            })
+        })();
+
 
     })
 </script>

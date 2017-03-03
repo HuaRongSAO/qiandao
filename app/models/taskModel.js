@@ -7,6 +7,7 @@ let taskSchema = new mongoose.Schema({
     type: String,
     start:Date,
     end: Date,
+    questions:Array,
     created_at: Date,
     updated_at: Date
 });

@@ -16,7 +16,7 @@ function createTaskAndUsers(json) {
     });
 }
 function findRelation(json) {
-    return TaskAndUsers.find(json).catch(function (err) {
+    return TaskAndUsers.find(json).sort({_id: 1}).catch(function (err) {
         console.log(err);
         throw err
     })

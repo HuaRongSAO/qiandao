@@ -128,7 +128,6 @@ masterRouter.post('/tasks/new', function (req, res, next) {
         if (err) {
             throw err;
         }
-        console.log(files)
         if (files.file) {
             let ttt = sd.format(new Date(), 'YYYYMMDDHHmmss');
             let ran = parseInt(Math.random() * 89999 + 10000);
@@ -165,7 +164,6 @@ masterRouter.post('/tasks/new', function (req, res, next) {
                 start: start,
                 end: end,
             }).then(function (doc) {
-                console.log('创建成功')
                 console.log(doc)
                 res.json({state: true, msg: '创建成功'})
             }).catch(function (err) {

@@ -2,7 +2,7 @@ import Task from './../models/taskModel'
 import sd from 'silly-datetime'
 
 
-export {creatTask, findAllTask, findTask, findTaskByPage, countTask,deleteTaskById,findNewestTask}
+export {creatTask, findAllTask, findTask, findTaskByPage, countTask, deleteTaskById, findNewestTask}
 
 //创建课程
 function creatTask(json) {
@@ -10,8 +10,9 @@ function creatTask(json) {
         title: json.title,
         content: json.content,
         file: json.file,
-        start:json.start,
+        start: json.start,
         end: json.end,
+        questions: json.questions,
         created_at: sd.format(new Date(), 'YYYY-MM-DD')
     }).save().catch(function (err) {
         console.log(err);
@@ -21,7 +22,7 @@ function creatTask(json) {
 
 //查找任务
 function findTask(json) {
-    return Task.find(json).then(function (doc) {
+    return Task.find(json).sort({_id: 1}).then(function (doc) {
         return doc
     }).catch(function (err) {
         console.log(err);
@@ -38,7 +39,7 @@ function findNewestTask() {
 }
 //发现所有的任务
 function findTaskByPage({page = 0, limit = 20}) {
-    let _skip =( page-1) * limit;
+    let _skip = ( page - 1) * limit;
     return Task.find().limit(limit).skip(_skip).sort({_id: -1}).then(function (tasks) {
         return tasks
     }).catch(function (err) {
@@ -64,13 +65,13 @@ function countTask() {
 }
 //删除课程
 function deleteTaskById(objectid) {
-    return  Task.remove(objectid).catch(function (err) {
+    return Task.remove(objectid).catch(function (err) {
         console.log(err);
         throw err
     })
 }
-
-// countTask()
-// Task.counts().then((count)=>(console.log(count)))
-// findAllTask()
-// taskPage()
+// let a ={
+//     questions:[
+//         {question:'请问1+1=？的原理是什么？',a:'asdasd',b:'asdasdsawqq',c:'wqe123',d:'23123123',answer:'a'}
+//     ]
+// }
