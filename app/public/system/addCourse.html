@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>新建课程</title>
+	<link rel="Shortcut Icon" href="images/logo.gif">
+	<link rel="stylesheet" href="libs/bootstrap.min.css">
+	<link rel="stylesheet" href="libs/bootstrap-fileinput.min.css">
+	<link rel="stylesheet" href="libs/jquery.trumbowyg.css">
+	<!-- <link rel="stylesheet" href="libs/laydate.css"> -->
+	<link rel="stylesheet" href="css/common.css">
+	<style>
+	.trumbowyg-box {
+		margin-left: 0;
+		margin-top: 0;
+	}
+	/* 练习题 */
+	.homework-container>div {
+		border-bottom: 1px dashed #999;
+		margin-bottom: 20px;
+	}
+	.homework-container .question input{
+		width: 80%;
+	}
+	.homework-container input{
+		margin-bottom: 10px;
+	}
+	.homework-container .options input{
+		width: 60%;
+	} 
+	.homework-container .options>div{
+		padding-left: 70px
+	} 
+	.homework-container .options label{
+		width: 60px;
+		font-weight: normal;
+	}
+	.add-option {
+		padding: 20px 0;
+		margin-left: 90px;
+	}
+
+	.homework .add-question {
+		color: #5bc4c7;
+		cursor: pointer;
+		text-align: center;
+		height: 50px;
+		line-height: 50px;
+		font-weight: bold;
+		border: 1px dashed #999;
+		margin-top: 20px;
+		border-radius: 6px;
+		font-size: 20px;
+	}
+	.homework .add-question:hover {
+		background-color: #5bc4c7;
+		color: #fff;
+		border: none;
+	}
+	.homework .homework-container .right-answer{
+		width: 100px;
+	}
+	</style>
+</head>
+
+<body>
+	<div id="topFix">
+		<strong>Admin</strong>
+		<small>后台管理系统</small>
+		<div class="text">
+			<span>
+				<i class="glyphicon glyphicon-user"></i> 你好，管理员A
+			</span>
+			<button class="btn btn-danger btn-sm logout">
+				<i class="glyphicon glyphicon-off"></i> 退出
+			</button>
+		</div>
+	</div>
+	<!-- <div class="space-h50"></div> -->
+	<div id="wrap">
+		<!-- 侧边栏开始 -->
+		<div class="sidebar">
+			<ul class="nav nav-pills nav-stacked" role="tablist">
+				<li class="active">
+					<a href="#list1" data-toggle="collapse">课程管理</a>
+					<ol id="list1" class="nav nav-pills nav-stacked collapse in">
+						<li><a href="allCourses.html">全部课程</a></li>
+						<li class="bg-info"><a href="javascript:;">新建课程</a></li>
+					</ol>
+				</li>
+				<li class="active">
+					<a href="#list2" data-toggle="collapse">用户管理</a>
+					<ol id="list2" class="nav nav-pills nav-stacked collapse in">
+						<li><a href="members.html">成员信息</a></li>
+						<li><a href="javascript:void(0);">修改密码</a></li>
+						<!-- <li><a href="#">编辑</a></li> -->
+					</ol>
+				</li>
+			</ul>
+		</div>
+		<!-- 侧边栏结束 -->
+		<!-- 正文开始 -->
+		<div class="main container">
+			<!-- 路径导航 -->
+			<ol class="breadcrumb">
+				<li class="active">新建课程</li>
+			</ol>
+			<!-- 上传按钮组件 -->
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<!-- h3标签原是label标签 -->
+						<label>选择文件：</label>
+						<!-- 如果需要文件多选,只需要在input标签加属性 multiple -->
+						<input id="upload" class="file" type="file" data-show-caption="true" data-show-upload="false" data-show-preview="false">
+					</div>
+					<div class="form-group">
+						<label>课程名称：</label>
+						<input type="text" class="form-control">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-9">
+					<label>课程描述：</label>
+					<div id="editor">
+					</div>
+				</div>
+			</div>
+			<div class="row homework">
+				<div class="col-md-8">
+					<label>课后练习设置：</label>
+					<div class="homework-container"></div>
+					<div class="add-question">+ 添加题目</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 50px;">
+				<div class="form-inline">
+					<label style="margin-left: 15px;">设置起始日期：&nbsp;&nbsp;</label>
+					<input class="form-control" type="text" id="start-date">
+					<label style="margin-left: 15px;">设置结束日期：&nbsp;&nbsp;</label>
+					<input class="form-control" type="text" id="end-date">
+					<button id="confirm" class="btn btn-success" style="margin-left: 45px;" data-loading-text="正在发布...">确认上传并发布</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="libs/jquery-2.1.4.js"></script>
+	<script src="libs/bootstrap.min.js"></script>
+	<script src="libs/bootstrap-uploadfile.min.js"></script>
+	<script src="libs/bootstrap-language-zh.js"></script>
+	<script src="libs/jquery.trumbowyg.js"></script>
+	<script src="libs/jquery.trumbowyg.lang.zh_cn.js"></script>
+	<script>
+	$('#editor').trumbowyg({
+		lang: 'zh_cn'
+	});
+	</script>
+	<script src="libs/laydate.js"></script>
+	<script>
+	laydate({
+		elem: '#start-date'
+	});
+	laydate({
+		elem: '#end-date'
+	});
+	</script>
+	<script src="libs/button.js"></script>
+	<!-- <script src="libs/jquery.trumbowyg.base64.js"></script> -->
+	<!-- <script src="libs/jquery.trumbowyg.language.fr.js"></script> -->
+	<script>
+	$(function() {
+		$('#confirm').click(function() {
+			var me = $(this);
+
+			me.button('loading');
+
+			setTimeout(function() {
+				me.button('reset');
+
+				alert('发布成功！')
+				window.location.href = "allCourses.html";
+			}, 1000)
+		});
+
+
+
+		// 练习题
+		(function() {
+			var homework = $('.homework');
+			var homeworkContainer = $('.homework-container');
+
+			//  添加题目
+			var nowQuestionIndex = 0; 		// 初始化只有1题
+			var questionHTML = '';			// 创建题目时对应的html模板
+			var clientH = $(window).height();
+			var winH = 0;
+			homework.on('click','.add-question', function() {
+				nowQuestionIndex += 1;
+				questionHTML = '<div><div class="form-inline question"><label>题目'+ nowQuestionIndex +'：</label><input class="form-control" type="text" placeholder="问题"></div><div class="form-inline options"><div><label>选项A:</label><input class="form-control" type="text" placeholder="选项A"></div><div><label>选项B:</label><input class="form-control" type="text" placeholder="选项B"></div><div><label>选项C:</label><input class="form-control" type="text" placeholder="选项C"></div><div class="add-option"><button class="btn btn-primary">+ 添加选项</button></div><div><label>正确答案:</label>&nbsp;<input type="text" class="form-control right-answer"><span>*(支持大/小写)</span></div></div></div>';
+				homeworkContainer.append(questionHTML);
+				winH = $(document).height();
+				$(window).scrollTop(winH - clientH);//滚动条置底
+
+				$('.question').last().find('input').focus();//自动聚焦
+			});
+
+			// 添加选项
+			// A~Z : 65~91
+			var nowCharCode = 67;		// C。每道题默认有3个选项
+			var nextLetter = '';		// 下一选项对应的选项名称
+			var optionHTML = '';		// 创建选项时对应的html模板
+			homework.on('click','.btn-primary',function(){//动态生成的元素需要父级绑定，否则新建元素无此事件
+				nextLetter = String.fromCharCode(++nowCharCode);// 创建的选项对应的字母
+				optionHTML = '<div><label>选项'+ nextLetter +':</label><input class="form-control" type="text" placeholder="选项'+ nextLetter +'"></div>'
+				$(optionHTML).insertBefore($(this).closest('.add-option'));
+			});
+
+			// 正确的答案。返回['a','b','d']字符串数组(全小写)
+			function userAnswers(){
+				var arr = [];
+				var val = '';
+				$('.right-answer').each(function(){
+					val = $(this).val().toLowerCase();
+					arr.join( val );
+				});
+				return arr
+			}
+		})();
+
+
+
+	})
+	</script>
+</body>
+
+</html>

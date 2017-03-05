@@ -134,7 +134,7 @@ h1 {
 }
 .complete i {
 	position: absolute;
-	background: url(/website/images/finish.png) no-repeat;
+	background: url(../images/finish.png) no-repeat;
 	background-size: cover;
 	width: 8.0rem;
 	height: 6rem;
@@ -208,7 +208,7 @@ table .false{
 }
 .answerBtn i{
     position: absolute;
-    background: url(/website/images/finish.png) no-repeat;
+    background: url(../images/finish.png) no-repeat;
     background-size: cover;
     width: 8.0rem;
     height: 6rem;
@@ -232,7 +232,7 @@ table .false{
 /* 个人中心*/
 .user-center{
     position: fixed;
-    right: 0.4rem;
+    left: 0.4rem;
     top: 43rem;
     width: 4.6rem;
     height: 4.6rem;
