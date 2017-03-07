@@ -124,7 +124,7 @@ masterRouter.post('/tasks/new', function (req, res, next) {
         let content = fields.descript || '';
         let start = fields.start || '';
         let end = fields.end || '';
-
+        let questions =JSON.parse(fields.questions) || [];
         if (err) {
             throw err;
         }
@@ -148,6 +148,7 @@ masterRouter.post('/tasks/new', function (req, res, next) {
                     content: content,
                     file: filePath,
                     start: start,
+                    questions: questions,
                     end: end,
                 }).then(function (doc) {
                     console.log('创建成功')
@@ -161,6 +162,7 @@ masterRouter.post('/tasks/new', function (req, res, next) {
             creatTask({
                 title: title,
                 content: content,
+                questions: questions,
                 start: start,
                 end: end,
             }).then(function (doc) {

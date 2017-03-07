@@ -18,6 +18,7 @@ var taskAndUsersSchema = new _mongoose2.default.Schema({
     task_id: String,
     department: String,
     user_id: String,
+    answer: Object,
     created_at: Date
 });
 

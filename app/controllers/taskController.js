@@ -70,8 +70,3 @@ function deleteTaskById(objectid) {
         throw err
     })
 }
-// let a ={
-//     questions:[
-//         {question:'请问1+1=？的原理是什么？',a:'asdasd',b:'asdasdsawqq',c:'wqe123',d:'23123123',answer:'a'}
-//     ]
-// }

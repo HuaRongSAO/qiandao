@@ -1,4 +1,7 @@
-<% if (task.questions.length > 0){ %>
+<%
+
+if (task.questions.length > 0){
+%>
 
 <div class="container">
     <div id="questions">
@@ -7,13 +10,14 @@
         <% for (var i = 0;i < task.questions.length;i++){ %>
 
         <div>
-            <h4><span><%= i + 1 %>、</span><%= task.questions[i].question %></h4>
-            <div class="radio">
-                <%  var tags = ['A','B','C','D','E','F','G']
+            <h4><span><%= i+1 %>、</span><%= task.questions[i].question %></h4>
+            <div class="radio" >
+                <%  var tags = ['A','B','C','D','E','F','G','H','I','J','K']
                     var select = task.questions[i].select;
-                        for(var key in  select) { %>
+                        for(var key in  select) {
+                %>
                 <label >
-                    <input type="radio" name="<%= i%>"><span>
+                    <input type="radio" name="<%= i%>" answer="<%= task.questions[i].answer %>" index="<%= key %>"><span>
                             <%= tags[key] %> </span><%= select[key]%>
                 </label>
                 <br>

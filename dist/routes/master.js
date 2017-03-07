@@ -32,9 +32,9 @@ var _taskController = require('./../controllers/taskController');
 
 var _userController = require('./../controllers/userController');
 
-var _util = require('./../controllers/util');
+var _md = require('md5');
 
-var _util2 = _interopRequireDefault(_util);
+var _md2 = _interopRequireDefault(_md);
 
 var _relationController = require('./../controllers/relationController');
 
@@ -153,12 +153,11 @@ masterRouter.post('/tasks/new', function (req, res, next) {
         var content = fields.descript || '';
         var start = fields.start || '';
         var end = fields.end || '';
-
+        var questions = JSON.parse(fields.questions) || [];
         if (err) {
             throw err;
         }
-        console.log(files);
-        if (files.file.name) {
+        if (files.file) {
             var ttt = _sillyDatetime2.default.format(new Date(), 'YYYYMMDDHHmmss');
             var ran = parseInt(Math.random() * 89999 + 10000);
             var extname = files.file.name;
@@ -178,6 +177,7 @@ masterRouter.post('/tasks/new', function (req, res, next) {
                     content: content,
                     file: filePath,
                     start: start,
+                    questions: questions,
                     end: end
                 }).then(function (doc) {
                     console.log('创建成功');
@@ -191,10 +191,10 @@ masterRouter.post('/tasks/new', function (req, res, next) {
             (0, _taskController.creatTask)({
                 title: title,
                 content: content,
+                questions: questions,
                 start: start,
                 end: end
             }).then(function (doc) {
-                console.log('创建成功');
                 console.log(doc);
                 res.json({ state: true, msg: '创建成功' });
             }).catch(function (err) {
@@ -224,7 +224,6 @@ masterRouter.get('/users/remove/:userid', function (req, res, next) {
     });
 });
 masterRouter.get('/users/find/:userid', function (req, res, next) {
-
     var objectJson = { '_id': req.params.userid };
     (0, _userController.findUser)(objectJson).then(function (user) {
         res.json({ state: true, msg: '查找到用户！', user: user });
@@ -232,5 +231,42 @@ masterRouter.get('/users/find/:userid', function (req, res, next) {
         res.json({ state: false, msg: '删除失败！' });
     });
 });
+masterRouter.get('/password', function (req, res, next) {
+    res.render('password');
+});
+masterRouter.post('/password', function (req, res, next) {
+    console.log(req.body);
+    var oldP = (0, _md2.default)(req.body.oldPassword);
+    var newP = (0, _md2.default)(req.body.newPassword);
+    var query = { _id: req.session.user._id };
+    var updateJson = { password: newP };
+    console.log(query);
+    console.log(updateJson);
+    if (oldP != req.session.user.password) {
+        res.json({ state: false, data: '', msg: '原密码错误！' });
+    }
+    (0, _userController.updateUser)(query, updateJson).then(function (result) {
+        if (result.nModified == 0) {
+            res.json({ state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！' });
+        }
+        res.json({ state: true, data: '', msg: '修改成功！' });
+    }).catch(function (err) {
+        res.json({ state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！' });
+    });
+});
 
+masterRouter.post('/users/password', function (req, res, next) {
+    console.log(req.body);
+    var query = { _id: req.body.uid };
+    var updateJson = { password: (0, _md2.default)(req.body.password) };
+    console.log(query + updateJson);
+    (0, _userController.updateUser)(query, updateJson).then(function (result) {
+        if (result.nModified == 0) {
+            res.json({ state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！' });
+        }
+        res.json({ state: true, data: '', msg: '修改成功！' });
+    }).catch(function (err) {
+        res.json({ state: false, data: '', msg: '原密码错误！请重新输入或者联系管理员修改密码！' });
+    });
+});
 exports.default = masterRouter;

@@ -24,7 +24,18 @@
     <link rel="stylesheet" href="/website/libs/reset.css">
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/website/css/article.css">
+    <style>
+        .user-center {
+            left: auto;
+            right: 0.4rem;
+        }
 
+        .complete i {
+            position: absolute;
+            background: url(/website//images/finish.png) no-repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -58,7 +69,7 @@ if(task._id){ %>
         温馨提示：本课程将于
         <span id="endDate"><%= task.end.Format("yyyy-MM-dd") %></span> 结束,逾期将不记录学习，请即时完成！
     </p>
-    <p class="article">
+    <p class="article" task="<%= task._id %>">
         <%- task.content %>
     </p>
     <div class="tab">
@@ -108,11 +119,17 @@ if(task._id){ %>
         <tr>
             <th>用户名</th>
             <th>状态</th>
+            <th>答对</th>
         </tr>
         </thead>
         <tbody>
         <%
             var isFinish = false;
+            var answer = {
+                right: 0,
+                select: [],
+                all: 0
+            };
             var w = [];
             var n = [];
             for (var i = 0; i < users.length; i++) {
@@ -121,7 +138,8 @@ if(task._id){ %>
                 var isExist = false;
                 for (var j = 0; j < finish.length; j++) {
                     if (finish[j].user_id == user._id) {
-                        isFinish = true
+                        isFinish = true;
+                        if (finish[j].answer) answer = finish[j].answer
                     }
                     var fid = finish[j].user_id;
                     if (fid == uid) {
@@ -136,17 +154,17 @@ if(task._id){ %>
             for (var i = 0; i < users.length; i++) {
                 for (var j = 0; j < finish.length; j++) {
                     if (users[i]._id == finish[j].user_id) {
+                        if (finish[j].answer) users[i].answer = finish[j].answer
                         w.push(users[i])
                     }
                 }
             }
-
-
         for(var i = 0;i < n.length;i++){
         %>
         <tr>
             <td><%= n[i].username %></td>
-            <td key="<%= n[i].username %>" class="false">未完成</td>
+            <td key="<%= n[i]._id %>" class="false">未完成</td>
+            <td key="<%= n[i]._id %>f" class="false">未完成</td>
         </tr>
         <%
         }
@@ -155,6 +173,11 @@ if(task._id){ %>
         <tr>
             <td><%= w[i].username %></td>
             <td>完成</td>
+            <% if( w[i].answer ){ %>
+            <td class="false"><%= w[i].answer.right %></td>
+            <% } else{%>
+                <td key="<%= w[i]._id %>F" class="false">未完成</td>
+            <%}%>
         </tr>
         <%
         }
@@ -200,6 +223,7 @@ if(task._id){ %>
         </div>
     </div>
 </div>
+<div id="info" finish="<%= isFinish %>" select="<%= answer.select %>"></div>
 <script src="//cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
 <script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
 <script>
@@ -222,21 +246,21 @@ if(task._id){ %>
         });
         //完成课程
         (function () {
-            var isFinish;
-            <% if(isFinish){ %>
-            var isFinish = <%= isFinish %>
-            <% } %>
-            if (isFinish) {
+            var isW = false;
+            isW = $('#info').attr('finish') == 'false' ? false : true;
+            console.log(isW)
+            if (isW) {
                 $('#subComplete').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
                 $('.complete i').show();
-            }else{
+            } else {
                 $('#questions').hide();
             }
+
             $('#subComplete').on('click', function () {
-                $('td[key="<%= user.username %>"]').text('完成').removeClass('false')
+                $('td[key="<%= user._id %>"]').text('完成').removeClass('false')
                 $('#questions').show();
                 $('#subComplete').off('click')
-                if (isFinish) return;
+                if (isW) return;
                 // ajax成功
                 $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
                 $.get("/user/article/finish/<%= task._id %>", function (result) {
@@ -244,7 +268,6 @@ if(task._id){ %>
                         $('.complete i').show();
                     }
                 });
-
             })
         })();
         //修改密码
@@ -321,37 +344,89 @@ if(task._id){ %>
         })();
 
 
-        //   提交答案(function() {
-        (function() {
+        //   提交答案
+        (function () {
+            var isFinishX = false;
+            if ($('#info').attr('select')) {
+                var myanswer = $('#info').attr('select').split(",");
+                //模拟选择
+                selectAn(myanswer)
+                checkAnswer()
+                moveAnswer()
+            }
 
-            var isFinish = false;
             var L = $('.radio').length;
-
-            $('#subQuestions').on('click', function() {
-                console.log('run')
-                //                未打完返回
+            $('#subQuestions').on('click', function () {
                 var len = $('input:checked').length;
-
-                if (isFinish) return;
+                if (isFinishX) return;
                 if (len < L) {
                     $('.caution').show();
                     return
-                };
-                // ajax成功
-                $(this).removeClass('btn-danger').addClass('btn-default active').text('已 交 卷');
-                $('.answerBtn i').show();
-                isFinish = true;
+                }
+                $('#subQuestions').off('click')
+                var userAnswer = checkAnswer()
+                var _url = '/user/task/answer/' + $('.article').attr('task');
+                var params = {}
+                params.answer = JSON.stringify(userAnswer);
+                var ri =userAnswer.right
+                $('td[key="<%= user._id+'F' %>"]').text(ri)
+                $.ajax({
+                    type: 'post',
+                    url: _url,
+                    data: params,
+                    success: function (data) {
+                        var _data = JSON.parse(data)
+                        if (_data.state) {
+                            moveAnswer();
 
-                //   提交后不再提供选择
-                $('[type="radio"]').prop('disabled', true);
-                $('.caution').hide();
-
-                // ajax失败
-                // ...
+                        } else {
+                        }
+                    }
+                });
             })
         })();
 
 
+        function checkAnswer() {
+            var userAnswer = {
+                select: [],
+                right: 0,
+                all: 0
+            };
+            aChecked = $('input:checked');
+            aInput = $('#questions input')
+            aInput.each(function (index, item) {
+                if ($(this).attr('index') == $(this).attr('answer')) {
+                    $(this).parent().css('color', '#ff0000')
+                }
+            })
+            aChecked.each(function (index, item) {
+                userAnswer.select.push($(this).attr('index'))
+                if ($(this).attr('index') == $(this).attr('answer')) {
+                    $(this).parent().css('color', 'green')
+                    userAnswer.right++
+                }
+            })
+            userAnswer.all = aChecked.length
+            return userAnswer
+        }
+
+        function moveAnswer() {
+            isFinishX = true
+            $('#subQuestions').removeClass('btn-danger').addClass('btn-default active').text('已 交 卷');
+            $('.answerBtn i').show();
+            $('[type="radio"]').prop('disabled', true);
+            $('.caution').hide();
+            $('#subQuestions').off('click')
+        }
+
+        function selectAn(arr) {
+            $('.radio').each(function (key, item) {
+                console.log(key)
+                var aInp = $(this).find('input');
+                $(aInp[arr[key]]).prop('checked', true)
+            })
+        }
     })
 </script>
 </body>

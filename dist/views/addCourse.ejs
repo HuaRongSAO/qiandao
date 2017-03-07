@@ -1,14 +1,86 @@
-<%include layout/head.ejs%>
-    <link href="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/css/fileinput.min.css" rel="stylesheet">
-    <link href="//cdn.bootcss.com/Trumbowyg/2.4.3/ui/trumbowyg.min.css" rel="stylesheet">
+<% include layout/head.ejs %>
+<link href="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/css/fileinput.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/Trumbowyg/2.4.3/ui/trumbowyg.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="/system/css/addCourse.css">
-    <style>
-        .trumbowyg-box {
-            margin-left: 0;
-            margin-top: 0;
-        }
-    </style>
+<link rel="stylesheet" href="/system/css/common.css">
+<style>
+    .trumbowyg-box {
+        margin-left: 0;
+        margin-top: 0;
+    }
+
+    .main {
+        width: 85%; /* 默认值会出现横向滚动条  */
+    }
+
+    /* 练习题 */
+    .homework-container > div {
+        border-bottom: 1px dashed #999;
+        margin-bottom: 20px;
+    }
+
+    .homework-container .question input {
+        width: 80%;
+    }
+
+    .homework-container input {
+        margin-bottom: 10px;
+    }
+
+    .homework-container .options input {
+        width: 60%;
+    }
+
+    .homework-container .options > div {
+        padding-left: 70px
+    }
+
+    .homework-container .options label {
+        width: 60px;
+        font-weight: normal;
+    }
+
+    .add-option {
+        padding: 20px 0;
+        margin-left: 90px;
+    }
+
+    .homework .add-question {
+        color: #5bc4c7;
+        cursor: pointer;
+        text-align: center;
+        height: 50px;
+        line-height: 50px;
+        font-weight: bold;
+        border: 1px dashed #999;
+        margin-top: 20px;
+        border-radius: 6px;
+        font-size: 20px;
+    }
+
+    .homework .add-question:hover {
+        background-color: #5bc4c7;
+        color: #fff;
+        border: none;
+    }
+
+    .homework .homework-container .right-answer {
+        width: 100px;
+    }
+
+    /* 删除按钮*/
+    .del {
+        margin-left: 10px;
+        background: #d51719;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        color: #fff;
+        text-align: center;
+        display: inline-block;
+    }
+</style>
 </head>
 
 <body>
@@ -52,6 +124,13 @@
                 </div>
             </div>
         </div>
+        <div class="row homework">
+            <div class="col-md-8">
+                <label>课后练习设置：</label>
+                <div class="homework-container"></div>
+                <div class="add-question">+ 添加题目</div>
+            </div>
+        </div>
         <div class="row" style="margin-top: 50px;">
             <div class="form-inline">
                 <div class="form-group">
@@ -73,7 +152,7 @@
     </div>
 </div>
 
-<% include layout/script.ejs%>
+<% include layout/script.ejs %>
 <script src="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/js/fileinput.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/js/locales/zh.min.js"></script>
 <script src="//cdn.bootcss.com/Trumbowyg/2.4.3/trumbowyg.min.js"></script>
@@ -96,8 +175,88 @@
 <script src="/system/libs/button.js"></script>
 <script>
     $(function () {
+        (function () {
+            var homework = $('.homework');
+            var homeworkContainer = $('.homework-container');
+            //  添加题目
+            var nowQuestionIndex = 0; 		// 初始化只有0题
+            var questionHTML = '';			// 创建题目时对应的html模板
+            var clientH = $(window).height();
+            var docH = 0;
+            homework.on('click', '.add-question', function () {
+                nowQuestionIndex += 1;
+                questionHTML =
+                    '<div class="module"><div class="form-inline question"><label>题目'
+                    + nowQuestionIndex +
+                    '：</label><input class="form-control q-title" type="text"  placeholder="问题'
+                    + nowQuestionIndex +
+                    '"><i class="del">X</i></div>' +
+                    '<div class="form-inline options">' +
+                    '<div><label>选项A:</label><input class="form-control A" type="text" placeholder="选项A"></div>' +
+                    '<div><label>选项B:</label><input class="form-control B" type="text" placeholder="选项B"></div>' +
+                    '<div><label>选项C:</label><input class="form-control C" type="text" placeholder="选项C"></div>' +
+                    '<div class="add-option"><button class="btn btn-primary">+ 添加选项</button></div>' +
+                    '<div><label>正确答案:</label>&nbsp;<input type="text" class="form-control right-answer">' +
+                    '<span>*(支持大/小写)</span></div>' +
+                    '</div></div>';
+                homeworkContainer.append(questionHTML);
+                docH = $(document).height();
+                $(window).scrollTop(docH - clientH);//滚动条置底
+
+                $('.question').last().find('input').focus();//自动聚焦
+            });
+            // 删除题目
+            homework.on('click', '.question .del', function () {
+                $(this).closest('.module').remove();
+                nowQuestionIndex--;
+            });
+            // 添加选项
+            // A~Z : 65~91
+            var nowCharCode = 67;		// C。每道题默认有3个选项
+            var nextLetter = '';		// 下一选项对应的选项名称
+            var optionHTML = '';		// 创建选项时对应的html模板
+            homework.on('click', '.btn-primary', function () {//动态生成的元素需要父级绑定，否则新建元素无此事件
+                nextLetter = String.fromCharCode(++nowCharCode);// 创建的选项对应的字母
+                optionHTML = '<div><label>选项' + nextLetter + ':</label>' +
+                    '<input class="form-control  ' + nextLetter + '" type="text" placeholder="选项' + nextLetter + '">' +
+                    '<i class="del del-opt">X</i>' +
+                    '</div>'
+                $(optionHTML).insertBefore($(this).closest('.add-option'));
+            });
+            // 删除选项
+            homework.on('click', '.del-opt', function () {
+                $(this).closest('div').remove();
+                nowCharCode--;
+            });
+        })();
+
+        function getQuestion() {
+            var aQuetions = [];
+            var oM = $('.module');
+            for (var i = 0; i < oM.length; i++) {
+                var oQuestion = {};
+
+                oQuestion.question = $(oM[i]).find('.q-title').val();
+                oQuestion.select = []
+                var oOps = $(oM[i]).find('.options').find('input');
+                var answerClass = $(oM[i]).find('.right-answer').val().toUpperCase()
+                $(oM[i]).find('.' + answerClass).addClass('answer')
+                for (var j = 0; j < oOps.length - 1; j++) {
+                    if (j < oOps.length) {
+                        if ($(oOps[j]).val()) oQuestion.select.push($(oOps[j]).val())
+                    }
+                    if ($(oOps[j]).hasClass('answer')) oQuestion.answer = oQuestion.select.length - 1
+                }
+                aQuetions.push(oQuestion)
+            }
+            console.log(aQuetions)
+
+            return aQuetions
+        }
+
         $('#confirm').click(function () {
 
+            var questions = getQuestion()
             var title = $('.course-title').val();
             var descript = $('#editor').html();
             var startDate = $('#start-date').val();
@@ -107,10 +266,21 @@
             var filepath = $("#upload").val()
             var extStart = filepath.lastIndexOf(".");
             var ext = filepath.substring(extStart, filepath.length).toUpperCase();
-            if (ext == ".mp4" || ext == ".MP4" || ext == ".pdf" || ext == ".PDF") {
-            }else {
-                layer.msg('只允许上传mp4和pdf文件');
+            if (!$('.q-title').val()) {
+                layer.msg('请完善题目！');
                 return false
+
+            }
+            if (!$('.right-answer').val()) {
+                layer.msg('题目缺少答案！');
+                return false
+            }
+            if (filepath) {
+                if (ext == ".mp4" || ext == ".MP4" || ext == ".pdf" || ext == ".PDF") {
+                } else {
+                    layer.msg('只允许上传mp4和pdf文件');
+                    return false
+                }
             }
             if (!title) {
                 layer.msg('请完善课程名称！');
@@ -127,31 +297,33 @@
                 $('#end-date').parent().addClass('has-error')
                 return false
             }
-
-
             if (files) {
                 data.append("file", files[0]);
                 data.append("title", title);
                 data.append("descript", descript);
                 data.append("start", startDate);
                 data.append("end", endDate);
+                data.append("questions", JSON.stringify(questions));
+                layer.load(1);
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
-                    url: '/admin/tasks/new',
+                    url: '/admin/tasks/new/',
                     data: data,
                     contentType: false,
                     processData: false,
                     success: function (data, textStatus) {
-                        layer.msg(data.msg, {icon: 4});
+                        layer.msg(data.msg, {icon: 1});
                         setTimeout(function () {
                             window.location.href = '/admin'
+                            layer.closeAll('loading');
                         }, 1000)
                     }
                 })
             }
         })
     })
+
 </script>
 </body>
 

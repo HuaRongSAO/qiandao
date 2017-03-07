@@ -81,5 +81,4 @@ function deleteUser(objectid) {
         console.log(err);
         throw err
     })
-
 }

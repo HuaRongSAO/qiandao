@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.deleteUser = exports.findUsersPage = exports.countUsers = exports.findAllUser = exports.findUser = exports.saveUser = undefined;
+exports.updateUser = exports.deleteUser = exports.findUsersPage = exports.countUsers = exports.findAllUser = exports.findUser = exports.saveUser = undefined;
 
 var _userModel = require('./../models/userModel');
 
@@ -17,6 +17,7 @@ exports.findAllUser = findAllUser;
 exports.countUsers = countUsers;
 exports.findUsersPage = findUsersPage;
 exports.deleteUser = deleteUser;
+exports.updateUser = updateUser;
 // 创建用户
 
 function saveUser(json) {
@@ -34,7 +35,7 @@ function saveUser(json) {
 }
 // 查询用户
 function findUser(queryJson) {
-    return _userModel2.default.find(queryJson).then(function (user) {
+    return _userModel2.default.find(queryJson).sort({ _id: 1 }).then(function (user) {
         return user;
     }).catch(function (err) {
         console.log('错 误' + err);
@@ -43,7 +44,7 @@ function findUser(queryJson) {
 }
 // 查询所有用户
 function findAllUser() {
-    return _userModel2.default.find().then(function (doc) {
+    return _userModel2.default.find().sort({ _id: 1 }).then(function (doc) {
         return doc;
     }).catch(function (err) {
         console.log('错误' + err);
@@ -59,10 +60,11 @@ function findUsersPage(_ref) {
         limit = _ref$limit === undefined ? 20 : _ref$limit;
 
     var _skip = (page - 1) * limit;
-    return _userModel2.default.find().limit(limit).skip(_skip).then(function (users) {
+    return _userModel2.default.find().limit(limit).skip(_skip).sort({ _id: -1 }).then(function (users) {
         return users;
     }).catch(function (err) {
-        return console.log("查找用户：" + err);
+        console.log(err);
+        throw err;
     });
 }
 
@@ -71,15 +73,18 @@ function countUsers() {
     return _userModel2.default.find().count().then(function (count) {
         return count;
     }).catch(function (err) {
-        return console.log("统计用户：" + err);
+        console.log(err);
+        throw err;
     });
 }
 
 //更新用户信息
-function updateUser(json, updata) {
-    return _userModel2.default.update(json).then(function (doc) {
-        console.log(doc);
+function updateUser(query, json) {
+    return _userModel2.default.where(query).update(json).then(function (doc) {
         return doc;
+    }).catch(function (err) {
+        console.log(err);
+        throw err;
     });
 }
 
@@ -88,6 +93,7 @@ function deleteUser(objectid) {
     return _userModel2.default.remove(objectid).then(function (doc) {
         return doc;
     }).catch(function (err) {
-        return console.log("删除用户：" + err);
+        console.log(err);
+        throw err;
     });
 }

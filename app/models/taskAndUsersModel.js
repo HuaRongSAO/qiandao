@@ -5,6 +5,7 @@ let taskAndUsersSchema = new mongoose.Schema({
     task_id: String,
     department: String,
     user_id: String,
+    answer:Object,
     created_at: Date
 });
 

@@ -1,6 +1,6 @@
 import TaskAndUsers from './../models/taskAndUsersModel'
 
-export {createTaskAndUsers,findRelation}
+export {createTaskAndUsers,findRelation,updateRelation}
 
 function createTaskAndUsers(json) {
     return TaskAndUsers({
@@ -17,6 +17,13 @@ function createTaskAndUsers(json) {
 }
 function findRelation(json) {
     return TaskAndUsers.find(json).sort({_id: 1}).catch(function (err) {
+        console.log(err);
+        throw err
+    })
+}
+
+function updateRelation(query,json) {
+    return TaskAndUsers.where(query).update(json).catch(function (err) {
         console.log(err);
         throw err
     })

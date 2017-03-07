@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>登陆</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="Shortcut Icon" href="/system/images/logo.gif">
     <style>
     body {
         background: url(/system/images/bg.jpg) no-repeat;
@@ -40,7 +41,7 @@
     .rights {
         position: absolute;
         bottom: 10px;
-        color: red;
+        color: #fff;
     }
     input{
         letter-spacing: 2px;
@@ -56,18 +57,16 @@
         <% if(message){ %>
         <p><%= message %></p>
         <% } %>
-        <div class="form-group has-success">
+        <div class="form-group">
             <label for="account">账号:</label>
             <div class="has-feedback">
                 <input type="text" class="form-control" name="username" id="account" placeholder="请输入账号">
-                <i class="glyphicon glyphicon-ok form-control-feedback"></i>
             </div>
         </div>
-        <div class="form-group has-error">
+        <div class="form-group ">
             <label for="password">密码:</label>
             <div class="has-feedback">
                 <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码">
-                <i class="glyphicon glyphicon-remove form-control-feedback"></i>
             </div>
         </div>
         <div class="form-group">
@@ -75,7 +74,7 @@
         </div>
     </form>
         <p class="rights">
-            © 2017 版权所有 泉州市第一医院.
+            © 2017 版权所有 福建医科大学附属泉州市第一医院.
         </p>
     </div>
     <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>

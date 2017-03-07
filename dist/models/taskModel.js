@@ -17,6 +17,7 @@ var taskSchema = new _mongoose2.default.Schema({
     type: String,
     start: Date,
     end: Date,
+    questions: Array,
     created_at: Date,
     updated_at: Date
 });

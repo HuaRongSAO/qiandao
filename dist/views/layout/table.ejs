@@ -1,0 +1,49 @@
+<%
+var isFinish = false;
+var w = [];
+var n = [];
+for (var i = 0; i < users.length; i++) {
+    var obj = users[i];
+    var uid = obj._id;
+    var isExist = false;
+    for (var j = 0; j < finish.length; j++) {
+        if (finish[j].user_id == user._id) {
+
+             isFinish = true
+        }
+        var fid = finish[j].user_id;
+        if (fid == uid) {
+            isExist = true;
+            break;
+        }
+    }
+    if (!isExist) {
+        n.push(obj);
+    }
+}
+for (var i = 0; i < users.length; i++) {
+    for (var j = 0; j < finish.length; j++) {
+        if (users[i]._id == finish[j].user_id) {
+            w.push(users[i])
+        }
+    }
+}
+
+
+for(var i = 0;i < n.length;i++){
+%>
+<tr>
+    <td><%= n[i].username %></td>
+    <td key="<%= n[i].username %>" class="false">未完成</td>
+</tr>
+<%
+}
+for(var i = 0;i < w.length;i++){
+%>
+<tr>
+    <td><%= w[i].username %></td>
+    <td>完成</td>
+</tr>
+<%
+}
+%>

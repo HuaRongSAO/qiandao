@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.findRelation = exports.createTaskAndUsers = undefined;
+exports.updateRelation = exports.findRelation = exports.createTaskAndUsers = undefined;
 
 var _taskAndUsersModel = require('./../models/taskAndUsersModel');
 
@@ -13,6 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.createTaskAndUsers = createTaskAndUsers;
 exports.findRelation = findRelation;
+exports.updateRelation = updateRelation;
 
 
 function createTaskAndUsers(json) {
@@ -29,5 +30,15 @@ function createTaskAndUsers(json) {
     });
 }
 function findRelation(json) {
-    return _taskAndUsersModel2.default.find(json);
+    return _taskAndUsersModel2.default.find(json).sort({ _id: 1 }).catch(function (err) {
+        console.log(err);
+        throw err;
+    });
+}
+
+function updateRelation(query, json) {
+    return _taskAndUsersModel2.default.where(query).update(json).catch(function (err) {
+        console.log(err);
+        throw err;
+    });
 }
