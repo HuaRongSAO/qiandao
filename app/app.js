@@ -39,7 +39,9 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
+app.use('/pdf', function (req, res, next) {
+    res.render('pdf', {message: null})
+});
 app.use('/auth', routerAuth);
 app.use('/pc', function (req, res, next) {
     res.render('login', {message: null})

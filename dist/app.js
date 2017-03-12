@@ -81,6 +81,9 @@ app.use((0, _expressSession2.default)({
     saveUninitialized: true
 }));
 
+app.use('/pdf', function (req, res, next) {
+    res.render('pdf', { message: null });
+});
 app.use('/auth', _auth2.default);
 app.use('/pc', function (req, res, next) {
     res.render('login', { message: null });

@@ -178,6 +178,8 @@
         (function () {
             var homework = $('.homework');
             var homeworkContainer = $('.homework-container');
+            var initCharCode = 67;// C。每道题默认有3个选项,即最后一项是C,编码是67。作为每道题的初始值
+
             //  添加题目
             var nowQuestionIndex = 0; 		// 初始化只有0题
             var questionHTML = '';			// 创建题目时对应的html模板
@@ -199,7 +201,11 @@
                     '<div><label>正确答案:</label>&nbsp;<input type="text" class="form-control right-answer">' +
                     '<span>*(支持大/小写)</span></div>' +
                     '</div></div>';
-                homeworkContainer.append(questionHTML);
+
+                homeworkContainer
+                    .append(questionHTML)
+                    .find('.module:last').get(0).currentCharCode = initCharCode;	//标记新建题目自定义属性从选项c开始
+
                 docH = $(document).height();
                 $(window).scrollTop(docH - clientH);//滚动条置底
 
@@ -212,11 +218,12 @@
             });
             // 添加选项
             // A~Z : 65~91
-            var nowCharCode = 67;		// C。每道题默认有3个选项
+//            var nowCharCode = 67;		// C。每道题默认有3个选项
             var nextLetter = '';		// 下一选项对应的选项名称
             var optionHTML = '';		// 创建选项时对应的html模板
             homework.on('click', '.btn-primary', function () {//动态生成的元素需要父级绑定，否则新建元素无此事件
-                nextLetter = String.fromCharCode(++nowCharCode);// 创建的选项对应的字母
+                var currentCharCode = ++$(this).closest('.module').get(0).currentCharCode;//记录当前对应的选项
+                nextLetter = String.fromCharCode(currentCharCode);// 创建的选项对应的字母
                 optionHTML = '<div><label>选项' + nextLetter + ':</label>' +
                     '<input class="form-control  ' + nextLetter + '" type="text" placeholder="选项' + nextLetter + '">' +
                     '<i class="del del-opt">X</i>' +
@@ -225,8 +232,8 @@
             });
             // 删除选项
             homework.on('click', '.del-opt', function () {
+                $(this).closest('.module').get(0).currentCharCode--;//更新
                 $(this).closest('div').remove();
-                nowCharCode--;
             });
         })();
 
@@ -266,15 +273,7 @@
             var filepath = $("#upload").val()
             var extStart = filepath.lastIndexOf(".");
             var ext = filepath.substring(extStart, filepath.length).toUpperCase();
-            if (!$('.q-title').val()) {
-                layer.msg('请完善题目！');
-                return false
 
-            }
-            if (!$('.right-answer').val()) {
-                layer.msg('题目缺少答案！');
-                return false
-            }
             if (filepath) {
                 if (ext == ".mp4" || ext == ".MP4" || ext == ".pdf" || ext == ".PDF") {
                 } else {
@@ -287,6 +286,18 @@
                 $('.course-title').parent().addClass('has-error')
                 return false
             }
+            if ($('.q-title').length > 0) {
+                if (!$('.q-title').val()) {
+                    layer.msg('请完善题目！');
+                    return false
+
+                }
+                if (!$('.right-answer').val()) {
+                    layer.msg('题目缺少答案！');
+                    return false
+                }
+            }
+
             if (!startDate) {
                 layer.msg('请完善开始时间！');
                 $('#start-date').parent().addClass('has-error')
@@ -297,6 +308,7 @@
                 $('#end-date').parent().addClass('has-error')
                 return false
             }
+
             if (files) {
                 data.append("file", files[0]);
                 data.append("title", title);
