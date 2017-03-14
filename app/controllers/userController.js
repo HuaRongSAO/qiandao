@@ -34,7 +34,7 @@ function findUser(queryJson) {
 }
 // 查询所有用户
 function findAllUser() {
-    return User.find().sort({_id: 1}).then(function (doc) {
+    return User.find().sort({"work_number": -1}).then(function (doc) {
         return doc
     }).catch(function (err) {
         console.log('错误' + err)
@@ -45,7 +45,7 @@ function findAllUser() {
 //分页查询用户
 function findUsersPage({page = 1, limit = 20}) {
     let _skip = ( page - 1) * limit;
-    return User.find().limit(limit).skip(_skip).sort({_id: -1}).then(function (users) {
+    return User.find().limit(limit).skip(_skip).sort({"work_number": -1}).then(function (users) {
         return users
     }).catch(function (err) {
         console.log(err);
