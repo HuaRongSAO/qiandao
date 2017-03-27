@@ -44,7 +44,7 @@ function findUser(queryJson) {
 }
 // 查询所有用户
 function findAllUser() {
-    return _userModel2.default.find().sort({ _id: 1 }).then(function (doc) {
+    return _userModel2.default.find().sort({ "work_number": -1 }).then(function (doc) {
         return doc;
     }).catch(function (err) {
         console.log('错误' + err);
@@ -60,7 +60,7 @@ function findUsersPage(_ref) {
         limit = _ref$limit === undefined ? 20 : _ref$limit;
 
     var _skip = (page - 1) * limit;
-    return _userModel2.default.find().limit(limit).skip(_skip).sort({ _id: -1 }).then(function (users) {
+    return _userModel2.default.find().limit(limit).skip(_skip).sort({ "work_number": -1 }).then(function (users) {
         return users;
     }).catch(function (err) {
         console.log(err);

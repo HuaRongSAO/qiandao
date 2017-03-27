@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 let userSchema = new mongoose.Schema({
     username: {type: String, required: true},
     password: {type: String, required: true},
-    work_number: String,
+    work_number: {type: String, required: true},
     department:String,
     birthday:Date,
     job:String,

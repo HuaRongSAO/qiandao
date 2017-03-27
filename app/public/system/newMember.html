@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>创建新成员</title>
+    <link rel="Shortcut Icon" href="images/logo.gif">
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .form{
+            width: 700px;
+            padding: 40px;
+            box-sizing: border-box;
+            border: 1px solid #d4d4d4;
+        }
+        input,select{
+            height: 36px;
+            width: 400px;
+            border-radius: 4px;
+            border: 1px solid #d4d4d4;
+            margin-bottom: 10px;
+            text-indent: 10px;
+        }
+        .btn-primary {
+            margin-left: 380px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="topFix">
+        <strong>Admin</strong>
+        <small>后台管理系统</small>
+        <div class="text">
+            <span>
+                <i class="glyphicon glyphicon-user"></i> 你好，管理员A
+            </span>
+            <button class="btn btn-danger btn-sm logout">
+                <i class="glyphicon glyphicon-off"></i> 退出
+            </button>
+        </div>
+    </div>
+    <div id="wrap">
+        <div class="sidebar">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
+                <li class="active">
+                    <a href="#list1" data-toggle="collapse">课程管理</a>
+                    <ol id="list1" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="allCourses.html">全部课程</a></li>
+                        <li><a href="addCourse.html">新建课程</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list2" data-toggle="collapse">用户管理</a>
+                    <ol id="list2" class="nav nav-pills nav-stacked collapse in">
+                        <li class="bg-info"><a href="javascript:;">成员信息</a></li>
+                        <li><a href="javascript:void(0);">修改密码</a></li>
+                        <!-- <li><a href="#">编辑</a></li> -->
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <div class="main">
+            <!-- 路径导航 -->
+            <ol class="breadcrumb">
+                <li class="active">新成员信息</li>
+            </ol>
+            <div class="form">
+                <div>
+                    <label for="name">姓名：</label>
+                    <input id="name" type="text">
+                </div>
+                <div>
+                    <label for="account">工号：</label>
+                    <input id="account" type="text">
+                </div>
+                <div>
+                    <label for="password">密码：</label>
+                    <input id="password" type="text">
+                </div>
+                <div>
+                    <label for="keshi">科室：</label>
+                    <select name="keshi" id="keshi">
+                        <option value="0">- 请选择 -</option>
+                        <option value="1">社会发展部</option>
+                        <option value="2">体检中心</option>
+                        <option value="3">N27区特需病房</option>
+                        <option value="4">N26区干部病房</option>
+                        <option value="4">...</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="subname">职称：</label>
+                    <select name="subname" id="subname">
+                        <option value="0">- 请选择 -</option>
+                        <option value="1">护士</option>
+                        <option value="2">护师</option>
+                        <option value="3">主管护师</option>
+                        <option value="4">副主任护师</option>
+                        <option value="4">...</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="alert('创建成功')">确定</button>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="libs/jquery-2.1.4.js"></script> -->
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<% include layout/head.ejs %>
+<link rel="stylesheet" href="/system/css/members.css">
+<link rel="stylesheet" href="/system/css/common.css">
+<style>
+    .form {
+        width: 700px;
+        padding: 40px;
+        box-sizing: border-box;
+        border: 1px solid #d4d4d4;
+    }
+
+    input, select {
+        height: 36px;
+        width: 400px;
+        border-radius: 4px;
+        border: 1px solid #d4d4d4;
+        margin-bottom: 10px;
+        text-indent: 10px;
+    }
+
+    .btn-primary {
+        margin-left: 380px;
+        margin-top: 20px;
+    }
+</style>
+</head>
+
+<body>
+<% include layout/fixTop.ejs %>
+<div id="wrap">
+
+    <% include layout/leftNav.ejs %>
+    <div class="main">
+        <!-- 路径导航 -->
+        <ol class="breadcrumb">
+            <li class="active">新成员信息</li>
+        </ol>
+        <div class="form">
+            <div>
+                <label for="name">姓名：</label>
+                <input id="name" type="text">
+            </div>
+            <div>
+                <label for="account">工号：</label>
+                <input id="account" type="text" placeholder="请大于这个数字<%= number %>的账号">
+            </div>
+            <div>
+                <label for="password">密码：</label>
+                <input id="password" type="text">
+            </div>
+            <div>
+                <label for="keshi">科室：</label>
+                <select name="keshi" id="keshi">
+
+                </select>
+            </div>
+            <div>
+                <label for="subname">职称：</label>
+                <input name="subname" id="subname" type="text"/>
+            </div>
+            <button class="btn btn-primary" id="tijiao" >确定</button>
+        </div>
+    </div>
+</div>
+<% include layout/script.ejs %>
+<script>
+    $(function () {
+        var isValid = false;
+        var departmentArry = [<%- departments%>]
+        var obj = $('#keshi')
+        for (var i in departmentArry) {
+            obj.append('<option selected value="' + departmentArry[i] + '">' + departmentArry[i] + '</option>');
+        }
+        $('#account').change(function () {
+            var _url = "/admin/users/check/" + $('#account').val();
+            $.get(_url, function (result) {
+                if(!result.state){
+                    isValid = false
+                    layer.msg(result.msg, {icon: 5});
+                }else {
+                    isValid = true
+                }
+
+            });
+        })
+        var isSubmit = false;
+        $("#tijiao").on('click',function () {
+            if(isSubmit) return;
+            var user = getUser();
+            for(var key in user){
+                if(!user[key]){
+                    layer.msg("请完善用户信息!", {icon: 5});
+                    return
+                }
+
+            }
+            if(!isNaN(user.work_number )){
+                user.work_number = pad(user.work_number,4)
+            }else{
+                layer.msg("用户工号格式不正确!", {icon: 5});
+                return
+            }
+            isSubmit = true
+            ajaxADDUser(user,function (data) {
+                isSubmit  = false;
+                $('input').val('');
+                if(data.state){
+                    layer.msg(data.msg, {icon: 1});
+                    return
+                }
+                layer.msg("添加失败!", {icon: 5});
+                return
+            })
+        })
+
+        function getUser() {
+            var user = {};
+            user.username = $("#name").val()
+            user.work_number = $('#account').val()
+            user.password = $('#password').val()
+            user.department = $('#keshi').val()
+            user.jobname  = $('#subname').val()
+            console.log(user)
+            return user;
+        }
+
+        function pad(num, n) {
+            return Array(n>num?(n-(''+num).length+1):0).join(0)+num;
+        }
+        function ajaxADDUser(user, callback) {
+            var _url = '/admin/users/add/';
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url: _url,
+                data: user,
+                success: function (data) {
+                    callback(data);
+                }
+            })
+        }
+    })
+
+</script>
+</body>
+
+</html>

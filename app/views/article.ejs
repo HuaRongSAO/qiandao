@@ -151,14 +151,30 @@ if(task._id){ %>
                     n.push(obj);
                 }
             }
+            //完成的用户
             for (var i = 0; i < users.length; i++) {
                 for (var j = 0; j < finish.length; j++) {
                     if (users[i]._id == finish[j].user_id) {
-                        if (finish[j].answer) users[i].answer = finish[j].answer
-                        w.push(users[i])
+                        var ouser = {}
+                        ouser.username = users[i].username
+                        ouser._id = users[i]._id
+
+                        if (finish[j].answer) {
+                            ouser.answer = finish[j].answer;
+                            ouser.right = finish[j].answer.right
+                            console.log(ouser)
+                        }
+                        w.push(ouser)
                     }
                 }
             }
+            var unique = {};
+            w.forEach(function (gpa) {
+                unique[JSON.stringify(gpa)] = gpa
+            });
+            w = Object.keys(unique).map(function (u) {
+                return JSON.parse(u)
+            });
         for(var i = 0;i < n.length;i++){
         %>
         <tr>
@@ -168,16 +184,17 @@ if(task._id){ %>
         </tr>
         <%
         }
+
         for(var i = 0;i < w.length;i++){
         %>
         <tr>
             <td><%= w[i].username %></td>
             <td>完成</td>
-            <% if( w[i].answer ){ %>
-            <td class="false"><%= w[i].answer.right %></td>
-            <% } else{%>
-                <td key="<%= w[i]._id %>F" class="false">未完成</td>
-            <%}%>
+            <% if( w[i].right ){ %>
+            <td class="false"><%= w[i].right %></td>
+            <% } else{ %>
+            <td key="<%= w[i]._id %>F" class="false">未完成</td>
+            <% } %>
         </tr>
         <%
         }
@@ -204,7 +221,14 @@ if(task._id){ %>
 <script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
 <script>
     $(function () {
-
+        var isFinishX = false;
+        if ($('#info').attr('select')) {
+            var myanswer = $('#info').attr('select').split(",");
+            //模拟选择
+            selectAn(myanswer)
+            checkAnswer()
+            moveAnswer()
+        }
         // 切换
         $('.item').on('click', function () {
             var index = $(this).index();
@@ -224,7 +248,7 @@ if(task._id){ %>
         (function () {
             var isW = false;
             isW = $('#info').attr('finish') == 'false' ? false : true;
-            console.log(isW)
+
             if (isW) {
                 $('#subComplete').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
                 $('.complete i').show();
@@ -232,11 +256,11 @@ if(task._id){ %>
                 $('#questions').hide();
             }
 
-            $('#subComplete').on('click', function () {
+            $('#subComplete').one('click', function () {
                 $('td[key="<%= user._id %>"]').text('完成').removeClass('false')
                 $('#questions').show();
                 $('#subComplete').off('click')
-                if (isW) return;
+                if (isW) return false;
                 // ajax成功
                 $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
                 $.get("/user/article/finish/<%= task._id %>", function (result) {
@@ -322,14 +346,7 @@ if(task._id){ %>
 
         //   提交答案
         (function () {
-            var isFinishX = false;
-            if ($('#info').attr('select')) {
-                var myanswer = $('#info').attr('select').split(",");
-                //模拟选择
-                selectAn(myanswer)
-                checkAnswer()
-                moveAnswer()
-            }
+
 
             var L = $('.radio').length;
             $('#subQuestions').on('click', function () {
@@ -340,19 +357,19 @@ if(task._id){ %>
                     return
                 }
 
-
-
                 var userAnswer = checkAnswer()
-                if(userAnswer.right/userAnswer.all<0.8){
-                    alert('您只答对了'+userAnswer.right+'题!请重新作答！')
+                if (userAnswer.right != userAnswer.all) {
+                    alert('您只答对了' + userAnswer.right + '题!请重新作答！')
                     return
                 }
                 var _url = '/user/task/answer/' + $('.article').attr('task');
                 var params = {}
                 params.answer = JSON.stringify(userAnswer);
-                var ri =userAnswer.right
-                $('td[key="<%= user._id+'F' %>"]').text(ri)
+                var ri = userAnswer.right
+                $('td[key="<%= user._id + 'F' %>"]').text(ri)
+
                 $('#subQuestions').off('click')
+                isFinishX = true;
                 $.ajax({
                     type: 'post',
                     url: _url,
@@ -361,7 +378,6 @@ if(task._id){ %>
                         var _data = JSON.parse(data)
                         if (_data.state) {
                             moveAnswer();
-
                         } else {
                         }
                     }
@@ -378,13 +394,13 @@ if(task._id){ %>
             };
             aChecked = $('input:checked');
             aInput = $('#questions input')
-            $('.radio label').css('color','#000')
+            $('.radio label').css('color', '#000')
             aChecked.each(function (index, item) {
                 userAnswer.select.push($(this).attr('index'))
                 if ($(this).attr('index') == $(this).attr('answer')) {
                     $(this).parent().css('color', 'green')
                     userAnswer.right++
-                }else {
+                } else {
                     $(this).parent().css('color', '#ff0000')
                 }
             })

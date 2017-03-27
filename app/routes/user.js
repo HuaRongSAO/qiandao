@@ -27,7 +27,7 @@ userRouter.get('/article/', function (req, res, next) {
         let users = results[1];
         let json = {task_id: task._id, department: req.session.user.department}
         findRelation(json).then(function (finish) {
-            console.log(finish)
+
             res.render('article', {
                 task: task,
                 user: req.session.user,
@@ -41,13 +41,22 @@ userRouter.get('/article/', function (req, res, next) {
 });
 
 userRouter.get('/article/finish/:taskid', function (req, res) {
-    createTaskAndUsers({
+    findRelation({
         task_id: req.params.taskid,
-        department: req.session.user.department,
         user_id: req.session.user._id
-    }).then(function (task) {
-        res.json({state: true, msg: '完成课程'})
+    }).then(function (result) {
+        if (result.length == 0) {
+            createTaskAndUsers({
+                task_id: req.params.taskid,
+                department: req.session.user.department,
+                user_id: req.session.user._id
+            }).then(function (task) {
+                res.json({state: true, msg: '完成课程'})
+            })
+            res.json({state: false, msg: '已经提交'})
+        }
     })
+
 })
 //退出
 userRouter.get('/out', function (req, res) {
@@ -72,11 +81,8 @@ userRouter.post('/update/:uid', function (req, res) {
 
 //做题
 userRouter.post('/task/answer/:taskid', function (req, res) {
-
-    let query = {user_id: req.session.user._id, task_id: req.params.taskid}
-    let updateJson = {answer:JSON.parse(req.body.answer)};
-    console.log(query)
-    console.log(updateJson)
+    let query = {user_id: req.session.user._id, task_id: req.params.taskid};
+    let updateJson = {answer: JSON.parse(req.body.answer)};
     updateRelation(query, updateJson).then(function (doc) {
         res.json({state: true, data: '', msg: ''})
     }).catch(function (err) {

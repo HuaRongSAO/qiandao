@@ -232,7 +232,7 @@
             });
             // 删除选项
             homework.on('click', '.del-opt', function () {
-                $(this).closest('.module').get(0).currentCharCode --;//更新
+                $(this).closest('.module').get(0).currentCharCode--;//更新
                 $(this).closest('div').remove();
             });
         })();
@@ -273,15 +273,7 @@
             var filepath = $("#upload").val()
             var extStart = filepath.lastIndexOf(".");
             var ext = filepath.substring(extStart, filepath.length).toUpperCase();
-            if (!$('.q-title').val()) {
-                layer.msg('请完善题目！');
-                return false
 
-            }
-            if (!$('.right-answer').val()) {
-                layer.msg('题目缺少答案！');
-                return false
-            }
             if (filepath) {
                 if (ext == ".mp4" || ext == ".MP4" || ext == ".pdf" || ext == ".PDF") {
                 } else {
@@ -294,6 +286,18 @@
                 $('.course-title').parent().addClass('has-error')
                 return false
             }
+            if ($('.q-title').length > 0) {
+                if (!$('.q-title').val()) {
+                    layer.msg('请完善题目！');
+                    return false
+
+                }
+                if (!$('.right-answer').val()) {
+                    layer.msg('题目缺少答案！');
+                    return false
+                }
+            }
+
             if (!startDate) {
                 layer.msg('请完善开始时间！');
                 $('#start-date').parent().addClass('has-error')
@@ -304,6 +308,7 @@
                 $('#end-date').parent().addClass('has-error')
                 return false
             }
+
             if (files) {
                 data.append("file", files[0]);
                 data.append("title", title);
