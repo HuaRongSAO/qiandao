@@ -86,7 +86,6 @@ masterRouter.get('/tasks/info/:taskid', function (req, res, next) {
             let a = []// 完成
             let b = []//未完成
             let isSame = false;
-
             for (let i = 0; i < users.length; i++) {
                 for (let j = 0; j < finish.length; j++) {
                     if (users[i]._id == finish[j].user_id) {
@@ -107,12 +106,15 @@ masterRouter.get('/tasks/info/:taskid', function (req, res, next) {
                 console.log(a[i])
                 b.push(a[i]);
             }
-            console.log(b[b.length - 1])
+
             return b
         }).then(function (arr) {
-
-
-            res.render('courseProgress', {users: arr, task: task[0], user: req.session.user})
+            res.render('courseProgress',
+                {
+                    users: arr, task: task[0],
+                    user: req.session.user
+                }
+            )
         })
     }).catch(function (r) {
         console.log(r);

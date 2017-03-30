@@ -137,7 +137,7 @@ if(task._id){ %>
                 var uid = obj._id;
                 var isExist = false;
                 for (var j = 0; j < finish.length; j++) {
-                    if (finish[j].user_id == user._id) {
+                    if (finish[j].user_id === user._id) {
                         isFinish = true;
                         if (finish[j].answer) answer = finish[j].answer
                     }
@@ -184,12 +184,11 @@ if(task._id){ %>
         </tr>
         <%
         }
-
         for(var i = 0;i < w.length;i++){
         %>
         <tr>
             <td><%= w[i].username %></td>
-            <td>完成</td>
+            <td key="<%= w[i]._id %>">完成</td>
             <% if( w[i].right ){ %>
             <td class="false"><%= w[i].right %></td>
             <% } else{ %>
@@ -220,211 +219,24 @@ if(task._id){ %>
 <script src="//cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
 <script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
 <script>
-    $(function () {
-        var isFinishX = false;
-        if ($('#info').attr('select')) {
-            var myanswer = $('#info').attr('select').split(",");
-            //模拟选择
-            selectAn(myanswer)
-            checkAnswer()
-            moveAnswer()
+    // 切换
+    $('.item').on('click', function () {
+        var index = $(this).index();
+
+        $('.item').removeClass('active');
+        $(this).addClass('active');
+
+        // 内容切换
+        $('.block').hide();
+        if (index === 1) {
+            $('table').css('display', 'table');
+        } else {
+            $('.block').eq(0).show();
         }
-        // 切换
-        $('.item').on('click', function () {
-            var index = $(this).index();
-
-            $('.item').removeClass('active');
-            $(this).addClass('active');
-
-            // 内容切换
-            $('.block').hide();
-            if (index === 1) {
-                $('table').css('display', 'table');
-            } else {
-                $('.block').eq(0).show();
-            }
-        });
-        //完成课程
-        (function () {
-            var isW = false;
-            isW = $('#info').attr('finish') == 'false' ? false : true;
-
-            if (isW) {
-                $('#subComplete').removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
-                $('.complete i').show();
-            } else {
-                $('#questions').hide();
-            }
-
-            $('#subComplete').one('click', function () {
-                $('td[key="<%= user._id %>"]').text('完成').removeClass('false')
-                $('#questions').show();
-                $('#subComplete').off('click')
-                if (isW) return false;
-                // ajax成功
-                $(this).removeClass('btn-danger').addClass('btn-default active').text('已完成该课程');
-                $.get("/user/article/finish/<%= task._id %>", function (result) {
-                    if (result.state) {
-                        $('.complete i').show();
-                    }
-                });
-            })
-        })();
-        //修改密码
-        (function () {
-            var oManage = $('#manage');
-            var $inputs = oManage.find('input');
-            var oldPassword = $inputs.eq(0);
-            var newPassword = $inputs.eq(1);
-            var newPasswordRepeat = $inputs.eq(2);
-            var minLen = 6;//密码最少是6位数
-
-            $('.user-center').on('click', function () {
-                oManage.toggle();
-                $inputs.val('');//清空值
-            });
-
-            // 取消按钮
-            oManage.add('.btn-default').on('click', function () {
-                oManage.hide();
-                $inputs.val('');//清空值
-            });
-
-            // 去空格
-            $inputs.on('keyup', function () {
-                oldPassword.val(oldPassword.val().trim());
-                newPassword.val(newPassword.val().trim());
-                newPasswordRepeat.val(newPasswordRepeat.val().trim());
-            })
-
-            // 确认按钮
-            oManage.find('.btn-primary').on('click', function () {
-                var oldPasswordValue = oldPassword.val();
-                var newPasswordValue = newPassword.val();
-                var newPasswordRepeatValue = newPasswordRepeat.val();
-
-                if (newPasswordValue.length < minLen || oldPasswordValue.length < minLen) {//新旧密码长度小于6
-                    alert("请检查密码长度是否满足要求！");
-                    return
-                } else {
-                    if (newPasswordValue === newPasswordRepeatValue) {//重复密码错误时
-                        var _url = '/user/update/' + $('#username').attr('uid');
-                        var params = {}
-                        params.oldPassword = oldPasswordValue;
-                        params.newPassword = newPasswordValue;
-                        $.ajax({
-                            type: 'post',
-                            url: _url,
-                            data: params,
-                            success: function (data) {
-                                var _data = JSON.parse(data)
-                                if (_data.state) {
-                                    alert('修改成功！')
-                                    oManage.toggle();
-                                } else {
-                                    alert('原密码错误！请重新输入或者联系管理员修改密码！')
-                                }
-                            }
-                        });
-                    } else {
-                        alert("密码不一致！");
-                        return
-                    }
-                }
-            });
-
-            //阻止冒泡
-            oManage.find('.container').on('click', function (e) {
-                e.stopPropagation();
-            });
-            //阻止默认
-            oManage.on('touchmove', function (e) {
-                e.preventDefault();
-            });
-        })();
-
-
-        //   提交答案
-        (function () {
-
-
-            var L = $('.radio').length;
-            $('#subQuestions').on('click', function () {
-                var len = $('input:checked').length;
-                if (isFinishX) return;
-                if (len < L) {
-                    $('.caution').show();
-                    return
-                }
-
-                var userAnswer = checkAnswer()
-                if (userAnswer.right != userAnswer.all) {
-                    alert('您只答对了' + userAnswer.right + '题!请重新作答！')
-                    return
-                }
-                var _url = '/user/task/answer/' + $('.article').attr('task');
-                var params = {}
-                params.answer = JSON.stringify(userAnswer);
-                var ri = userAnswer.right
-                $('td[key="<%= user._id + 'F' %>"]').text(ri)
-
-                $('#subQuestions').off('click')
-                isFinishX = true;
-                $.ajax({
-                    type: 'post',
-                    url: _url,
-                    data: params,
-                    success: function (data) {
-                        var _data = JSON.parse(data)
-                        if (_data.state) {
-                            moveAnswer();
-                        } else {
-                        }
-                    }
-                });
-            })
-        })();
-
-
-        function checkAnswer() {
-            var userAnswer = {
-                select: [],
-                right: 0,
-                all: 0
-            };
-            aChecked = $('input:checked');
-            aInput = $('#questions input')
-            $('.radio label').css('color', '#000')
-            aChecked.each(function (index, item) {
-                userAnswer.select.push($(this).attr('index'))
-                if ($(this).attr('index') == $(this).attr('answer')) {
-                    $(this).parent().css('color', 'green')
-                    userAnswer.right++
-                } else {
-                    $(this).parent().css('color', '#ff0000')
-                }
-            })
-            userAnswer.all = aChecked.length
-            return userAnswer
-        }
-
-        function moveAnswer() {
-            isFinishX = true
-            $('#subQuestions').removeClass('btn-danger').addClass('btn-default active').text('已 交 卷');
-            $('.answerBtn i').show();
-            $('[type="radio"]').prop('disabled', true);
-            $('.caution').hide();
-            $('#subQuestions').off('click')
-        }
-
-        function selectAn(arr) {
-            $('.radio').each(function (key, item) {
-                var aInp = $(this).find('input');
-                $(aInp[arr[key]]).prop('checked', true)
-            })
-        }
-    })
+    });
 </script>
+<% include layout/doArticle.ejs %>
+
 </body>
 
 </html>

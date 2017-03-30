@@ -27,7 +27,7 @@ userRouter.get('/article/', function (req, res, next) {
         let users = results[1];
         let json = {task_id: task._id, department: req.session.user.department}
         findRelation(json).then(function (finish) {
-
+            console.log(finish)
             res.render('article', {
                 task: task,
                 user: req.session.user,
@@ -43,7 +43,8 @@ userRouter.get('/article/', function (req, res, next) {
 userRouter.get('/article/finish/:taskid', function (req, res) {
     findRelation({
         task_id: req.params.taskid,
-        user_id: req.session.user._id
+        user_id: req.session.user._id,
+        department:req.session.user.department
     }).then(function (result) {
         if (result.length == 0) {
             createTaskAndUsers({
@@ -53,6 +54,7 @@ userRouter.get('/article/finish/:taskid', function (req, res) {
             }).then(function (task) {
                 res.json({state: true, msg: '完成课程'})
             })
+        } else {
             res.json({state: false, msg: '已经提交'})
         }
     })
