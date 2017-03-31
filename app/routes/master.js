@@ -87,10 +87,13 @@ masterRouter.get('/tasks/info/:taskid', function (req, res, next) {
             let b = []//未完成
             let isSame = false;
             for (let i = 0; i < users.length; i++) {
+
                 for (let j = 0; j < finish.length; j++) {
+
                     if (users[i]._id == finish[j].user_id) {
                         isSame = true;
                         user = users[i]
+                        if(finish[j].answer&&finish[j].answer.time)  user.time = finish[j].answer.time
                         user.wan = finish[j].created_at
                         break
                     }
@@ -103,10 +106,8 @@ masterRouter.get('/tasks/info/:taskid', function (req, res, next) {
                 }
             }
             for (let i in a) {
-                console.log(a[i])
                 b.push(a[i]);
             }
-
             return b
         }).then(function (arr) {
             res.render('courseProgress',

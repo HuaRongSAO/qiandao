@@ -112,7 +112,7 @@
         //   提交答案
         (function () {
 
-
+            var time =1;
             var L = $('.radio').length;
             $('#subQuestions').on('click', function () {
                 var len = $('input:checked').length;
@@ -123,10 +123,13 @@
                 }
 
                 var userAnswer = checkAnswer()
+
                 if (userAnswer.right != userAnswer.all) {
                     alert('您只答对了' + userAnswer.right + '题!请重新作答！')
+                    time++;
                     return
                 }
+                userAnswer.time = time
                 var _url = '/user/task/answer/' + $('.article').attr('task');
                 var params = {}
                 params.answer = JSON.stringify(userAnswer);

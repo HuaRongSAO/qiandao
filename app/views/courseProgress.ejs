@@ -50,6 +50,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
                 <tr>
                     <th>工号</th>
                     <th>用户名</th>
+                    <th>作答次数</th>
                     <th>状态</th>
                     <th>完成日期</th>
                 </tr>
@@ -61,6 +62,11 @@ Date.prototype.Format = function (fmt) { //author: meizz
                 <tr>
                     <td><%= users[i].work_number%></td>
                     <td><%= users[i].username%></td>
+                    <%if(users[i].time){%>
+                    <td><span class="label label-primary"><%= users[i].time%></span></td>
+                    <%}else{%>
+                    <td><span class="label label-danger ">0</span></td>
+                    <%} %>
                     <%if(users[i].wan){%>
                     <td><span class="label label-primary">完成</span></td>
                     <td><%= users[i].wan.Format("yyyy-MM-dd hh:mm:ss")%></td>
@@ -68,7 +74,6 @@ Date.prototype.Format = function (fmt) { //author: meizz
                     <td><span class="label label-danger ">未完成</span></td>
                     <td>还未完成</td>
                     <%} %>
-
                 </tr>
 
                 <%}}%>

@@ -83,7 +83,7 @@ userRouter.post('/update/:uid', function (req, res) {
 
 //做题
 userRouter.post('/task/answer/:taskid', function (req, res) {
-    let query = {user_id: req.session.user._id, task_id: req.params.taskid};
+    let query = {user_id: req.session.user._id, task_id: req.params.taskid, department: req.session.user.department};
     let updateJson = {answer: JSON.parse(req.body.answer)};
     updateRelation(query, updateJson).then(function (doc) {
         res.json({state: true, data: '', msg: ''})
