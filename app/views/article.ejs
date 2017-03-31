@@ -120,6 +120,7 @@ if(task._id){ %>
             <th>用户名</th>
             <th>状态</th>
             <th>答对</th>
+            <th>答题次数</th>
         </tr>
         </thead>
         <tbody>
@@ -158,11 +159,11 @@ if(task._id){ %>
                         var ouser = {}
                         ouser.username = users[i].username
                         ouser._id = users[i]._id
-
+                        ouser.time =0
                         if (finish[j].answer) {
                             ouser.answer = finish[j].answer;
                             ouser.right = finish[j].answer.right
-                            console.log(ouser)
+                            if(finish[j].answer.time)ouser.time=finish[j].answer.time
                         }
                         w.push(ouser)
                     }
@@ -181,6 +182,7 @@ if(task._id){ %>
             <td><%= n[i].username %></td>
             <td key="<%= n[i]._id %>" class="false">未完成</td>
             <td key="<%= n[i]._id %>f" class="false">未完成</td>
+            <td><%= w[i].time%></td>
         </tr>
         <%
         }
@@ -193,7 +195,9 @@ if(task._id){ %>
             <td class="false"><%= w[i].right %></td>
             <% } else{ %>
             <td key="<%= w[i]._id %>F" class="false">未完成</td>
+
             <% } %>
+            <td><%= w[i].time%></td>
         </tr>
         <%
         }

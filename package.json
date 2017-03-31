@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./app/bin/www --exec babel-node",
+    "start": "PORT=3000 nodemon ./app/bin/www  --exec babel-node",
     "dist": "gulp dist"
   },
   "dependencies": {
