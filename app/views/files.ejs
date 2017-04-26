@@ -1,0 +1,199 @@
+<% include layout/head.ejs %>
+<%
+Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+%>
+<link rel="stylesheet" href="/system/css/common.css">
+</head>
+<style>
+    .btn-toolbar {
+        left: 30%;
+    }
+
+    .query {
+        padding: 20px 0;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    .category {
+        width: 150px;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .category option {
+        font-size: 16px;
+    }
+
+    .query-btn {
+        margin-bottom: 4px;
+    }
+</style>
+<body>
+<% include layout/fixTop.ejs %>
+<!-- <div class="space-h50"></div> -->
+<div id="wrap">
+    <!-- 侧边栏开始 -->
+
+    <% include layout/leftNav.ejs %>
+
+    <!-- 侧边栏结束 -->
+    <!-- 正文开始 -->
+    <div class="main">
+        <!-- 路径导航 -->
+        <ol class="breadcrumb">
+            <li class="active">健康处方</li>
+            <li class="active">文件管理</li>
+        </ol>
+        <div class="query">
+            <div>
+                <label for="">选择种类：</label>
+                <select class="category category_1"></select>
+                <select class="category category_2"></select>
+                <button class="btn btn-default query-btn"><i class="glyphicon glyphicon-search"></i> 筛选</button>
+            </div>
+        </div>
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>名称</th>
+                <th>种类</th>
+                <th>类型</th>
+                <th>发布日期</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%
+            for(var i = 0;i < fileLists.length;i++){
+            %>
+
+            <tr>
+                <td><%= i %></td>
+                <td><%= fileLists[i].title %></td>
+                <td><%= fileLists[i].parent %></td>
+                <td><%= fileLists[i].child %></td>
+                <td><%= fileLists[i].date.Format("yyyy-MM-dd") %></td>
+                <td>
+                    <button key="<%= fileLists[i]._id %>" class="btn btn-link btn-sm delete"><i
+                                class="glyphicon glyphicon-trash"></i> 删除
+                    </button>
+                </td>
+            </tr>
+            <%
+            }
+            %>
+
+            </tbody>
+        </table>
+        <!-- 所有页码 -->
+        <div class="btn-toolbar text-center">
+            <div id="pagebar" class="btn-group btn-group-md"></div>
+        </div>
+    </div>
+</div>
+<% include layout/script.ejs %>
+<script src="/system/libs/jquery.pagination.js"></script>
+<script>
+    $(function () {
+        // 下拉菜单初始化
+        function initOptions(selctor, arr) {
+            var init = '<option value="0">-- 所有 --</option>';
+
+            arr = arr || [];
+            for (var i = 0; i < arr.length; i++) {
+                init += '<option value="' + arr[i] + '">' + arr[i] + '</option>';
+            }
+            $(selctor).html(init);
+        }
+
+        var categories = JSON.parse('<%- JSON.stringify(classifies) %>');
+
+        //初始化下拉菜单
+        (function () {
+            var keys = [];
+            for (var key in categories) {
+                keys.push(key);
+            }
+
+            initOptions('.category_1', keys);
+            initOptions('.category_2');
+        })();
+
+        // 初始化分页插件
+        $('#pagebar').pagination({
+            totalData: <%= pagination.count %>, //总数据条数
+            showData: 20, //每页数据条数
+            current:  <%= pagination.current %>, //当前页
+            // jump:true,//跳转
+            coping: true, //开启首页尾页
+            homePage: '首页',
+            endPage: '末页',
+            prevContent: '上页',
+            nextContent: '下页',
+            callback: function (obj) { //当前页作为hash值
+                window.location.href = window.location.pathname + '?page=' + obj.getCurrent();
+            }
+        });
+
+        // 删除
+        $('table').on('click', '.delete', function () {
+            var nowIndex = $(".delete").index(this); //当前按钮的索引
+
+            if (window.confirm("是否删除(index=" + nowIndex + ")的数据")) {
+                alert("删除成功！");
+                location.reload();
+            }
+        });
+
+        // 联动下拉菜单
+        $('.category_1').on('change', function () {
+            var selectedVal = $(this).children('option:selected').val();
+
+            if (selectedVal === '0') { //0代表选择所有
+                initOptions('.category_2');
+            }
+            for (var key in categories) {
+                if (key === selectedVal) {
+                    initOptions('.category_2', categories[key]);
+                    break;
+                }
+            }
+        });
+
+        // 筛选
+        $('.query-btn').click(function () {
+            var category_1 = $('.category_1').val();//大类
+            var category_2 = $('.category_2').val();//小类
+            if (category_1 == 0) return
+
+            window.location.href = '/admin/files/query/' + category_1 + '+' + category_2
+        });
+    })
+</script>
+</body>
+
+</html>

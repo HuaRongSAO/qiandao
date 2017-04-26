@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -42,6 +41,7 @@
 <header>
     <div class="logo"></div>
     <div id="user">
+        <a href="/user/out">文件系统</a>
         <span id="username" uid="<%= user._id %>"><%= user.username %></span>，欢迎你！
         <a href="/user/out"><span class="logout">退 出</span></a>
     </div>
@@ -159,11 +159,11 @@ if(task._id){ %>
                         var ouser = {}
                         ouser.username = users[i].username
                         ouser._id = users[i]._id
-                        ouser.time =0
+                        ouser.time = 0
                         if (finish[j].answer) {
                             ouser.answer = finish[j].answer;
                             ouser.right = finish[j].answer.right
-                            if(finish[j].answer.time)ouser.time=finish[j].answer.time
+                            if (finish[j].answer.time) ouser.time = finish[j].answer.time
                         }
                         w.push(ouser)
                     }
@@ -182,7 +182,7 @@ if(task._id){ %>
             <td><%= n[i].username %></td>
             <td key="<%= n[i]._id %>" class="false">未完成</td>
             <td key="<%= n[i]._id %>f" class="false">未完成</td>
-            <td><%= w[i].time%></td>
+            <td><%= n[i].time %></td>
         </tr>
         <%
         }
@@ -197,7 +197,7 @@ if(task._id){ %>
             <td key="<%= w[i]._id %>F" class="false">未完成</td>
 
             <% } %>
-            <td><%= w[i].time%></td>
+            <td><%= w[i].time %></td>
         </tr>
         <%
         }
@@ -218,6 +218,19 @@ if(task._id){ %>
 
 <!-- 个人中心 -->
 <div class="user-center"></div>
+<div style="position: fixed;
+    right: 0.4rem;
+    background: rgba(0,0,0,0.85);
+    top: 35rem;
+    width: 4.6rem;
+    height: 4.6rem;
+    line-height: 4.6rem;
+    border-radius: 100%;
+    color: #fff;
+
+    z-index: 10;">
+    <a href="/files">文件系统</a>
+</div>
 <% include layout/password.ejs %>
 <div id="info" finish="<%= isFinish %>" select="<%= answer.select %>"></div>
 <script src="//cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>

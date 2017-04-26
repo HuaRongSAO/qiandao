@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>科室管理</title>
+    <link rel="Shortcut Icon" href="images/logo.gif">
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style type="text/css">
+    table {
+        margin-top: 6px;
+    }
+    
+    table input {
+        text-align: center;
+        width: 80%;
+        border: 0;
+        background: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="topFix">
+        <strong>Admin</strong>
+        <small>后台管理系统</small>
+        <div class="text">
+            <span>
+                <i class="glyphicon glyphicon-user"></i> 你好，管理员A
+            </span>
+            <button class="btn btn-danger btn-sm logout">
+                <i class="glyphicon glyphicon-off"></i> 退出
+            </button>
+        </div>
+    </div>
+    <div id="wrap">
+        <!-- 侧边栏开始 -->
+        <div class="sidebar">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
+                <li class="active">
+                    <a href="#list1" data-toggle="collapse">课程管理</a>
+                    <ol id="list1" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="allCourses.html">全部课程</a></li>
+                        <li><a href="addCourse.html">新建课程</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list2" data-toggle="collapse">用户管理</a>
+                    <ol id="list2" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="members.html">成员信息</a></li>
+                        <li><a href="newMember.html">添加用户</a></li>
+                        <li class="bg-info"><a href="javascript:;">科室管理</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list3" data-toggle="collapse">健康处方</a>
+                    <ol id="list3" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="healthContent.html">文件管理</a></li>
+                        <li><a href="healthUpload.html">上传文件</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list4" data-toggle="collapse" class="collapse">管理员设置</a>
+                    <ol id="list4" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="#">修改密码</a></li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <div class="main">
+            <!-- 路径导航 -->
+            <ol class="breadcrumb">
+                <li class="active">用户管理</li>
+                <li class="active">科室管理</li>
+            </ol>
+            <div class="col-md-8">
+                <span>* 鼠标点击科室即可进行修改</span>
+                <table class="table table-striped table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>科室</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <input type="text" value="N12">
+                            </td>
+                            <td>
+                                <button class="del btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <input type="text" value="放射科">
+                            </td>
+                            <td>
+                                <button class="del btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary">+ 添加科室</button>
+            </div>
+        </div>
+    </div>
+    <script src="libs/jquery-2.1.4.js"></script>
+    <script>
+    $(function() {
+        // 保存科室
+        function save(inp) {
+            var trimValue = inp.val().trim();
+            if (trimValue.length) {
+                alert('提交')
+                    /*$.get({
+                        url: String,
+                        dataType: 'text',
+                        data: Object,
+                        success: function() {}
+                    });*/
+            }
+        }
+
+        // 添加科室
+        $('.btn-primary').click(function() {
+            var len = $('tbody tr').length;
+            var oTr = $('<tr><td>' + (len + 1) + '</td><td><input type="text" value=""></td><td><button class="del btn btn-link btn-sm"><i class="glyphicon glyphicon-trash"></i> 删除</button></td></tr>');
+            var lastTr;
+
+            $('tbody').append(oTr);
+            lastTr = oTr.last();
+
+            //自动聚焦、失去焦点保存
+            lastTr.find('input').focus().on('blur', function() {
+                var trimValue = $(this).val().trim();
+                if (trimValue.length === 0) {
+                    lastTr.remove();
+                }
+            });
+        });
+
+        // 修改科室
+        $('input').on('blur', function() {
+            save($(this));
+        });
+
+        // 删除科室
+        $('.table').on('click', '.del', function() {
+            var target = $(this).closest('tr').find('input').val(); //科室名称
+
+            if (confirm('是否删除"' + target + '"?')) {
+
+                /*$.get({
+                    url: String,
+                    dataType: 'text',
+                    data: Object,
+                    success: function() {
+                        window.location.reload();
+                    }
+                });*/
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

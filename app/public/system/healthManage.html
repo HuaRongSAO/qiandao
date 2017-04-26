@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>文件管理</title>
+    <link rel="Shortcut Icon" href="images/logo.gif">
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+    .create-class{
+        padding-bottom: 50px;
+        padding-right: 50px;
+    }
+    #content dl {
+        padding: 20px 0 50px;
+        border-bottom: 1px dashed #333;
+    }
+    
+    #content dl:first-child {
+        padding-top: 0;
+    }
+    
+    #content dl:last-child {
+        padding-bottom: 0;
+        border: 0;
+    }
+    
+    #content dt {
+        display: table-cell;
+    }
+    
+    #content dd {
+        margin-left: 20px;
+        margin-top: 20px;
+    }
+    /*弹窗*/
+    
+    .popup-box,
+    .class-alert {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+    }
+    
+    .popup,
+    .class-alert > div {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        border-radius: 6px;
+        box-shadow: 1px 1px 5px #ddd;
+    }
+    
+    .popup .title {
+        line-height: 2;
+        margin-bottom: 15px;
+        font-size: 16px;
+        color: #888;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .popup .btn {
+        margin-top: 10px;
+    }
+    
+    .popup .btn-success {
+        margin-top: 30px;
+    }
+    
+    .popup .caution {
+        font-size: 10px;
+        color: #999;
+        line-height: 3;
+    }
+
+    /*新建分类弹窗*/
+    .class-alert input {
+        margin-bottom: 20px;
+    }
+    .class-alert .btn-success{
+        margin-right: 20px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="topFix">
+        <strong>Admin</strong>
+        <small>后台管理系统</small>
+        <div class="text">
+            <span>
+                <i class="glyphicon glyphicon-user"></i> 你好，管理员A
+            </span>
+            <button class="btn btn-danger btn-sm logout">
+                <i class="glyphicon glyphicon-off"></i> 退出
+            </button>
+        </div>
+    </div>
+    <div id="wrap">
+        <!-- 侧边栏-->
+        <div class="sidebar">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
+                <li class="active">
+                    <a href="#list1" data-toggle="collapse">课程管理</a>
+                    <ol id="list1" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="allCourses.html">全部课程</a></li>
+                        <li><a href="addCourse.html">新建课程</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list2" data-toggle="collapse">用户管理</a>
+                    <ol id="list2" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="members.html">成员信息</a></li>
+                        <li><a href="newMember.html">添加用户</a></li>
+                        <li><a href="departments.html">科室管理</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list3" data-toggle="collapse">健康处方</a>
+                    <ol id="list3" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="healthContent.html">文件管理</a></li>
+                        <li><a href="healthUpload.html">上传文件</a></li>
+                        <li class="bg-info"><a href="healthManage.html">分类管理</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list4" data-toggle="collapse" class="collapse">管理员设置</a>
+                    <ol id="list4" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="#">修改密码</a></li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <!-- 正文 -->
+        <div class="main">
+            <!-- 路径导航 -->
+            <ol class="breadcrumb">
+                <li class="active">健康处方</li>
+                <li class="active">分类管理</li>
+            </ol>
+            <div class="clearfix create-class">
+                <button class="btn btn-default">+ 新建分类</button>
+            </div>
+            <div id="content"></div>
+        </div>
+        <!-- 编辑弹窗 -->
+        <div class="popup-box">
+            <div class="popup">
+                <div class="title">修改信息</div>
+                <div class="form">
+                    <input class="form-control" type="text" value="" placeholder="123">
+                    <div class="caution">* 不填写表示不修改或不添加新项</div>
+                </div>
+                <div id="commit" class="btn btn-success btn-block">确定</div>
+                <div class="btn btn-default btn-block">取消</div>
+                <div id="delete" class="btn btn-danger btn-block btn-sm">删除该项</div>
+            </div>
+        </div>
+        <!-- 新建分类弹窗 -->
+        <div class="class-alert">
+            <div>
+                <h4>新建分类</h4>
+                <div class="form">
+                    <input class="form-control class-name" type="text" placeholder="类名">
+                    <input class="form-control class-itemname" type="text" placeholder="新增项名称">
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-success">确定</button>
+                    <button class="btn btn-default">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="libs/jquery-2.1.4.js"></script>
+    <script>
+    $(function() {
+        var DATA = {
+            '内科疾病': ['呼吸系统疾病', '心血管疾病', '消化道疾病', '脑血管疾病', '精神类疾病', '肾脏疾病', '血液病', '传染性疾病', '内分泌疾病', '代谢性疾病'],
+            '外科疾病': ['皮肤感染性疾病', '乳腺疾病', '心脏疾病', '胃肠疾病', '肝胆疾病', '泌尿系统疾病', '骨科疾病', '神经外科疾病', '胸部外科疾病', '周围血管疾病'],
+            '妇儿疾病': ['孕期保健', '孕期合并症', '正常分娩', '异常分娩', '分娩并发症', '生殖系统炎症', '生殖系统肿瘤', '其他新生儿疾病', '营养障碍疾病', '呼吸道疾病', '心脏疾病', '血液病', '消化道疾病', '脑及神经性疾病', '感染性疾病', '儿童急症'],
+            '其他疾病': ['康复', '检查', '眼科', '耳鼻喉']
+        };
+
+        // 初始化列表
+        (function initRender() {
+            var htmlTemplate = '';
+            for (var item in DATA) {
+                htmlTemplate += '<dl><dt class="btn btn-primary btn-lg btn-block">' + item + '</dt><dd class="btn btn-info">' + DATA[item].join('</dd><dd class="btn btn-info">') + '</dd><dd class="btn btn-default add">+</dd></dl>';
+            }
+            $('#content').html(htmlTemplate);
+        })();
+
+        // 编辑弹窗组件
+        (function() {
+            /**
+             *@param(obj) 触发弹窗的对象(this)
+             */
+            function Alert(obj) {
+                function proxy(obj) {
+                    var THIS = this;
+                    var placeholder = ($(obj).text()==='+')?'新增项名称':$(obj).text();
+
+                    this.input.attr('placeholder', placeholder);
+                }
+
+                proxy.prototype = {
+                    isSubmitting:false,// 是否处于正在提交状态
+                    data: DATA,// 数据源
+                    // 对象
+                    currentDom: obj,//触发弹窗的.btn
+                    contentBox: $('.popup-box'), //弹窗父级
+                    input: $('.popup-box input'), //输入框,
+                    submitBtn: $('#commit'), //确认按钮
+                    cancelBtn: $('.popup-box .btn-default'), //取消按钮
+                    deleteBtn: $('#delete') //删除按钮
+                };
+
+                // ajax提交
+                proxy.prototype.submit = function(data) {
+                    /*
+                     *这里是ajax提交修改请求部分
+                     */
+
+                    // 成功后
+                    this.quit();
+
+                    // window.location.reload(); // 务必页面重载,初始化所有状态
+                }
+
+                // 退出弹窗
+                proxy.prototype.quit = function() {
+                    this.contentBox.fadeOut();
+                    this.contentBox.val('');
+                }
+
+                /* 初始化组件,并返回代理 */
+                proxy.prototype.init = function() {
+                    var THIS = this;
+
+                    this.contentBox.fadeIn();
+
+                    /*提交修改*/
+                    this.submitBtn.off('click').click(function() {//先卸载click事件
+                        var input = THIS.input;
+                        var newVal = $.trim(input.val()); //修改之后的值
+
+                        var thisItem = $(THIS.currentDom);
+                        var thisItemName = thisItem.text();//修改之前的值
+                        var className = thisItem.prevAll('dt').text();
+
+                        var data = THIS.data;
+
+                        if (THIS.isSubmitting) return; //重复点击
+                        if (newVal === '' || newVal === THIS.placeholder) { //无改动
+                            alert('无改动或新增项输入为空');
+                            THIS.quit();
+                            return;
+                        }
+
+                        //重命名一个分类
+                        if (thisItem.hasClass('btn-lg')) {
+                            var newClass = {};
+
+                            newClass[newVal] = data[thisItemName];
+
+                            delete data[thisItemName];
+
+                            $.extend(data,newClass);
+
+                            THIS.submit(data);
+                        }else{
+                            //重命名一个项
+                            for (var name in data) {
+
+                                if (name===className) {
+                                    for (var i = 0; i < data[name].length; i++) {
+                                        if (data[name][i]===thisItemName) {
+                                            data[name].splice(i,1,newVal);
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // 提交新增项
+                        if (thisItem.hasClass('btn')) {
+                            data[className].push(newVal);
+                        }
+
+                        console.log(data);
+                        THIS.submit(data); //提交更新后的数据DATA
+                    })
+
+                    /*取消*/
+                    this.cancelBtn.off('click').click(function() {
+                        THIS.quit();
+                    });
+
+                    /*删除*/
+                    this.deleteBtn.off('click').click(function () {
+                        var thisItem = $(THIS.currentDom);
+                        var thisItemName = thisItem.text();
+                        var data = THIS.data;
+
+                        //删除整个分类
+                        if (thisItem.hasClass('btn-lg')) {
+                            delete data[thisItemName];
+                            THIS.submit(data);
+                        }else{
+                            //删除一个项
+                            for (var name in data) {
+                                var className = thisItem.prevAll('dt').text();
+
+                                if (name===className) {
+                                    for (var i = 0; i < data[name].length; i++) {
+                                        if (data[name][i]===thisItemName) {
+                                            data[name].splice(i,1);
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+
+                        console.log(data);
+                        THIS.submit(data);//提交删除后的data
+                    })
+                }
+
+                return new proxy(obj);
+            }
+
+            //编辑项
+            $('dt,dd:not(.add)').click(function() {
+                var This = this;
+
+                Alert(This).init();
+            });
+
+            // 新增项
+            $('.add').click(function() {
+                var This = this;
+
+                Alert(This).init();
+            });
+        })();
+
+        // 新建分类
+        (function () {
+            var $alert = $('.class-alert');
+
+            $('.create-class').find('.btn').click(function(){
+                $('.class-alert').fadeIn();
+            });
+
+            // 确定提交
+            $alert.find('.btn-success').click(function () {
+                var name = $.trim($alert.find('.class-name').val());
+                var value = $.trim($alert.find('.class-itemname').val());
+                var data = {};
+
+                if (name&&value) {
+                    data[name]=value;
+                    /*
+                    * ajax提交
+                    */
+                }
+                alert('不能为空');
+            });
+
+            // 取消
+            $alert.find('.btn-default').click(function(){
+                $('.class-alert').fadeOut();
+            });
+        })();
+    })
+    </script>
+</body>
+
+</html>

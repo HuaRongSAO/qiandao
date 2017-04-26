@@ -16,7 +16,7 @@ import {
 import Department from './../models/departmentModel'
 import md5 from 'md5'
 import {findRelation} from './../controllers/relationController'
-
+import filesRoute from './files'
 
 let masterRouter = express.Router()
 //管理员页面路由控制
@@ -418,4 +418,6 @@ masterRouter.post('/department/add/', function (req, res, next) {
         })
     })
 })
+
+masterRouter.use('/files',filesRoute)
 export default masterRouter

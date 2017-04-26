@@ -92,5 +92,9 @@ userRouter.post('/task/answer/:taskid', function (req, res) {
     })
 })
 
+userRouter.get('/mobile/', function (req, res, next) {
+
+    res.render('filesMobile')
+})
 
 export default userRouter

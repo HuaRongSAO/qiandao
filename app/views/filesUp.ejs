@@ -1,0 +1,143 @@
+<% include layout/head.ejs %>
+<link rel="stylesheet" href="/system/css/common.css">
+<link rel="stylesheet" href="/system/libs/bootstrap-fileinput.min.css">
+</head>
+<% include layout/filesUpStyle.ejs %>
+<body>
+<% include layout/fixTop.ejs %>
+<!-- <div class="space-h50"></div> -->
+<div id="wrap">
+    <!-- 侧边栏开始 -->
+
+    <% include layout/leftNav.ejs %>
+
+    <!-- 侧边栏结束 -->
+    <!-- 正文开始 -->
+    <div class="main container">
+        <ol class="breadcrumb">
+            <li class="active">健康处方</li>
+            <li class="active">上传文件</li>
+        </ol>
+        <div class="row">
+            <form id="file" enctype="multipart/form-data" action="/admin/files/pdf/upload" method="post">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>选择文件：</label>
+                        <input id="upload"
+                               name="file"
+                               multiple="multiple"
+                               class="file" type="file"
+                               data-show-caption="true"
+                               data-show-upload="false"
+                               data-show-preview="false"
+                               accept="application/pdf">
+                    </div>
+                    <div class="form-group">
+                        <label>文件名称：</label>
+                        <input type="text" class="form-control" id="filename" name="title">
+                    </div>
+                    <div class="form-group">
+                        <label>选择分类：</label>
+                        <div>
+                            <select id="cate" name="parent"></select>
+                            <select id="cate-menu" name="child"></select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <button class="btn btn-success submit">确认上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+<% include layout/script.ejs %>
+<script src="/system/libs/bootstrap-uploadfile.min.js"></script>
+<script src="/system/libs/bootstrap-language-zh.js"></script>
+<script>
+    $(function () {
+        //校验文件
+        function checkFile() {
+            var reg = /\.pdf$/; //不支持accept属性时校验
+            var arr = $('#upload').val().split('\\');
+            var filename = arr[arr.length - 1];
+            if (!reg.test(filename)) return false; //不是pdf文件
+            return filename; // 是pdf文件返回文件名
+        }
+
+        //校验文件名称
+        function checkName() {
+            var value = $('#filename').val();
+            return $.trim(value).length ? true : false;
+        }
+
+        //校验下拉选项
+        function checkSelect() { //只需判断二级菜单值
+            return $('#cate-menu option:selected').val() === '0' ? false : true;
+        }
+
+        //初始化二级下拉菜单
+        function initOptions(selector, arr) {
+            var init = '<option value="0">-- 请选择 --</option>';
+            arr = arr || [];
+            for (var i = 0; i < arr.length; i++) {
+                init += '<option value="' + arr[i] + '">' + arr[i] + '</option>';
+            }
+            $(selector).html(init);
+        }
+
+        var categories = <%- JSON.stringify(classifies) %>;
+        //初始化下拉菜单
+        (function () {
+            var keys = [];
+            for (var key in categories) {
+                keys.push(key);
+            }
+            initOptions('#cate', keys);
+            initOptions('#cate-menu');
+        })();
+
+        //自动填写文件名
+        $('#upload').on('change', function () {
+            var filename = checkFile().replace('.pdf', '');
+            $('#filename').val(filename);
+        });
+
+        //下拉
+        $('#cate').on('change', function () {
+            var selectedVal = $(this).children('option:selected').val();
+            if (selectedVal === '0') { //未选择
+                initOptions('#cate-menu');
+            }
+            for (var key in categories) {
+                if (key === selectedVal) {
+                    initOptions('#cate-menu', categories[key]);
+                    break;
+                }
+            }
+        });
+
+        //提交
+        $('.submit').click(function () {
+            if (checkFile() && checkName() && checkSelect()) {
+                var pdfFile = $('#upload')[0].files;//文件
+                var filename = $('#filename').val();//文件名
+                var cate = $('#cate option:selected').val();//一级分类
+                var cate_item = $('#cate-menu option:selected').val();//二级分类
+
+                $('#file').submit();
+            } else if (!checkFile()) {
+                alert('请先选择需要上传的文件')
+            } else if (!checkName()) {
+                alert('文件名不能为空')
+            } else if (!checkSelect()) {
+                alert('请选择分类')
+            }
+        });
+    })
+</script>
+</body>
+
+</html>

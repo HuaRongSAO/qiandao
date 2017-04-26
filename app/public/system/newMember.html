@@ -9,24 +9,27 @@
     <link rel="stylesheet" href="libs/bootstrap.min.css">
     <link rel="stylesheet" href="css/common.css">
     <style>
-        .form{
-            width: 700px;
-            padding: 40px;
-            box-sizing: border-box;
-            border: 1px solid #d4d4d4;
-        }
-        input,select{
-            height: 36px;
-            width: 400px;
-            border-radius: 4px;
-            border: 1px solid #d4d4d4;
-            margin-bottom: 10px;
-            text-indent: 10px;
-        }
-        .btn-primary {
-            margin-left: 380px;
-            margin-top: 20px;
-        }
+    .form {
+        width: 700px;
+        padding: 40px;
+        box-sizing: border-box;
+        border: 1px solid #d4d4d4;
+    }
+    
+    input,
+    select {
+        height: 36px;
+        width: 400px;
+        border-radius: 4px;
+        border: 1px solid #d4d4d4;
+        margin-bottom: 10px;
+        text-indent: 10px;
+    }
+    
+    .btn-primary {
+        margin-left: 380px;
+        margin-top: 20px;
+    }
     </style>
 </head>
 
@@ -56,9 +59,22 @@
                 <li class="active">
                     <a href="#list2" data-toggle="collapse">用户管理</a>
                     <ol id="list2" class="nav nav-pills nav-stacked collapse in">
-                        <li class="bg-info"><a href="javascript:;">成员信息</a></li>
-                        <li><a href="javascript:void(0);">修改密码</a></li>
-                        <!-- <li><a href="#">编辑</a></li> -->
+                        <li><a href="members.html">成员信息</a></li>
+                        <li class="bg-info"><a href="newMember.html">添加用户</a></li>
+                        <li><a href="departments.html">科室管理</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list3" data-toggle="collapse">健康处方</a>
+                    <ol id="list3" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="healthContent.html">文件管理</a></li>
+                        <li><a href="healthUpload.html">上传文件</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list4" data-toggle="collapse" class="collapse">管理员设置</a>
+                    <ol id="list4" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="#">修改密码</a></li>
                     </ol>
                 </li>
             </ul>
@@ -66,7 +82,8 @@
         <div class="main">
             <!-- 路径导航 -->
             <ol class="breadcrumb">
-                <li class="active">新成员信息</li>
+                <li class="active">用户管理</li>
+                <li class="active">添加用户</li>
             </ol>
             <div class="form">
                 <div>

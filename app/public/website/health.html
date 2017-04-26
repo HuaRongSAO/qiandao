@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script>
+    (function(doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+            };
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title></title>
+    <link rel="Shortcut Icon" href="images/logo.gif">
+    <link rel="stylesheet" href="libs/reset.css">
+    <style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        color: #333;
+    }
+    
+    .title {
+        font-size: 16px;
+        font-weight: 700;
+        height: 4rem;
+        line-height: 4rem;
+        color: #fff;
+        background-color: #3189e4;
+        display: block;
+        padding-left: 8px;
+    }
+    .title span{
+        font-size: 14px;
+        line-height: 4rem;
+    }
+    
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    a:visited {
+        color: #999;
+    }
+    
+    .category {
+        padding: 1rem;
+    }
+    
+    .category {
+        overflow: hidden;
+    }
+    
+    .category li {
+        position: relative;
+        float: left;
+        margin-right: 1.2rem;
+        margin-bottom: 0.4rem;
+        background-color: #fff;
+    }
+    
+    .category a {
+        display: block;
+        padding: .8rem 1rem;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+    .content-wrap{
+        display: none;
+    }
+    .content-list a {
+        position: relative;
+    }
+    .category a:after {
+        border: 1px solid #333;
+        border-radius: 6px;
+    }
+    .content-list a:after{
+        border-bottom: 1px solid #bbb;
+    }
+    /* 1px边框*/
+    .category a:after,
+    .content-list a:after {
+        position: absolute;
+        left: -50%;
+        top: -50%;
+        content: '';
+        width: 200%;
+        height: 200%;
+        transform: scale(0.5);
+    } 
+    .content-list li:last-child {
+        margin-bottom: 2rem;
+    }
+    
+    .content-list a {
+        display: block;
+        padding: 1.4rem .8rem;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+    /*伪类的样式变换*/
+    .category a.active{
+        background-color: #31ad44;
+        color: #fff;
+    }
+    .category a.active:after{ 
+        border-color: transparent;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="category-wrap">
+            <di class="title">请选择分类：</div>
+            <ul class="category"></ul>
+        </div>
+        <div class="content-wrap">
+            <div class="title">当前选择：<span class="inow"></span></div>
+            <ul class="content-list"></ul>
+        </div>
+    </div>
+    <script src="./libs/zepto.min.js"></script>
+    <script>
+    $(function() {
+        // 分类选项初始化
+        function renderCategory(arr) {
+            var categoryBtn = '<li><a href="javascript:;">' + arr.join('</a></li><li><a href="javascript:;">') + '</li>';
+            $('.category').html(categoryBtn);
+        }
+
+        //获取到的列表数据
+        function getContentList() {
+            return ['第1名第1名第1名第1名第1名第1名第1名第1名第1名', '第2名', '第3名', '第4名', '第5名']
+        }
+
+        // 渲染列表
+        function renderList() {
+            var contentList = getContentList();
+            var content = '<li><a href="javascript:;">' + contentList.join('</a></li><li><a href="javascript:;">') + '</a></li>';
+
+            $('.content-list').html(content); //文件列表
+            $('.content-wrap').show();
+        }
+
+        // 所有分类
+        var categories = {
+            '内科疾病': ['呼吸系统疾病', '心血管疾病', '消化道疾病', '脑血管疾病', '精神类疾病', '肾脏疾病', '血液病', '传染性疾病', '内分泌疾病', '代谢性疾病'],
+            '外科疾病': ['皮肤感染性疾病', '乳腺疾病', '心脏疾病', '胃肠疾病', '肝胆疾病', '泌尿系统疾病', '骨科疾病', '神经外科疾病', '胸部外科疾病', '周围血管疾病'],
+            '妇儿疾病': ['孕期保健', '孕期合并症', '正常分娩', '异常分娩', '分娩并发症', '生殖系统炎症', '生殖系统肿瘤', '其他新生儿疾病', '营养障碍疾病', '呼吸道疾病', '心脏疾病', '血液病', '消化道疾病', '脑及神经性疾病', '感染性疾病', '儿童急症'],
+            '其他疾病': ['康复', '检查', '眼科', '耳鼻喉']
+        };
+
+        var currentPage = '内科疾病'; //假设当前页为'内科疾病'页面
+        (function init(current, category) {
+            for (var name in category) {
+                if (current === name) {
+                    $('title').text(name); //修改title
+                    $('.category-wrap .title').text(current+'分类：');//修改分类标题
+                    renderCategory(category[name]);
+
+                    break;
+                }
+            }
+        })(currentPage, categories);
+
+        // 点选分类
+        $('.category a').click(function(){
+            var current = $(this).text();
+
+            $('.category a').removeClass('active');//切换样式
+            $(this).addClass('active');
+
+            $('.inow').text(current);//当前选择
+            renderList();
+        })
+    })
+    </script>
+</body>
+
+</html>

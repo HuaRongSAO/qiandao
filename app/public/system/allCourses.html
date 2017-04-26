@@ -7,7 +7,7 @@
     <title>全部课程</title>
     <link rel="Shortcut Icon" href="images/logo.gif">
     <link rel="stylesheet" href="libs/bootstrap.min.css">
-    <link rel="stylesheet" href="css/allCourses.css">
+    <link rel="stylesheet" href="css/common.css">
 </head>
 
 <body>
@@ -23,9 +23,8 @@
             </button>
         </div>
     </div>
-    <!-- <div class="space-h50"></div> -->
     <div id="wrap">
-        <!-- 侧边栏开始 -->
+        <!-- 侧边栏-->
         <div class="sidebar">
             <ul class="nav nav-pills nav-stacked" role="tablist">
                 <li class="active">
@@ -39,6 +38,21 @@
                     <a href="#list2" data-toggle="collapse">用户管理</a>
                     <ol id="list2" class="nav nav-pills nav-stacked collapse in">
                         <li><a href="members.html">成员信息</a></li>
+                        <li><a href="newMember.html">添加用户</a></li>
+                        <li><a href="departments.html">科室管理</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list3" data-toggle="collapse">健康处方</a>
+                    <ol id="list3" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="healthContent.html">文件管理</a></li>
+                        <li><a href="healthUpload.html">上传文件</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list4" data-toggle="collapse" class="collapse">管理员设置</a>
+                    <ol id="list4" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="#">修改密码</a></li>
                     </ol>
                 </li>
             </ul>
@@ -47,6 +61,7 @@
         <div class="main">
             <!-- 路径导航 -->
             <ol class="breadcrumb">
+                <li class="active">课程管理</li>
                 <li class="active">全部课程</li>
             </ol>
             <table class="table table-striped table-bordered table-hover table-condensed">

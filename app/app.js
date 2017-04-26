@@ -1,16 +1,14 @@
 import express from 'express'
 import path from 'path'
-import favicon from 'serve-favicon'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import session from 'express-session'
-import parseurl from 'parseurl'
 
 
 import index from './routes/index'
-import users from './routes/user'
 import routerAuth from './routes/auth'
+import downRoute from './routes/down'
 //中间件验证
 import isUser from './middllerwares/isUser'
 //链接数据库
@@ -38,7 +36,7 @@ app.use(session({
     cookie: {maxAge: 1000 * 60 * 60 * 24 * 365},//365days
     saveUninitialized: true
 }));
-
+app.use('/down', downRoute);
 app.use('/pdf', function (req, res, next) {
     res.render('pdf', {message: null})
 });

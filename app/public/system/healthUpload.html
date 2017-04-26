@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>上传文件</title>
+    <link rel="Shortcut Icon" href="images/logo.gif">
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="libs/bootstrap-fileinput.min.css">
+    <style>
+    #cate,
+    #cate-menu {
+        width: 200px;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+    }   
+    #cate option,
+    #cate-menu option {
+        font-size: 16px
+    }
+    .submit {
+        margin-top: 20px;
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="topFix">
+        <strong>Admin</strong>
+        <small>后台管理系统</small>
+        <div class="text">
+            <span>
+                <i class="glyphicon glyphicon-user"></i> 你好，管理员
+            </span>
+            <button class="btn btn-danger btn-sm logout">
+                <i class="glyphicon glyphicon-off"></i> 退出
+            </button>
+        </div>
+    </div>
+    <div id="wrap">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
+                <li class="active">
+                    <a href="#list1" data-toggle="collapse">课程管理</a>
+                    <ol id="list1" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="allCourses.html">全部课程</a></li>
+                        <li><a href="addCourse.html">新建课程</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list2" data-toggle="collapse">用户管理</a>
+                    <ol id="list2" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="members.html">成员信息</a></li>
+                        <li><a href="newMember.html">添加用户</a></li>
+                        <li><a href="departments.html">科室管理</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list3" data-toggle="collapse">健康处方</a>
+                    <ol id="list3" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="healthContent.html">文件管理</a></li>
+                        <li class="bg-info"><a href="healthUpload.html">上传文件</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list4" data-toggle="collapse" class="collapse">管理员设置</a>
+                    <ol id="list4" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="#">修改密码</a></li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <!-- 正文 -->
+        <div class="main container">
+            <ol class="breadcrumb">
+                <li class="active">健康处方</li>
+                <li class="active">上传文件</li>
+            </ol>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>选择文件：</label>
+                        <input id="upload" class="file" type="file" data-show-caption="true" data-show-upload="false" data-show-preview="false" accept="application/pdf">
+                    </div>
+                    <div class="form-group">
+                        <label>文件名称：</label>
+                        <input type="text" class="form-control" id="filename">
+                    </div>
+                    <div class="form-group">
+                        <label>选择分类：</label>
+                        <div>
+                            <select id="cate"></select>
+                            <select id="cate-menu"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-success submit">确认上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="libs/jquery-2.1.4.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    <script src="libs/bootstrap-uploadfile.min.js"></script>
+    <script src="libs/bootstrap-language-zh.js"></script>
+    <script>
+    $(function() {
+        //校验文件
+        function checkFile() {
+            var reg = /\.pdf$/; //不支持accept属性时校验
+            var arr = $('#upload').val().split('\\');
+            var filename = arr[arr.length - 1];
+
+            if (!reg.test(filename)) return false; //不是pdf文件
+            return filename; // 是pdf文件返回文件名
+        }
+        //校验文件名称
+        function checkName() {
+            var value = $('#filename').val();
+
+            return $.trim(value).length ? true : false;
+        }
+        //校验下拉选项
+        function checkSelect() { //只需判断二级菜单值
+            return $('#cate-menu option:selected').val()==='0' ? false : true;
+        }
+        //初始化二级下拉菜单
+        function initOptions(selector,arr) {
+            var init = '<option value="0">-- 请选择 --</option>';
+
+            arr = arr || [];
+            for (var i = 0; i < arr.length; i++) {
+                init += '<option value="' + arr[i] + '">' + arr[i] + '</option>';
+            }
+            $(selector).html(init);
+        }
+
+        var categories = {
+            '内科疾病': ['呼吸系统疾病', '心血管疾病', '消化道疾病', '脑血管疾病', '精神类疾病', '肾脏疾病', '血液病', '传染性疾病', '内分泌疾病', '代谢性疾病'],
+            '外科疾病': ['皮肤感染性疾病', '乳腺疾病', '心脏疾病', '胃肠疾病', '肝胆疾病', '泌尿系统疾病', '骨科疾病', '神经外科疾病', '胸部外科疾病', '周围血管疾病'],
+            '妇儿疾病': ['孕期保健', '孕期合并症', '正常分娩', '异常分娩', '分娩并发症', '生殖系统炎症', '生殖系统肿瘤', '其他新生儿疾病', '营养障碍疾病', '呼吸道疾病', '心脏疾病', '血液病', '消化道疾病', '脑及神经性疾病', '感染性疾病', '儿童急症'],
+            '其他疾病': ['康复', '检查', '眼科', '耳鼻喉']
+        };
+
+        //初始化下拉菜单
+        (function() {
+            var keys = [];
+            for (var key in categories) {
+                keys.push(key);
+            }
+
+            initOptions('#cate', keys);
+            initOptions('#cate-menu');
+        })();
+
+        //自动填写文件名
+        $('#upload').on('change', function() {
+            var filename = checkFile().replace('.pdf', '');
+            $('#filename').val(filename);
+        });
+
+        //下拉
+        $('#cate').on('change', function() {
+            var selectedVal = $(this).children('option:selected').val();
+
+            if (selectedVal === '0') { //未选择
+                initOptions('#cate-menu');
+            }
+
+            for (var key in categories) {
+                if (key === selectedVal) {
+                    initOptions('#cate-menu',categories[key]);
+                    break;
+                }
+            }
+        });
+
+        //提交
+        $('.submit').click(function() {
+            if (checkFile() && checkName() && checkSelect()) {
+                alert('可以提交了');
+                var pdfFile = $('#upload')[0].files;//文件
+                var filename = $('#filename').val();//文件名
+                var cate = $('#cate option:selected').val();//一级分类
+                var cate_item = $('#cate-menu option:selected').val();//二级分类
+            } else if (!checkFile()) {
+                alert('请先选择需要上传的文件')
+            } else if (!checkName()) {
+                alert('文件名不能为空')
+            } else if (!checkSelect()) {
+                alert('请选择分类')
+            }
+        });
+    })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>文件管理系统</title>
+    <link href="https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="ui fixed inverted menu">
+    <div class="ui container">
+        <a href="#" class="header item">
+            <img class="logo" src="/website/images/logo.gif">
+            &nbsp;&nbsp;文件管理系统
+        </a>
+        <a href="/user/article" class="item">个人中心</a>
+        <a href="/down" class="item">文件管理</a>
+    </div>
+</div>
+<div id="app" class="ui main text container " style="padding-top: 80px">
+    <div class="ui relaxed divided list">
+        <%
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        };
+        if(fileLists.length == 0){
+        %>
+        <h2 class="ui center aligned icon header">
+            <i class="circular users icon"></i>
+            对不起尚无文件
+        </h2>
+        <%
+        }
+                for(var item in fileLists){
+        %>
+        <div class="item">
+            <i class="large cloud download  middle aligned icon"></i>
+            <div class="content">
+                <a class="header"><%= fileLists[item].title %></a>
+                <div class="description"><%= fileLists[item].date.Format("yyyy-MM-dd") %></div>
+            </div>
+        </div>
+
+        <%
+        }
+        %>
+
+    </div>
+
+</div>
+
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js"></script>
+<script>
+    $('.ui.accordion')
+        .accordion()
+    ;
+</script>
+</body>
+</html>

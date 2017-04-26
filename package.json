@@ -16,6 +16,7 @@
     "express": "~4.14.0",
     "express-session": "^1.14.2",
     "formidable": "^1.0.17",
+    "lodash": "^4.17.4",
     "md5": "^2.2.1",
     "mongoose": "^4.7.7",
     "morgan": "~1.7.0",

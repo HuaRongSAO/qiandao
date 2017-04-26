@@ -66,7 +66,7 @@
         border: 1px solid #f4f4f4;
         position: fixed;
         z-index: 99999;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
         background-color: #fff;
@@ -75,7 +75,8 @@
         box-shadow: 4px 4px 5px #999;
         display: none;
     }
-    #manage h4{
+    
+    #manage h4 {
         text-align: left;
         padding-left: 10px;
         margin: 0;
@@ -83,11 +84,13 @@
         background-color: #337ab7;
         color: #fff;
     }
-    #manage .content{
+    
+    #manage .content {
         padding: 20px 40px;
     }
     
-    #manage input,#manage select {
+    #manage input,
+    #manage select {
         width: 240px;
         height: 36px;
         border-radius: 4px;
@@ -96,7 +99,7 @@
         margin-bottom: 10px;
     }
     
-    #manage .btn{
+    #manage .btn {
         margin: 10px;
     }
     
@@ -132,6 +135,21 @@
                     <a href="#list2" data-toggle="collapse">用户管理</a>
                     <ol id="list2" class="nav nav-pills nav-stacked collapse in">
                         <li class="bg-info"><a href="javascript:;">成员信息</a></li>
+                        <li><a href="newMember.html">添加用户</a></li>
+                        <li><a href="departments.html">科室管理</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list3" data-toggle="collapse">健康处方</a>
+                    <ol id="list3" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="healthContent.html">文件管理</a></li>
+                        <li><a href="healthUpload.html">上传文件</a></li>
+                    </ol>
+                </li>
+                <li class="active">
+                    <a href="#list4" data-toggle="collapse" class="collapse">管理员设置</a>
+                    <ol id="list4" class="nav nav-pills nav-stacked collapse in">
+                        <li><a href="#">修改密码</a></li>
                     </ol>
                 </li>
             </ul>
@@ -139,6 +157,7 @@
         <div class="main">
             <!-- 路径导航 -->
             <ol class="breadcrumb">
+                <li class="active">用户管理</li>
                 <li class="active">成员信息</li>
             </ol>
             <a href="newMember.html" class="btn btn-primary create-member">+ 添加新成员</a>
@@ -287,35 +306,35 @@
 
             $('table').on('click', '.modify', function() {
 
-                var $tr = $(this).closest('tr');	// 对应当前栏
-                var number = $tr.children('td:nth(0)').text();	//对应工号
-                var username = $tr.children('td:nth(1)').text();	//对应用户名
-                var department = $tr.children('td:nth(2)').text();	// 对应科室
-                var jobname = $tr.children('td:nth(3)').text();	// 对应职称
+                var $tr = $(this).closest('tr'); // 对应当前栏
+                var number = $tr.children('td:nth(0)').text(); //对应工号
+                var username = $tr.children('td:nth(1)').text(); //对应用户名
+                var department = $tr.children('td:nth(2)').text(); // 对应科室
+                var jobname = $tr.children('td:nth(3)').text(); // 对应职称
 
                 $manage.show().find('#username').val(username)
-                	.end().find('#number').val(number);
+                    .end().find('#number').val(number);
 
                 for (var i = 0; i < $departmentOpts.length; i++) {
-                	if ($departmentOpts.eq(i).text() === department) {
-                		$departmentOpts.eq(i).prop('selected', true);
-                	}
+                    if ($departmentOpts.eq(i).text() === department) {
+                        $departmentOpts.eq(i).prop('selected', true);
+                    }
                 }
                 for (var i = 0; i < $jobnameOpts.length; i++) {
-                	if ($jobnameOpts.eq(i).text() === jobname) {
-                		$jobnameOpts.eq(i).prop('selected', true);
-                	}
+                    if ($jobnameOpts.eq(i).text() === jobname) {
+                        $jobnameOpts.eq(i).prop('selected', true);
+                    }
                 }
 
             });
             // 确定&取消
-            $manage.find('.cancel').on('click',function(){
-                $manage.hide();
-            }).end()
-            .find('.btn-success').on('click',function(){
-                $manage.hide();
-                alert('修改成功！');
-            });
+            $manage.find('.cancel').on('click', function() {
+                    $manage.hide();
+                }).end()
+                .find('.btn-success').on('click', function() {
+                    $manage.hide();
+                    alert('修改成功！');
+                });
         })();
     })
     </script>
