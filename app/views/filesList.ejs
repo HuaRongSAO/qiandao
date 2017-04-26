@@ -51,7 +51,7 @@
         <div class="item">
             <i class="large cloud download  middle aligned icon"></i>
             <div class="content">
-                <a class="header"><%= fileLists[item].title %></a>
+                <a class="header" onclick="window.open('/website/preview-02/viewer.html?file=<%=fileLists[item].url %>');"><%= fileLists[item].title %></a>
                 <div class="description"><%= fileLists[item].date.Format("yyyy-MM-dd") %></div>
             </div>
         </div>
