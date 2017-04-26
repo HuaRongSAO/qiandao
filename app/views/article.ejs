@@ -41,7 +41,6 @@
 <header>
     <div class="logo"></div>
     <div id="user">
-        <a href="/user/out">文件系统</a>
         <span id="username" uid="<%= user._id %>"><%= user.username %></span>，欢迎你！
         <a href="/user/out"><span class="logout">退 出</span></a>
     </div>
@@ -229,7 +228,7 @@ if(task._id){ %>
     color: #fff;
 
     z-index: 10;">
-    <a href="/files">文件系统</a>
+    <a href="/down">文件</a>
 </div>
 <% include layout/password.ejs %>
 <div id="info" finish="<%= isFinish %>" select="<%= answer.select %>"></div>
