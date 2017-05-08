@@ -51,7 +51,8 @@
         <div class="item">
             <i class="large cloud download  middle aligned icon"></i>
             <div class="content">
-                <a class="header" onclick="window.open('/website/preview-02/viewer.html?file=<%=fileLists[item].url %>');"><%= fileLists[item].title %></a>
+                <a class="header"
+                   onclick="window.open('/website/preview-02/viewer.html?file=<%= fileLists[item].url %>');"><%= fileLists[item].title %></a>
                 <div class="description"><%= fileLists[item].date.Format("yyyy-MM-dd") %></div>
             </div>
         </div>
@@ -68,9 +69,7 @@
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js"></script>
 <script>
-    $('.ui.accordion')
-        .accordion()
-    ;
+    $('.ui.accordion').accordion()
 </script>
 </body>
 </html>

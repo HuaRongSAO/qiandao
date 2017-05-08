@@ -120,6 +120,7 @@
                 <div class="caution">* 确保你的输入的名字不重复</div>
             </div>
             <div id="commit" class="btn btn-success btn-block">确定</div>
+            <div id="delete" class="btn btn-danger btn-block btn-sm">删除该项</div>
             <div class="btn btn-default btn-block">取消</div>
         </div>
     </div>
@@ -140,153 +141,167 @@
 <% include layout/script.ejs %>
 <script>
     $(function () {
-        var DATA = JSON.parse('<%- JSON.stringify(classifies) %>')
-        initRender(DATA)
-        // 初始化列表
-        function initRender(DATA) {
+        var data = JSON.parse('<%- JSON.stringify(classifies) %>');
+        // 初始化页面
+        (function () {
             var htmlTemplate = '';
-            for (var item in DATA) {
-                htmlTemplate += '<dl><dt  class="btn btn-primary btn-lg btn-block">' + item + '</dt><dd  class="btn btn-info">' + DATA[item].join('</dd><dd class="btn btn-info">') + '</dd><dd class="btn btn-default add">+</dd></dl>';
+            for (var item in data) {
+                htmlTemplate += '<dl><dt class="btn btn-primary btn-lg btn-block">' + item + '</dt><dd class="btn btn-info">' + data[item].join('</dd><dd class="btn btn-info">') + '</dd><dd class="btn btn-default add">+</dd></dl>';
             }
             $('#content').html(htmlTemplate);
-        }
+        })();
 
-        // 编辑弹窗组件
+        window.$target = null; //触发对象
+        window.placeholder = ''; //触发对象的文本
+
+        // 编辑现有分类
         (function () {
-            /**
-             *@param(obj) 触发弹窗的对象(this)
-             */
-            function Alert(obj) {
-                function proxy(obj) {
-                    var THIS = this;
-                    var placeholder = ($(obj).text() === '+') ? '新增项名称' : $(obj).text();
-                    this.input.attr('placeholder', placeholder);
-                }
+            var dialog = $('.popup-box');
 
-                proxy.prototype = {
-                    isSubmitting: false,// 是否处于正在提交状态
-                    data: DATA,// 数据源
-                    currentDom: obj,//触发弹窗的.btn
-                    contentBox: $('.popup-box'), //弹窗父级
-                    input: $('.popup-box input'), //输入框,
-                    submitBtn: $('#commit'), //确认按钮
-                    cancelBtn: $('.popup-box .btn-default'), //取消按钮
-                    deleteBtn: $('#delete') //删除按钮
-                };
-                // ajax提交
-                proxy.prototype.submit = function (data) {
-                    /*
-                     *这里是ajax提交修改请求部分
-                     */
-                    // 成功后
-                    this.quit();
-                }
-                // 退出弹窗
-                proxy.prototype.quit = function () {
-                    this.contentBox.fadeOut();
-                    this.contentBox.val('');
-                }
-                /* 初始化组件,并返回代理 */
-                proxy.prototype.init = function (submit, dele) {
-                    var THIS = this;
-                    this.contentBox.fadeIn();
-                    /*提交修改*/
-                    this.submitBtn.off('click').click(function () {//先卸载click事件
-                        var input = THIS.input;
-                        var newVal = $.trim(input.val()); //修改之后的值
-                        var thisItem = $(THIS.currentDom);
-                        var thisItemName = thisItem.text();//修改之前的值
-                        var className = thisItem.prevAll('dt').text();
-                        if (newVal === thisItemName) return
-                        submit(newVal, thisItemName, className)
-                    })
-
-                    /*取消*/
-                    this.cancelBtn.off('click').click(function () {
-                        THIS.quit();
-                    });
-                    /*删除*/
-                    this.deleteBtn.off('click').click(function () {
-                        dele()
-                    })
-                }
-                return new proxy(obj);
+            function quit() {
+                dialog.fadeOut().find('input').val('');
             }
 
-            //编辑项
-//            $('dd:not(.add)').click(function () {
-//                var This = this;
-//                Alert(This).init(function (newVal, thisItemName,className) {
-//                    console.log(newVal+'='+thisItemName+'-'+className)
-//                    if(newVal===thisItemName) return
-//                });
-//            });
-//            $('dt').click(function () {
-//                var This = this;
-//                Alert(This).init(function (newVal, thisItemName) {
-//                    if(newVal===thisItemName) return
-//                    var query = 'new=' + newVal + '&old=' + thisItemName
-//                    window.location.href = '/admin/files/classify/update/?' + query
-//                });
-//            });
-            // 新增项
-            $('.add').click(function () {
-                var This = this;
-                Alert(This).init(function (newVal, thisItemName) {
-                    var parentName = $(This).siblings('dt').text()
-                    if (!parentName || !newVal) return
-                    var query = 'parent=' + parentName + '&child=' + newVal
-                    window.location.href = '/admin/files/classify/sub/add/?' + query
-                });
-            });
-        })();
+            // 编辑单项或新增单项
+            $('dd').click(function () {
+                window.$target = $(this);
+                window.placeholder = $(this).text();
 
-        // 新建分类
-        (function () {
-            var $alert = $('.class-alert');
-            $('.create-class').find('.btn').click(function () {
-                $('.class-alert').fadeIn();
+                //如若点击新增项,则隐藏删除按钮
+                if (window.placeholder === '+') {
+                    window.placeholder = '新增项目名称';
+                    $('#delete').hide();
+                } else {
+                    $('#delete').show();
+                }
+
+                dialog.fadeIn().find('input').attr('placeholder', window.placeholder);
             });
-            // 确定提交
-            $alert.find('.btn-success').click(function () {
-                var name = $.trim($alert.find('.class-name').val());
-                if (name) {
-                    window.location.href = '/admin/files/classify/add/' + name
+
+            // 确定提交数据
+            $('#commit').click(function () {
+                var value = $.trim(dialog.find('input').val()); //修改值
+                var parentText = window.$target.prevAll('dt').text();
+
+                if (value.length) { //不为空值时提交
+                    // 1.更新大分类名称
+                    if (window.$target.hasClass('btn-lg')) {
+                        var url = '/admin/files/classify/check/parent/' + value;
+
+                        checkNewValue(url, success)
+
+                        function success(data) {
+                            if (!data.exist) {
+                                window.location.href = '/admin/files/classify/update/parent/?oldName=' + window.placeholder + '&newName=' + value;
+                            } else {
+                                alert('分类名称已存在，请重新设置！')
+                            }
+                        }
+                    }
+                    // 2.更新小分类名称
+                    else if (window.$target.hasClass('btn-info')) {
+                        var url = '/admin/files/classify/check/child/?child=' + value + '&parent=' + parentText;
+
+                        checkNewValue(url, success);
+
+                        function success(data) {
+                            if (!data.exit) {
+                                window.location.href = '/admin/files/classify/update/child/?oldName=' + window.placeholder + '&newName=' + value + '&parent=' + parentText;
+                            } else {
+                                alert('分类名称已存在，请重新设置！')
+                            }
+                        }
+                    }
+                    // 3.新建小分类
+                    else if (window.$target.hasClass('add')) {
+                        var url = '/admin/files/classify/check/child/?child=' + value + '&parent=' + parentText;
+
+                        checkNewValue(url, success);
+
+                        function success(data) {
+                            if (!data.exit) {
+                                window.location.href = '/admin/files/classify/add/child/?child=' + value + '&parent=' + parentText;
+                            } else {
+                                alert('分类名称已存在，请重新设置！')
+                            }
+                        }
+                    }
+                }
+
+                quit();
+
+                // 检查修改后的名称是否可以使用
+                function checkNewValue(url, callback) {//url是判断地址
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        success: callback,
+                        error: function () {
+                            alert('发送请求失败！')
+                        }
+                    });
                 }
             });
+
             // 取消
-            $alert.find('.btn-default').click(function () {
-                $('.class-alert').fadeOut();
+            dialog.find('.btn-default').click(function () {
+                quit();
             });
-            $alert.find('.class-name').mouseout(function () {
-                var name = $.trim($alert.find('.class-name').val());
-                if (!name) return
-                $.get("/admin/files/classify/find/" + name, function (result) {
-                    if (result.exist) {
-                        $alert.find('.class-name').val('');
-                        layer.msg('对不起，分类已经存在！', {icon: 5});
-                    }
-                });
-            })
+
+            // 删除【完成】
+            $('#delete').click(function () {
+                //删除大分类
+                if (window.$target.hasClass('btn-lg')) {
+                    window.location.href = '/admin/files/classify/remove/parent/' + window.placeholder;
+                    return;
+                }
+
+                //删除小分类 ?
+                var parentText = window.$target.prevAll('dt').text();
+                // console.log(parentText);
+                window.location.href = '/admin/files/classify/remove/child/?child=' + window.placeholder + '&parent=' + parentText;
+            });
+
+            // 编辑项目分类名称(大分类名称)【完成】
+            $('dt').click(function () {
+                window.$target = $(this);
+                window.placeholder = $(this).text();
+
+                $('#delete').show();//防止删除键已经被隐藏
+                dialog.fadeIn().find('input').attr('placeholder', window.placeholder);
+            });
         })();
 
+        // 新建大分类
+        (function () {
+            var dialog = $('.class-alert');
 
-    })
-
-</script>
-<script>
-    $(function () {
-        $('dt').click(function () {
-            var old = $(this).text()
-            layer.prompt({title: '请输入修改的名字'}, function (pass, index) {
-                layer.close(index);
-                if (old == pass || !pass) return
-                var query = 'new=' + pass + '&old=' + old
-                window.location.href = '/admin/files/classify/update/?' + query
+            $('.create-class').find('.btn').click(function () {
+                dialog.fadeIn();
             });
-        })
+
+            // 确定
+            dialog.find('.btn-success').click(function () {
+                var name = $.trim(dialog.find('.class-name').val());
+                // var value = $.trim(dialog.find('.class-itemname').val());
+                var data = {};
+
+                if (name.length) {
+                    window.location.href = '/admin/files/classify/add/parent/' + name;
+                    return;
+                }
+
+                alert('分类名称不能为空！');
+            });
+
+            // 取消
+            dialog.find('.btn-default').click(function () {
+                dialog.fadeOut().find('input').val('');
+            });
+        })();
     })
 </script>
+
 </body>
 
 </html>

@@ -5,7 +5,16 @@ import  formidable from 'formidable'
 import sd from 'silly-datetime'
 import fs from 'fs'
 import path from 'path'
-export {getAllClassify, hasClassify, saveClassify, updateClassify, uploadPDF, getAllFiles, getFilePage}
+export {
+    getAllClassify,
+    removeClassifies,
+    hasClassify,
+    saveClassify,
+    updateClassify,
+    uploadPDF,
+    getAllFiles,
+    getFilePage
+}
 
 function getAllClassify() {
     return Classify.find().sort({_id: -1}).then(function (classifies) {
@@ -44,7 +53,7 @@ function saveClassify(obj) {
     })
 }
 function updateClassify(query, update) {
-    return Classify.where(query).update(update).then(function (doc) {
+    return Classify.where(query).updateMany(update).then(function (doc) {
         if (doc.nModified == 0) {
             return false
         }
@@ -122,4 +131,8 @@ function getFilePage(query, page = 1, limit = 20) {
     return Promise.all([getClass, getFilesList, count]).then(function (result) {
         return result
     })
+}
+
+function removeClassifies(query) {
+    return Classify.remove(query)
 }
