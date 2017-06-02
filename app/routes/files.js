@@ -6,7 +6,8 @@ import {
     updateClassify,
     uploadPDF,
     removeClassifies,
-    getFilePage
+    getFilePage,
+    deleteFile
 } from './../controllers/filesController'
 
 let filesRouter = express.Router()
@@ -154,5 +155,17 @@ filesRouter.get('/classify/remove/child/', function (req, res, next) {
         res.redirect('/admin/files/manage')
     })
 })
+
+//删除文件
+//files/delete/:id
+filesRouter.get('/file/delete/:fileid', function (req, res, next) {
+    let query = {'_id': req.params.fileid}
+    console.log(query)
+    deleteFile(query).then(function (doc) {
+        console.log(doc.result.n)
+        res.redirect('/admin/files')
+    })
+})
+
 
 export default filesRouter

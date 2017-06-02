@@ -13,7 +13,9 @@ export {
     updateClassify,
     uploadPDF,
     getAllFiles,
-    getFilePage
+    getFilePage,
+    deleteFile,
+    updateFiles
 }
 
 function getAllClassify() {
@@ -135,4 +137,10 @@ function getFilePage(query, page = 1, limit = 20) {
 
 function removeClassifies(query) {
     return Classify.remove(query)
+}
+function deleteFile(query) {
+    return File.remove(query)
+}
+function updateFiles(query, update) {
+    return Classify.where(query).updateMany(update)
 }

@@ -1,15 +1,28 @@
 <% include layout/head.ejs %>
 <link href="//cdn.bootcss.com/bootstrap-fileinput/4.3.7/css/fileinput.min.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/Trumbowyg/2.4.3/ui/trumbowyg.min.css" rel="stylesheet">
-
+<link href="https://cdn.bootcss.com/loaders.css/0.1.2/loaders.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/system/css/common.css">
 <% include layout/courseStyle.ejs%>
 </head>
 
 <body>
+<div class="loader">
+    <div class="bg"></div>
+    <div class="loader-box">
+        <div class="ball-scale-ripple-multiple">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+    </div>
+    <h3>文件上传中 请勿关闭！</h3>
+</div>
 <% include layout/fixTop.ejs %>
 <!-- <div class="space-h50"></div> -->
 <div id="wrap">
+
     <!-- 侧边栏开始 -->
     <% include layout/leftNav.ejs %>
     <!-- 侧边栏结束 -->
@@ -239,7 +252,8 @@
                 data.append("start", startDate);
                 data.append("end", endDate);
                 data.append("questions", JSON.stringify(questions));
-                layer.load(1);
+                $('.loader').show()
+
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
@@ -248,6 +262,7 @@
                     contentType: false,
                     processData: false,
                     success: function (data, textStatus) {
+                        $('.loader').hide()
                         layer.msg(data.msg, {icon: 1});
                         setTimeout(function () {
                             window.location.href = '/admin'

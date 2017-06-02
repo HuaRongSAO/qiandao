@@ -161,12 +161,8 @@ Date.prototype.Format = function (fmt) { //author: meizz
 
         // 删除
         $('table').on('click', '.delete', function () {
-            var nowIndex = $(".delete").index(this); //当前按钮的索引
-
-            if (window.confirm("是否删除(index=" + nowIndex + ")的数据")) {
-                alert("删除成功！");
-                location.reload();
-            }
+            var url = 'http://127.0.0.1:3000/admin/files/file/delete/' + $(this).attr('key');
+            window.location.href = url;
         });
 
         // 联动下拉菜单
@@ -192,9 +188,9 @@ Date.prototype.Format = function (fmt) { //author: meizz
 
             window.location.href = '/admin/files/query/' + category_1 + '+' + category_2
         });
-        
+
         $('.delete').click(function () {
-            
+
         })
     })
 </script>

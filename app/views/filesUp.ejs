@@ -1,9 +1,23 @@
 <% include layout/head.ejs %>
 <link rel="stylesheet" href="/system/css/common.css">
 <link rel="stylesheet" href="/system/libs/bootstrap-fileinput.min.css">
+<link href="https://cdn.bootcss.com/loaders.css/0.1.2/loaders.min.css" rel="stylesheet">
+
 </head>
 <% include layout/filesUpStyle.ejs %>
 <body>
+<div class="loader">
+    <div class="bg"></div>
+    <div class="loader-box">
+        <div class="ball-scale-ripple-multiple">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+    </div>
+    <h3>文件上传中 请勿关闭！</h3>
+</div>
 <% include layout/fixTop.ejs %>
 <!-- <div class="space-h50"></div> -->
 <div id="wrap">
@@ -126,7 +140,7 @@
                 var filename = $('#filename').val();//文件名
                 var cate = $('#cate option:selected').val();//一级分类
                 var cate_item = $('#cate-menu option:selected').val();//二级分类
-
+                $('.loader').show()
                 $('#file').submit();
             } else if (!checkFile()) {
                 alert('请先选择需要上传的文件')
