@@ -161,7 +161,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 
         // 删除
         $('table').on('click', '.delete', function () {
-            var url = 'http://127.0.0.1:3000/admin/files/file/delete/' + $(this).attr('key');
+            var url = '/admin/files/file/delete/' + $(this).attr('key');
             window.location.href = url;
         });
 
