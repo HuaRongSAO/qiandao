@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script>
+        var doc = document,
+            docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 12 * (clientWidth / 320) + 'px';
+            };
+        if (!!doc.addEventListener) {
+            window.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        }
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>健康处方</title>
+    <link rel="Shortcut Icon" href="/website/images/logo.gif">
+    <link rel="stylesheet" href="/website/libs/reset.css">
+    <link rel="stylesheet" href="/website/libs/swiper/css/swiper.min.css">
+    <link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+    <style>
+        html,
+        body {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            padding-top: 16rem;
+            color: #333;
+        }
+
+        .fix-wrap {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            z-index: 9;
+        }
+
+        .swiper-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner .swiper-wrapper li {
+            width: 100%;
+            height: 13rem;
+        }
+
+        .banner .swiper-wrapper img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .banner .swiper-pagination {
+            text-align: right;
+        }
+
+        .banner .swiper-pagination-bullet-active {
+            background: #fff
+        }
+
+        .banner .swiper-pagination-bullet {
+            width: .5rem;
+            height: .5rem
+        }
+
+        nav {
+            background-color: #fcfcfc;
+            height: 3.0rem;
+        }
+
+        .tab-container {
+            width: 90%;
+        }
+
+        .tab {
+            height: 3.0rem;
+            line-height: 3.0rem;
+            text-align: center;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        .tab .swiper-slide {
+            width: auto;
+            padding: 0 1.25rem;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        nav li {
+            float: left;
+            width: 8.0rem;
+        }
+
+        nav > span {
+            position: relative;
+            flex: 1;
+            height: 3rem;
+            background: url('/website/images/next.png') no-repeat center;
+            background-size: 40%;
+        }
+
+        nav > span:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            border-left: 1px solid #eee;
+        }
+
+        nav .active {
+            font-size: 1.15rem;
+            color: #119c11;
+            background-color: #fff;
+        }
+
+        .list li {
+            display: flex;
+            height: 6.8rem;
+            padding: 1rem .8rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .list img {
+            width: 6rem;
+            height: 4.8rem;
+        }
+
+        .list div {
+            flex: 1;
+            margin-left: 1rem;
+            overflow: hidden;
+        }
+
+        .list h4 {
+            line-height: 1.6;
+            font-size: 1.3rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .list p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #666;
+        }
+
+        .article-container {
+            position: fixed;
+            left: 100%;
+            top: 0;
+            z-index: 9999;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            padding: 1.0rem;
+            background-color: #fff;
+            transform: translate3d(100%, 0, 0);
+            overflow: auto;
+        }
+
+        .article-container h1 {
+            font-size: 1.333333rem;
+            font-weight: bold;
+        }
+
+        .article-container .time {
+            margin: 0.833333rem 0;
+            color: #999;
+        }
+
+        .article-container .line {
+            height: 0.833333rem;
+            margin-bottom: 3.333333rem;
+
+            background-size: contain;
+        }
+
+        .line0 {
+            background: url('/website/images/line0.png');
+        }
+
+        .line1 {
+            background: url('/website/images/line1.png');
+        }
+
+        .article-container .img-wrap {
+            width: 70%;
+            margin: 0.833333rem auto;
+            text-align: center;
+        }
+
+        .article-container img {
+            width: 100%;
+        }
+
+        .article {
+            line-height: 2;
+            text-indent: 2em;
+            letter-spacing: .2em;
+        }
+
+        .link-to-pdf {
+            margin-top: 1.666667rem;
+            text-align: center;
+        }
+
+        .link-to-pdf a {
+            display: block;
+            font-size: 1.166667rem;
+            color: #6666f7;
+            text-decoration: underline;
+        }
+
+        .link-to-pdf img {
+            width: 3.333333rem;
+            margin-bottom: 0.833333rem;
+        }
+
+        .shadow {
+            -webkit-animation: shadow .15s;
+            animation: shadow .15s;
+        }
+
+        .rightin {
+            -webkit-animation: rightin .3s forwards;
+            animation: rightin .3s forwards;
+        }
+
+        .rightout {
+            -webkit-animation: rightout .3s forwards;
+            animation: rightout .3s forwards;
+        }
+
+        @-webkit-keyframes shadow {
+            0% {
+                background-color: rgba(0, 0, 0, 0);
+            }
+            50% {
+                background-color: rgba(0, 0, 0, .2);
+            }
+            100% {
+                background-color: rgba(0, 0, 0, 0);
+            }
+        }
+
+        @keyframes shadow {
+            0% {
+                background-color: rgba(0, 0, 0, 0);
+            }
+            50% {
+                background-color: rgba(0, 0, 0, .2);
+            }
+            100% {
+                background-color: rgba(0, 0, 0, 0);
+            }
+        }
+
+        @keyframes rightin {
+            0% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+        }
+
+        @-webkit-keyframes rightin {
+            0% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes rightout {
+            0% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+            100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+        }
+
+        @-webkit-keyframes rightout {
+            0% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+            100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="fix-wrap">
+    <div class="banner swiper-container">
+        <ul class="swiper-wrapper">
+            <li class="swiper-slide"><img src="/website/images/wx-1.jpg"></li>
+            <li class="swiper-slide"><img src="/website/images/wx-2.jpg"></li>
+            <li class="swiper-slide"><img src="/website/images/wx-3.jpg"></li>
+            <li class="swiper-slide"><img src="/website/images/wx-4.jpg"></li>
+        </ul>
+        <div class="swiper-pagination"></div>
+    </div>
+    <nav>
+        <div class="tab-container swiper-container">
+            <ul class="tab swiper-wrapper clearfix">
+                <li class="active swiper-slide">全部</li>
+                <%
+                classList.forEach(function (value, index) {
+                %>
+                <li class=" swiper-slide" child='<%= value %>'><%= value %></li>
+                <%
+                })
+                %>
+            </ul>
+        </div>
+        <span></span>
+    </nav>
+</div>
+<ul class="list" id='list'>
+</ul>
+
+
+<!-- 文章预览 -->
+<div class="article-container">
+    <h1>二甲双胍：让你也可以活到120岁的“长生药”</h1>
+    <div class="time">发布时间：2017-09-10 10:01:12</div>
+    <div class="line"></div>
+    <div class="img-wrap">
+        <img src="/website/images/wx-1.jpg">
+    </div>
+    <p class="article">
+        文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
+    <div class="link-to-pdf">
+        <img src="/website/images/pdf_.png">
+        <a href="">查看此文件</a>
+    </div>
+</div>
+
+<div id="loadingToast" style='display: none'>
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">数据加载中</p>
+    </div>
+</div>
+
+<script src="/website/libs/zepto.min.js"></script>
+<script src="/website/libs/fastclick.js"></script>
+<script src="/website/libs/swiper/js/swiper.jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.16.2/axios.min.js"></script>
+<script>
+    $(function () {
+        var list = new List($('#list'));
+        setTimeout(function () {
+            list.query()
+        })
+        //无限滚动
+        $(window).scroll(function(){
+            var scrollTop = $(this).scrollTop();
+            var scrollHeight = $(document).height();
+            var windowHeight = $(this).height();
+            if(scrollHeight-(scrollTop + windowHeight)<200){
+                list.next()
+            }
+        });
+
+
+        FastClick.attach(document.body);
+
+        var style = (document.body || document.documentElement).style;
+
+        var animationEnd = (function () {
+            var animEndEventNames = {
+                WebkitAnimation: 'webkitAnimationEnd',
+                animation: 'animationend'
+            }
+            for (var name in animEndEventNames) {
+                if (typeof style[ name ] === "string") {
+                    return animEndEventNames[ name ]
+                }
+            }
+        })();
+
+        $.fn.clickShadow = function (callback) {
+            $(this).addClass('shadow').on(animationEnd, function () {
+                $(this).removeClass('shadow');
+                callback && callback();
+            });
+        }
+
+        // 轮播图
+        new Swiper('.banner', {
+            loop: true,
+            autoplay: 8000,
+            pagination: '.swiper-pagination',
+            touchRatio: 0.5
+        });
+
+        // 导航
+        topNav();
+
+        // tab 切换
+        $('.tab').on('click', 'li', function () {
+            $(this).addClass('active').siblings().removeClass('active');
+            var child =  $(this).attr('child')||'all'
+            list.setChild(child).query()
+        });
+
+        // 跳转
+        var $article = $('.article-container');
+
+        $('.list').on('click', 'li', function () {
+
+            var _id = $(this).attr('key')
+            var _lists = list.lists
+            for(var i=0,len=_lists.length;i<len;i++){
+                if(_id === _lists[i]['_id']){
+                    $article.find('h1').text(_lists[i]['title']);
+                    var src = _lists[i]['image'] || '/website/images/wx-1.jpg';
+                    $('.img-wrap img').attr('src',src);
+                    $('.article').text(_lists[i]['descript']||_lists[i]['title'])
+                    $article.find('a').attr('href','/website/preview/viewer.html?file='+_lists[i]['url'])
+                }
+            }
+
+            var _className = 'line' + parseInt(Math.random() * 10) % 2;
+            $('.line').addClass(_className);//切换分界线背景
+
+            $(this).clickShadow(function () {
+                $article.removeClass('rightout').addClass('rightin');
+                window.history.pushState(null, '', '');
+            });
+
+            window.addEventListener('popstate', function () {
+                $article.removeClass('rightin').addClass('rightout');
+                window.history.back();
+                $('.line').removeClass(_className);
+            }, false);
+        });
+
+        function topNav () {
+            var mySwiper = new Swiper('.tab-container', {
+                freeMode: true,
+                freeModeMomentumRatio: 0.5,
+                slidesPerView: 'auto'
+            });
+
+            var swiperWidth = mySwiper.container[ 0 ].clientWidth
+            var maxTranslate = mySwiper.maxTranslate();
+            var maxWidth = -maxTranslate + swiperWidth / 2
+
+            $(".tab-container").on('touchstart', function (e) {
+                e.preventDefault();
+            })
+
+            mySwiper.on('tap', function (swiper, e) {
+                // e.preventDefault();
+
+                var slide = swiper.slides[ swiper.clickedIndex ];
+                var slideLeft = slide.offsetLeft;
+                var slideWidth = slide.clientWidth;
+                var slideCenter = slideLeft + slideWidth / 2;
+                // 被点击slide的中心点
+
+                mySwiper.setWrapperTransition(300);
+
+                if (slideCenter < swiperWidth / 2) {
+
+                    mySwiper.setWrapperTranslate(0);
+
+                } else if (slideCenter > maxWidth) {
+
+                    mySwiper.setWrapperTranslate(maxTranslate);
+
+                } else {
+
+                    nowTlanslate = slideCenter - swiperWidth / 2;
+
+                    mySwiper.setWrapperTranslate(-nowTlanslate);
+
+                }
+
+                $(".tab-container  .active").removeClass('active');
+
+                $(".tab-container .swiper-slide").eq(swiper.clickedIndex).addClass('active');
+            })
+        }
+
+        function List (dom) {
+            this.page = 1;
+            this.limit = 20;
+            this.dom = dom;
+            this.child='all';
+            this.isEnd = false;
+            this.lists = []
+        }
+        List.prototype.setLists = function (data) {
+           for(var i=0,len=data.length;i<len;i++){
+               this.lists.push(data[i])
+           }
+           console.log(this.lists)
+           return this
+        }
+        List.prototype.setChild = function (child) {
+            this.child = child
+            this.isEnd = false
+            return this
+        }
+        List.prototype.get = function () {
+            $('#loadingToast').show()
+            var self = this
+            return axios.get('/down/find', {
+                params: {
+                    child: self.child,
+                    limit:self.limit,
+                    page:self.page
+                }
+            }).then(function (responese) {
+                $('#loadingToast').hide()
+                return responese
+            })
+            .catch(function (error) {
+                $('#loadingToast').hide()
+                alert('查找失败！')
+            });
+        }
+        List.prototype.query = function () {
+            var self = this
+            this.lists = []
+            this.page = 1
+            this.get().then(function (response) {
+                self.setLists(response.data.data)
+                self.insertList(response.data.data)
+            })
+        }
+        List.prototype.template = function (data) {
+            var listItem=''
+            data = Array.from(data)
+            if (data.length === 0) return '<p style="padding: 10px;text-align: center">没有没有更多数据了</p>'
+            for (var i = 0; i < data.length; i++) {
+                var url = data[ i ].image||'/website/images/wx-1.jpg'
+                var title =  data[ i ].title ||'祝您身体健康'
+                var descript = data[ i ].descript ||'点击查看详情'
+                var key = data[i]._id
+                listItem += '<li key='+key+'><img src="'+ url +'"><div><h4>'+ title+ '</h4><p>' +
+                    descript +'</p></div> </li>';
+            }
+            return listItem
+        }
+        List.prototype.insertList = function (data) {
+            var listItem = this.template(data)
+            this.dom.html(listItem)
+        }
+        List.prototype.append = function (data) {
+            var listItem = this.template(data)
+            this.setLists(data)
+            this.dom.append(listItem)
+        }
+        List.prototype.next = function () {
+            var self = this,
+                loading = false;
+            if(loading || this.isEnd) return false;
+
+            loading = true;
+            this.page++;
+            this.get().then(function (response) {
+                loading = false;
+                self.append(response.data.data)
+                if(response.data.data.length<20) {
+                    self.isEnd = true
+                    return false
+                }
+            })
+            $('#loadingToast').hide()
+        }
+    })
+</script>
+</body>
+
+</html>

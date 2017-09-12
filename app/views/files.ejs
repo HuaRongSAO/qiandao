@@ -96,7 +96,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
                 <td><%= fileLists[i].title %></td>
                 <td><%= fileLists[i].parent %></td>
                 <td><%= fileLists[i].child %></td>
-                <td><%= fileLists[i].date.Format("yyyy-MM-dd") %></td>
+                <td><%= fileLists[i].date?fileLists[i].date.Format("yyyy-MM-dd"):'未知' %></td>
                 <td>
                     <button key="<%= fileLists[i]._id %>" class="btn btn-link btn-sm delete"><i
                                 class="glyphicon glyphicon-trash"></i> 删除

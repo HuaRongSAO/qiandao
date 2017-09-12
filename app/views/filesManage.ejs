@@ -146,7 +146,8 @@
         (function () {
             var htmlTemplate = '';
             for (var item in data) {
-                htmlTemplate += '<dl><dt class="btn btn-primary btn-lg btn-block">' + item + '</dt><dd class="btn btn-info">' + data[item].join('</dd><dd class="btn btn-info">') + '</dd><dd class="btn btn-default add">+</dd></dl>';
+                htmlTemplate += '<dl><dt class="btn btn-primary btn-lg btn-block">'
+                    + item + '</dt><dd class="btn btn-info">' + data[item].join('</dd><dd class="btn btn-info">') + '</dd><dd class="btn btn-default add">+</dd></dl>';
             }
             $('#content').html(htmlTemplate);
         })();

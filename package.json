@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "PORT=3000 nodemon ./app/bin/www  --exec babel-node",
-    "dist": "gulp dist"
+    "dist": "gulp dist",
+    "server": "PORT=3000 node ./dist/bin/www  ",
+    "deploy":"pm2 ./app/bin/www  "
+
   },
   "dependencies": {
     "bluebird": "^3.4.7",
