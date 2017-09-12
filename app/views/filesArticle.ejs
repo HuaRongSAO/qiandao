@@ -569,11 +569,8 @@
             var maxTranslate = mySwiper.maxTranslate();
             var maxWidth = -maxTranslate + swiperWidth / 2
 
-            $(".tab-container").on('touchstart', function (e) {
-                e.preventDefault();
-            })
 
-            mySwiper.on('click', function (swiper, e) {
+            mySwiper.on('tap', function (swiper, e) {
                 // e.preventDefault();
 
                 var slide = swiper.slides[ swiper.clickedIndex ];
