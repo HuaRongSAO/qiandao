@@ -429,7 +429,6 @@
         List.prototype.template = function (data) {
             var listItem=''
             data = Array.from(data)
-            if (data.length === 0) return '<p style="padding: 10px;text-align: center">没有没有更多数据了</p>'
             for (var i = 0; i < data.length; i++) {
                 var url = data[ i ].image||'/website/images/wx-1.jpg'
                 var title =  data[ i ].title ||'祝您身体健康'
@@ -438,6 +437,11 @@
                 listItem += '<li key='+key+'><img src="'+ url +'"><div><h4>'+ title+ '</h4><p>' +
                     descript +'</p></div> </li>';
             }
+            if (data.length < 20) {
+                listItem+= '<p style="padding: 10px;text-align: center">没有更多数据了</p>'
+                this.isEnd=true
+            }
+
             return listItem
         }
         List.prototype.insertList = function (data) {
