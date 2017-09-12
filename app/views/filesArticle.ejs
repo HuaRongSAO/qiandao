@@ -385,7 +385,8 @@
             this.dom = dom;
             this.child='all';
             this.isEnd = false;
-            this.lists = []
+            this.lists = [];
+            this.loading = false;
         }
         List.prototype.setLists = function (data) {
             for(var i=0,len=data.length;i<len;i++){
@@ -449,15 +450,16 @@
             this.dom.append(listItem)
         }
         List.prototype.next = function () {
-            var self = this,
-                loading = false;
-            if(loading || this.isEnd) return false;
+            var self = this;
 
-            loading = true;
+            if( this.loading || this.isEnd){
+                return false
+            }
+
+            this.loading = true;
             this.page++;
             this.get().then(function (response) {
-                loading = false;
-
+                self.loading = false;
                 if(response.data.data.length<20) {
                     self.append(response.data.data)
                     self.isEnd = true
@@ -571,7 +573,7 @@
                 e.preventDefault();
             })
 
-            mySwiper.on('tap', function (swiper, e) {
+            mySwiper.on('click', function (swiper, e) {
                 // e.preventDefault();
 
                 var slide = swiper.slides[ swiper.clickedIndex ];
