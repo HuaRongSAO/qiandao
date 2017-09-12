@@ -22,6 +22,34 @@ downRouter.get('/', function (req, res, next) {
         res.render('filesArticle', { classList: classList, filesList: filesList })
     })
 })
+downRouter.get('/', function (req, res, next) {
+    Promise.all([ getAllFiles(), getAllClassify() ]).then((result) => {
+        let [ filesList, classifies ] = result
+        let classList = []
+        for (let key in classifies) {
+            if (classifies[ key ]) {
+                classList.push(classifies[ key ])
+            }
+        }
+        classList = _.flattenDeep(classList)
+        res.render('filesArticle', { classList: classList, filesList: filesList })
+    })
+})
+downRouter.get('/class', function (req, res, next) {
+    Promise.all([ getAllFiles(), getAllClassify() ]).then((result) => {
+        let [ filesList, classifies ] = result
+        let classList = []
+        for (let key in classifies) {
+            if (classifies[ key ]) {
+                classList.push(classifies[ key ])
+            }
+        }
+        classList = _.flattenDeep(classList)
+        res.json({
+            data: { classList: classList, filesList: filesList }
+        })
+    })
+})
 downRouter.get('/find', function (req, res, next) {
     let query = { child: req.query.child }
     let page = req.query.page
