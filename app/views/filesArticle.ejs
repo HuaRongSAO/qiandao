@@ -546,7 +546,7 @@
                     var src = _lists[i]['image'] || '/website/images/wx-1.jpg';
                     $('.img-wrap img').attr('src',src);
                     $('.article').html(_lists[i]['descript']||_lists[i]['title'])
-                    $article.find('a').attr('href','/website/preview/viewer.html?file='+_lists[i]['url'])
+                    if (_lists[i]['url'])  $article.find('a').attr('href','/website/preview/viewer.html?file='+_lists[i]['url'])
                 }
             }
 
