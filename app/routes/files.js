@@ -10,7 +10,8 @@ import {
     uploadImage,
     removeClassifies,
     getFilePage,
-    deleteFile
+    deleteFile,
+    uploadImages
 } from './../controllers/filesController'
 
 let filesRouter = express.Router()
@@ -18,10 +19,10 @@ let filesRouter = express.Router()
 filesRouter.get('/', function (req, res, next) {
     let page = req.query.page || 1
     getFilePage({}, page, 20).then(function (result) {
-        let classifies = result[ 0 ] || {}
-        let fileLists = result[ 1 ] || []
+        let classifies = result[0] || {}
+        let fileLists = result[1] || []
         let pagination = {}
-        pagination.count = result[ 2 ] || 0
+        pagination.count = result[2] || 0
         pagination.current = page
         res.render('files', {
             classifies: classifies,
@@ -32,16 +33,15 @@ filesRouter.get('/', function (req, res, next) {
 })
 filesRouter.get('/query/:query', function (req, res, next) {
     let query = {}
-    let [ parent, child ] = req.params.query.split('+')
+    let [parent, child] = req.params.query.split('+')
     query.parent = parent
     if (child != 0) query.child = child
     let page = req.query.page || 1
-    console.log(query)
     getFilePage(query, page, 20).then(function (result) {
-        let classifies = result[ 0 ] || {}
-        let fileLists = result[ 1 ] || []
+        let classifies = result[0] || {}
+        let fileLists = result[1] || []
         let pagination = {}
-        pagination.count = result[ 2 ] || 0
+        pagination.count = result[2] || 0
         pagination.current = page
         res.render('files', {
             classifies: classifies,
@@ -50,6 +50,7 @@ filesRouter.get('/query/:query', function (req, res, next) {
         })
     })
 })
+
 filesRouter.get('/up', function (req, res, next) {
     getAllClassify().then(function (classifies) {
         res.render('filesUp', { classifies: classifies })
@@ -59,19 +60,18 @@ filesRouter.get('/up', function (req, res, next) {
 filesRouter.post('/file/upload', function (req, res, next) {
     uploadFile(req).then(function (result) {
         File({
-            url:result.url,
-            image:result.image,
-            title:result.title,
-            parent:result.parent,
-            child:result.child,
-            descript:result.descript,
-            date:new Date()
+            url: result.url,
+            image: result.image,
+            title: result.title,
+            parent: result.parent,
+            child: result.child,
+            descript: result.descript,
+            date: new Date()
         }).save().then(function (r) {
             console.log(r)
             res.redirect('/admin/files')
         })
     })
-
 })
 //进入管理页面
 filesRouter.get('/manage', function (req, res, next) {
@@ -166,7 +166,6 @@ filesRouter.get('/classify/update/child/', function (req, res, next) {
 filesRouter.get('/classify/remove/child/', function (req, res, next) {
     let query = { 'name': req.query.child, 'belong': req.query.parent }
     removeClassifies(query).then(function (doc) {
-        console.log(doc.result.n)
         res.redirect('/admin/files/manage')
     })
 })
@@ -175,12 +174,24 @@ filesRouter.get('/classify/remove/child/', function (req, res, next) {
 //files/delete/:id
 filesRouter.get('/file/delete/:fileid', function (req, res, next) {
     let query = { '_id': req.params.fileid }
-    console.log(query)
     deleteFile(query).then(function (doc) {
-        console.log(doc.result.n)
         res.redirect('/admin/files')
     })
 })
-
-
+// ajax 图片上传 
+filesRouter.post('/file/image/up', (req, res, next) => {
+    uploadImages(req).then((r) => {
+        res.json({
+            errno: 0,
+            data: [
+                r.url
+            ]
+        })
+    })
+    .catch( err => {
+        res.json({
+            errno: 1
+        })
+    })
+})
 export default filesRouter

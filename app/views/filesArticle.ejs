@@ -214,8 +214,11 @@
 
         .article {
             line-height: 2;
-            text-indent: 2em;
-            letter-spacing: .2em;
+            /* text-indent: 2em; */
+            /* letter-spacing: .2em; */
+        }
+        .article img{
+            width: 100%;
         }
 
         .link-to-pdf {
@@ -432,7 +435,7 @@
             for (var i = 0; i < data.length; i++) {
                 var url = data[ i ].image||'/website/images/wx-1.jpg'
                 var title =  data[ i ].title ||'祝您身体健康'
-                var descript = data[ i ].descript ||'点击查看详情'
+                var descript = '点击查看详情'
                 var key = data[i]._id
                 listItem += '<li key='+key+'><img src="'+ url +'"><div><h4>'+ title+ '</h4><p>' +
                     descript +'</p></div> </li>';
@@ -542,7 +545,7 @@
                     $article.find('h1').text(_lists[i]['title']);
                     var src = _lists[i]['image'] || '/website/images/wx-1.jpg';
                     $('.img-wrap img').attr('src',src);
-                    $('.article').text(_lists[i]['descript']||_lists[i]['title'])
+                    $('.article').html(_lists[i]['descript']||_lists[i]['title'])
                     $article.find('a').attr('href','/website/preview/viewer.html?file='+_lists[i]['url'])
                 }
             }

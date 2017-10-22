@@ -6,7 +6,7 @@ let fileSchema = new mongoose.Schema({
     child: String,
     url: String,
     image:String,
-    decript:String,
+    descript:String,
     date: Date
 });
 
