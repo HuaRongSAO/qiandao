@@ -166,20 +166,22 @@ function uploadPDF(req) {
                 //新的路径由三个部分组成：时间戳、随机数、拓展名
                 // let newpath = __dirname + "../public/files/" + ttt + ran + extname;
                 let newpath = path.normalize(__dirname + "/../../dist/public/files/" + extname);
+                let pdfUrl = '/files/' + extname
                 //改名
                 fs.rename(oldpath, newpath, function (err) {
                     if (err) {
-                        throw Error("改名失败");
+                        reject('保存失败！')
+                    } else {
+                        File({
+                            title: title,
+                            parent: parent,
+                            child: child,
+                            date: new Date(),
+                            url: pdfUrl
+                        }).save().then(function (file) {
+                            resolve(true)
+                        })
                     }
-                    File({
-                        title: title,
-                        parent: parent,
-                        child: child,
-                        date: new Date(),
-                        url: '/files/' + extname
-                    }).save().then(function (file) {
-                        resolve(true)
-                    })
                 });
             }
         })

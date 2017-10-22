@@ -546,7 +546,13 @@
                     var src = _lists[i]['image'] || '/website/images/wx-1.jpg';
                     $('.img-wrap img').attr('src',src);
                     $('.article').html(_lists[i]['descript']||_lists[i]['title'])
-                    if (_lists[i]['url'])  $article.find('a').attr('href','/website/preview/viewer.html?file='+_lists[i]['url'])
+                    console.log(_lists[i]['url'])
+                    if (_lists[i]['url'].search(/pdf$/)>-1){
+                        $('.link-to-pdf').css('display','block')
+                        $article.find('a').attr('href','/website/preview/viewer.html?file='+_lists[i]['url'])
+                    }else{
+                        $('.link-to-pdf').css('display','none')
+                    }
                 }
             }
 
