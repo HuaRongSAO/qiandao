@@ -1,197 +1,210 @@
 <% include layout/head.ejs %>
-  <link rel="stylesheet" href="/system/css/common.css">
-  <link href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.3/css/fileinput.min.css" rel="stylesheet">
-  <link href="https://cdn.bootcss.com/loaders.css/0.1.2/loaders.min.css" rel="stylesheet">
-  <link href="https://cdn.bootcss.com/wangEditor/3.0.10/wangEditor.min.css" rel="stylesheet">
-  </head>
-  <% include layout/filesUpStyle.ejs %>
-
-    <body>
-      <div class="loader">
-        <div class="bg"></div>
-        <div class="loader-box">
-          <div class="ball-scale-ripple-multiple">
+<link rel="stylesheet" href="/system/css/common.css">
+<link href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.3/css/fileinput.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/loaders.css/0.1.2/loaders.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/wangEditor/3.0.10/wangEditor.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+</head>
+<% include layout/filesUpStyle.ejs %>
+<style>
+    .colorpicker{
+        z-index: 99999;
+    }
+</style>
+<body>
+<div class="loader">
+    <div class="bg"></div>
+    <div class="loader-box">
+        <div class="ball-scale-ripple-multiple">
             <div></div>
             <div></div>
             <div></div>
-          </div>
-
         </div>
-        <h3>文件上传中 请勿关闭！</h3>
-      </div>
-      <% include layout/fixTop.ejs %>
-        <!-- <div class="space-h50"></div> -->
-        <div id="wrap">
-          <!-- 侧边栏开始 -->
 
-          <% include layout/leftNav.ejs %>
+    </div>
+    <h3>文件上传中 请勿关闭！</h3>
+</div>
+<% include layout/fixTop.ejs %>
+<!-- <div class="space-h50"></div> -->
+<div id="wrap">
+    <!-- 侧边栏开始 -->
 
-            <!-- 侧边栏结束 -->
-            <!-- 正文开始 -->
-            <div class="main container">
-              <ol class="breadcrumb">
-                <li class="active">健康处方</li>
-                <li class="active">上传文件</li>
-              </ol>
-              <div class="row">
-                <form id="file" enctype="multipart/form-data" action="/admin/files/file/upload" method="post">
-                  <div class="col-md-12">
+    <% include layout/leftNav.ejs %>
+
+    <!-- 侧边栏结束 -->
+    <!-- 正文开始 -->
+    <div class="main container">
+        <ol class="breadcrumb">
+            <li class="active">健康处方</li>
+            <li class="active">上传文件</li>
+        </ol>
+        <div class="row">
+            <form id="file" enctype="multipart/form-data" action="/admin/files/file/upload" method="post">
+                <div class="col-md-12">
                     <div class="col-md-6">
-                      <div class="form-group">
-                        <label>选择PDF文件：</label>
-                        <input id="upload" name="file" multiple="multiple" class="file" type="file" data-show-caption="true" data-show-upload="false"
-                          data-show-preview="false" accept="application/pdf" placeholder='必选选项'>
-                      </div>
-                      <div class="form-group">
-                        <label>选择插图：</label>
-                        <input id="image" name="image" multiple="multiple" class="file" type="file" data-show-caption="true" data-show-upload="false"
-                          data-show-preview="true" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" placeholder='必选图片'>
-                      </div>
-                      <div class="form-group">
-                        <label>文件名称：</label>
-                        <input type="text" class="form-control" id="filename" name="title">
-                      </div>
-                      <div class="form-group">
-                        <label>选择分类：</label>
-                        <div>
-                          <select id="cate" name="parent"></select>
-                          <select id="cate-menu" name="child"></select>
+                        <!--<div class="form-group">-->
+                        <!--<label>选择PDF文件：</label>-->
+                        <!--<input id="upload" name="file" multiple="multiple" class="file" type="file" data-show-caption="true" data-show-upload="false"-->
+                        <!--data-show-preview="false" accept="application/pdf" placeholder='必选选项'>-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <label>选择插图：</label>
+                            <input id="image" name="image" multiple="multiple" class="file" type="file"
+                                   data-show-caption="true" data-show-upload="false"
+                                   data-show-preview="true" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                                   placeholder='必选图片'>
                         </div>
-                      </div>
+                        <div class="form-group">
+                            <label>文件名称：</label>
+                            <input type="text" class="form-control" id="filename" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label>选择分类：</label>
+                            <div>
+                                <select id="cate" name="parent"></select>
+                                <select id="cate-menu" name="child"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>自定义背景颜色：</label>
+                            <div id="cp4" class="input-group colorpicker-component" title="Using color option">
+                                <input type="text" name="backgroundColor" class="form-control input-lg"/>
+                                <span class="input-group-addon"><i></i></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-10">
-                      <div class="form-group">
-                        <label>文章描述：</label>
-                        <div id="editor"></div>
-                        <input type="text" style="display:none" id="descript" name="descript">
-                        <!-- <textarea type="text" class="form-control" id="descript" name="descript"></textarea> -->
-                      </div>
+                        <div class="form-group">
+                            <label>文章描述：</label>
+                            <div id="editor"></div>
+                            <input type="text" style="display:none" id="descript" name="descript">
+                            <!-- <textarea type="text" class="form-control" id="descript" name="descript"></textarea> -->
+                        </div>
                     </div>
-                  </div>
-                </form>
-              </div>
-              <div class="row">
-                <div class="col-md-4">
-                  <button class="btn btn-success submit">确认上传</button>
                 </div>
-              </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-success submit">确认上传</button>
             </div>
         </div>
-        <% include layout/script.ejs %>
-          <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.3/js/fileinput.min.js"></script>
-          <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.3/js/locales/zh.min.js"></script>
-          <script src="https://cdn.bootcss.com/wangEditor/3.0.10/wangEditor.min.js"></script>
-          <script type="text/javascript">
-            var E = window.wangEditor
-            var editor = new E('#editor') 
-            // 配置服务器端地址
-            editor.customConfig.uploadImgServer = '/admin/files/file/image/up'
-            // 限制一次最多上传 5 张图片
-            editor.customConfig.uploadImgMaxLength = 1
-            editor.customConfig.uploadFileName = 'fileimagesup'
-            editor.customConfig.onchange = function (html) {
-              $('#descript').val(html)
-              console.log($('#descript').val())
+    </div>
+</div>
+<% include layout/script.ejs %>
+<script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.3/js/fileinput.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.3/js/locales/zh.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-colorpicker/2.5.1/js/bootstrap-colorpicker.min.js"></script>
+<script src="https://cdn.bootcss.com/wangEditor/3.0.10/wangEditor.min.js"></script>
+<script type="text/javascript">
+    $('#cp4').colorpicker()
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    // 配置服务器端地址
+    editor.customConfig.uploadImgServer = '/admin/files/file/image/up'
+    // 限制一次最多上传 5 张图片
+    editor.customConfig.uploadImgMaxLength = 1
+    editor.customConfig.uploadFileName = 'fileimagesup'
+    editor.customConfig.onchange = function (html) {
+        $('#descript').val(html)
+        console.log($('#descript').val())
+    }
+    editor.create()
+
+    $(function () {
+        //校验文件
+//              function checkFile() {
+//                var reg = /\.pdf$/; //不支持accept属性时校验
+//                var arr = $('#upload').val().split('\\');
+//                var filename = arr[arr.length - 1];
+//                if (!reg.test(filename)) return false; //不是pdf文件
+//                return filename; // 是pdf文件返回文件名
+//              }
+
+        //校验文件名称
+        function checkName() {
+            var value = $('#filename').val();
+            return $.trim(value).length ? true : false;
+        }
+
+        //校验文件名称
+        function checkDescript() {
+            var content = $('#descript'.val)
+            return content
+        }
+
+        //校验image名称
+        function checkImage() {
+            var reg = /\.pdf$|\.png$|\.jpeg$|\.gif$\.jpg$|/; //不支持accept属性时校验
+            var arr = $('#image').val().split('\\');
+            var filename = arr[arr.length - 1];
+            if (!reg.test(filename)) return false; //不是pdf文件
+            return filename; // 是pdf文件返回文件名
+        }
+
+        //校验下拉选项
+        function checkSelect() { //只需判断二级菜单值
+            return $('#cate-menu option:selected').val() === '0' ? false : true;
+        }
+
+        //初始化二级下拉菜单
+        function initOptions(selector, arr) {
+            var init = '<option value="0">-- 请选择 --</option>';
+            arr = arr || [];
+            for (var i = 0; i < arr.length; i++) {
+                init += '<option value="' + arr[i] + '">' + arr[i] + '</option>';
             }
-            editor.create()
+            $(selector).html(init);
+        }
 
-            $(function () {
-              //校验文件
-              function checkFile() {
-                var reg = /\.pdf$/; //不支持accept属性时校验
-                var arr = $('#upload').val().split('\\');
-                var filename = arr[arr.length - 1];
-                if (!reg.test(filename)) return false; //不是pdf文件
-                return filename; // 是pdf文件返回文件名
-              }
+        var categories = <%- JSON.stringify(classifies) %>;
+        //初始化下拉菜单
+        (function () {
+            var keys = [];
+            for (var key in categories) {
+                keys.push(key);
+            }
+            initOptions('#cate', keys);
+            initOptions('#cate-menu');
+        })();
 
-              //校验文件名称
-              function checkName() {
-                var value = $('#filename').val();
-                return $.trim(value).length ? true : false;
-              }
-              //校验文件名称
-              function checkDescript() {
-                var content = $('#descript'.val)
-                return content
-              }
-              //校验image名称
-              function checkImage() {
-                var reg = /\.pdf$|\.png$|\.jpeg$|\.gif$\.jpg$|/; //不支持accept属性时校验
-                var arr = $('#image').val().split('\\');
-                var filename = arr[arr.length - 1];
-                if (!reg.test(filename)) return false; //不是pdf文件
-                return filename; // 是pdf文件返回文件名
-              }
-              //校验下拉选项
-              function checkSelect() { //只需判断二级菜单值
-                return $('#cate-menu option:selected').val() === '0' ? false : true;
-              }
+        //自动填写文件名
+//              $('#upload').on('change', function () {
+////                var filename = checkFile().replace('.pdf', '');
+////                $('#filename').val(filename);
+//              });
 
-              //初始化二级下拉菜单
-              function initOptions(selector, arr) {
-                var init = '<option value="0">-- 请选择 --</option>';
-                arr = arr || [];
-                for (var i = 0; i < arr.length; i++) {
-                  init += '<option value="' + arr[i] + '">' + arr[i] + '</option>';
-                }
-                $(selector).html(init);
-              }
-
-              var categories = <%- JSON.stringify(classifies) %>;
-              //初始化下拉菜单
-              (function () {
-                var keys = [];
-                for (var key in categories) {
-                  keys.push(key);
-                }
-                initOptions('#cate', keys);
+        //下拉
+        $('#cate').on('change', function () {
+            var selectedVal = $(this).children('option:selected').val();
+            if (selectedVal === '0') { //未选择
                 initOptions('#cate-menu');
-              })();
-
-              //自动填写文件名
-              $('#upload').on('change', function () {
-                var filename = checkFile().replace('.pdf', '');
-                $('#filename').val(filename);
-              });
-
-              //下拉
-              $('#cate').on('change', function () {
-                var selectedVal = $(this).children('option:selected').val();
-                if (selectedVal === '0') { //未选择
-                  initOptions('#cate-menu');
-                }
-                for (var key in categories) {
-                  if (key === selectedVal) {
+            }
+            for (var key in categories) {
+                if (key === selectedVal) {
                     initOptions('#cate-menu', categories[key]);
                     break;
-                  }
                 }
-              });
+            }
+        });
 
-              //提交
-              $('.submit').click(function () {
-                if (checkName() && checkSelect() && checkImage() && checkDescript()) {
-                  var pdfFile = $('#upload')[0].files;//文件
-                  var filename = $('#filename').val();//文件名
-                  var cate = $('#cate option:selected').val();//一级分类
-                  var cate_item = $('#cate-menu option:selected').val();//二级分类
-                  $('.loader').show()
-                  $('#file').submit();
-                } else if (!checkFile()) {
-                  alert('请先选择需要上传的文件')
-                } else if (!checkName()) {
-                  alert('文件名不能为空')
-                } else if (!checkSelect()) {
-                  alert('请选择分类')
-                } else if (!checkDescript()) {
-                  alert('请填写描述')
-                } else if (!checkImage()) {
-                  alert('请选择图片')
-                }
-              });
-            })
-          </script>
-    </body>
+        //提交
+        $('.submit').click(function () {
+            if (checkName() && checkSelect() && checkImage() && checkDescript()) {
+                $('.loader').show()
+                $('#file').submit();
+            } else if (!checkName()) {
+                alert('文章标题不能为空')
+            } else if (!checkSelect()) {
+                alert('请选择分类')
+            } else if (!checkDescript()) {
+                alert('请填写描述')
+            } else if (!checkImage()) {
+                alert('请选择图片')
+            }
+        });
+    })
+</script>
+</body>
 
-    </html>
+</html>

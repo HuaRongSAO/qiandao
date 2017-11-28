@@ -216,9 +216,7 @@
                     // 3.新建小分类
                     else if (window.$target.hasClass('add')) {
                         var url = '/admin/files/classify/check/child/?child=' + value + '&parent=' + parentText;
-
                         checkNewValue(url, success);
-
                         function success(data) {
                             if (!data.exit) {
                                 window.location.href = '/admin/files/classify/add/child/?child=' + value + '&parent=' + parentText;

@@ -94,11 +94,12 @@ function uploadFile(req) {
             let parent = fields.parent || '';
             let child = fields.child || '';
             let descript = fields.descript || '';
+            let backgroundColor = fields.backgroundColor || '';
             if (err) {
                 throw err;
             }
             let image = null, url = null
-            if (files.file) {
+            if (files && files.file) {
                 let fileextname = files.file.name;
                 let fileoldpath = files.file.path
                 let filenewpath = path.normalize(__dirname + "/../../dist/public/files/" + fileextname);
@@ -106,7 +107,7 @@ function uploadFile(req) {
                 });
                 url = '/files/' + fileextname
             }
-            if (files.image) {
+            if (files && files.image) {
                 let imageextname = files.image.name;
                 let imageoldpath = files.image.path
                 let imagenewpath = path.normalize(__dirname + "/../../dist/public/files/image/" + imageextname);
@@ -115,12 +116,13 @@ function uploadFile(req) {
                 image = '/files/image/' + imageextname
             }
             resolve({
-                url: url,
-                image: image,
+                url: url || '',
+                image: image || '',
                 title: title,
                 parent: parent,
                 child: child,
                 descript: descript,
+                backgroundColor: backgroundColor,
                 date: new Date()
             })
         })
@@ -134,7 +136,7 @@ function uploadImage(req) {
             if (err) {
                 throw err;
             }
-            if (files.image) {
+            if (files && files.image) {
                 let extname = files.image.name;
                 let oldpath = files.file.path
                 let newpath = path.normalize(__dirname + "/../../dist/public/files/image" + extname);
@@ -157,7 +159,7 @@ function uploadPDF(req) {
             if (err) {
                 throw err;
             }
-            if (files.file) {
+            if (files && files.file) {
                 let ttt = sd.format(new Date(), 'YYYYMMDDHHmmss');
                 let ran = parseInt(Math.random() * 89999 + 10000);
                 let extname = files.file.name;
@@ -230,7 +232,7 @@ function uploadImages(req) {
     return new Promise(function (resolve, reject) {
         form.parse(req, function (err, fields, files) {
 
-            if (files.fileimagesup) {
+            if (files && files.fileimagesup) {
                 let ttt = sd.format(new Date(), 'YYYYMMDDHHmmss');
                 let ran = parseInt(Math.random() * 89999 + 10000);
                 let extname = files.fileimagesup.name;

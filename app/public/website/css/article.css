@@ -10,7 +10,7 @@ header {
 header div {
     height: 100%;
 }
-
+::-webkit-scrollbar{ display:none}
 .logo {
     width: 30%;
     float: left;

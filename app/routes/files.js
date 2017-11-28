@@ -59,6 +59,7 @@ filesRouter.get('/up', function (req, res, next) {
 
 filesRouter.post('/file/upload', function (req, res, next) {
     uploadFile(req).then(function (result) {
+        console.log(result.backgroundColor)
         File({
             url: result.url,
             image: result.image,
@@ -66,6 +67,7 @@ filesRouter.post('/file/upload', function (req, res, next) {
             parent: result.parent,
             child: result.child,
             descript: result.descript,
+            backgroundColor: result.backgroundColor,
             date: new Date()
         }).save().then(function (r) {
             console.log(r)
