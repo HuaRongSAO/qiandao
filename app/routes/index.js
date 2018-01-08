@@ -23,5 +23,4 @@ router.get('/', function (req, res, next) {
 router.use('/admin', isMaster, masterRouter)
 router.use('/user', isNurse, userRouter)
 
-
 export default router

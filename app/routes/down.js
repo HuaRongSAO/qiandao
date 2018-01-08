@@ -22,7 +22,6 @@ downRouter.get('/', function (req, res, next) {
         res.render('filesArticle', { classList: classList, filesList: filesList })
     })
 })
-
 downRouter.get('/class', function (req, res, next) {
     Promise.all([getAllFiles(), getAllClassify()]).then((result) => {
         let [filesList, classifies] = result
@@ -50,7 +49,6 @@ downRouter.get('/find', function (req, res, next) {
         })
     })
 })
-
 downRouter.get('/:parent/:child', function (req, res, next) {
     let query = {
         parent: req.params.parent,
