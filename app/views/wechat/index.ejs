@@ -21,7 +21,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
     <title>健康处方</title>
-    <link rel="Shortcut Icon" href="images/logo.gif">
+    <link rel="Shortcut Icon" href="/website/images/logo.gif">
     <link rel="stylesheet" href="/website/libs/reset.css">
     <link href="https://cdn.bootcss.com/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">
     <style>
@@ -88,7 +88,7 @@
             position: relative;
             text-indent: 1em;
             line-height: 3.733333rem;
-            background: url(/website/website/images/next-1.png) no-repeat 98% center;
+            background: url(/website/images/next-1.png) no-repeat 98% center;
             background-size: auto 30%;
         }
 
@@ -123,11 +123,10 @@
     </div>
 </div>
 <div class="list">
-    <li><a href="jkcf3_small_class.html">大类名称</a></li>
-    <li><a href="/">大类名称</a></li>
-    <li><a href="/">大类名称</a></li>
-    <li><a href="/">大类名称</a></li>
-    <li><a href="/">大类名称</a></li>
+    <% classArray&&classArray.forEach(function (item) { %>
+    <li><a href="/wechat/classify?classify=<%= item %>"><%= item %></a></li>
+    <% }) %>
+
 </div>
 <script src="https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>

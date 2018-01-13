@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script>
+      var doc = document,
+        docEl = doc.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        recalc = function () {
+          var clientWidth = docEl.clientWidth
+          if (!clientWidth) return
+          docEl.style.fontSize = 12 * (clientWidth / 320) + 'px'
+        }
+      if (!!doc.addEventListener) {
+        window.addEventListener(resizeEvt, recalc, false)
+        doc.addEventListener('DOMContentLoaded', recalc, false)
+      }
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>健康处方</title>
+    <link rel="Shortcut Icon" href="/website/images/logo.gif">
+    <link rel="stylesheet" href="/website/libs/reset.css">
+    <style>
+        html,
+        body {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            color: #333;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h3 {
+            padding-top: 8px;
+            padding-bottom: 20px;
+            text-indent: 1em;
+            line-height: 1.6;
+            border-bottom: 4px solid #ddd;
+            font-size: 1.3rem
+        }
+
+        .list li {
+            position: relative;
+            text-indent: 1em;
+            line-height: 3.733333rem;
+            background: url(/website/images/next-1.png) no-repeat 98% center;
+            background-size: auto 30%;
+        }
+
+        .list li:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 200%;
+            border-bottom: 1px solid #ccc;
+            transform: scale(.5);
+            transform-origin: 0 0;
+            z-index: 999
+        }
+
+        .list li:active {
+            background-color: #fdfdfd;
+        }
+    </style>
+</head>
+
+<body>
+<h3>该大类名称：<%= classify %></h3>
+<div class="list">
+    <% subClassify && subClassify.forEach(function (item) { %>
+    <li><a href="/wechat/classify/subclassify?classify=<%= item.belong %>&subclassify=<%= item.name %>"><%= item.name %></a></li>
+    <% }) %>
+    <%if (!subClassify || !subClassify.length) {%>
+    <li><a>暂无相关数据</a></li>
+    <%}%>
+
+</div>
+<script src="https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
+<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+<script src="https://cdn.bootcss.com/Swiper/4.0.7/js/swiper.min.js"></script>
+<script>
+  $(function () {
+    FastClick.attach(document.body)
+
+    var style = (document.body || document.documentElement).style
+    var animationEnd = (function () {
+      var animEndEventNames = {
+        WebkitAnimation: 'webkitAnimationEnd',
+        animation: 'animationend'
+      }
+      for (var name in animEndEventNames) {
+        if (typeof style[name] === 'string') {
+          return animEndEventNames[name]
+        }
+      }
+    })()
+
+    // 轮播图
+    new Swiper('.banner', {
+      loop: true,
+      autoplay: 8000,
+      pagination: '.swiper-pagination',
+      touchRatio: 0.5
+    })
+  })
+</script>
+</body>
+
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script>
+      var doc = document,
+        docEl = doc.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        recalc = function () {
+          var clientWidth = docEl.clientWidth
+          if (!clientWidth) return
+          docEl.style.fontSize = 12 * (clientWidth / 320) + 'px'
+        }
+      if (!!doc.addEventListener) {
+        window.addEventListener(resizeEvt, recalc, false)
+        doc.addEventListener('DOMContentLoaded', recalc, false)
+      }
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>健康处方</title>
+    <link rel="Shortcut Icon" href="/website/images/logo.gif">
+    <link rel="stylesheet" href="/website/libs/reset.css">
+    <style>
+        html,
+        body {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            color: #333;
+        }
+
+        .list li {
+            display: flex;
+            height: 6.8rem;
+            padding: 1rem .8rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .list li:active {
+            background-color: #eee
+        }
+
+        .list img {
+            width: 6rem;
+            height: 4.8rem;
+        }
+
+        .list div {
+            flex: 1;
+            margin-left: 1rem;
+            overflow: hidden;
+        }
+
+        .list h4 {
+            line-height: 1.6;
+            font-size: 1.3rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .list p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #666;
+        }
+
+        .article-container {
+            position: fixed;
+            left: 100%;
+            top: 0;
+            z-index: 9999;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            padding: 1.0rem;
+            background-color: #fff;
+            transform: translate3d(100%, 0, 0);
+            overflow: auto;
+        }
+        .article-img{
+            display: block;
+            width: 80%!important;
+            margin-left: 10%!important;
+            max-width: 100%!important;
+        }
+        .article-container h1 {
+            font-size: 1.333333rem;
+            font-weight: bold;
+        }
+
+        .article-container .time {
+            margin: 0.833333rem 0;
+            color: #999;
+        }
+
+        .article-container .line {
+            height: 0.833333rem;
+            margin-bottom: 1.6rem;
+            background-size: contain;
+        }
+
+        .line0 {
+            background: url('/website/images/line0.png');
+        }
+
+        .line1 {
+            background: url('/website/images/line1.png');
+        }
+
+        .article-container img {
+            max-width: 60%;
+        }
+
+        .article {
+            line-height: 2;
+            text-indent: 2em;
+            letter-spacing: .2em;
+        }
+
+        .load-data {
+            display: none;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .rightin {
+            -webkit-animation: rightin .3s forwards;
+            animation: rightin .3s forwards;
+        }
+
+        .rightout {
+            -webkit-animation: rightout .3s forwards;
+            animation: rightout .3s forwards;
+        }
+
+        @keyframes rightin {
+            0% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+        }
+
+        @-webkit-keyframes rightin {
+            0% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes rightout {
+            0% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+            100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+        }
+
+        @-webkit-keyframes rightout {
+            0% {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+            }
+            100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div id="wrapper">
+    <ul id="list" class="list">
+    </ul>
+    <div id="loading" class="load-data">
+        加载数据...
+    </div>
+    <div id="notData" class="load-data">
+        没有更多的数据了
+    </div>
+</div>
+
+
+<!-- 文章预览 -->
+<div class="article-container" style="background-color: red">
+    <h1>二甲双胍：让你也可以活到120岁的“长生药”</h1>
+    <div class="time">发布时间：2017-09-10 10:01:12</div>
+    <div class="line"></div>
+    <p class="article">
+        <img class="article-img">
+        文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描
+        述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描述文章描
+        述文章描述文章描述文章描述文章描述文章描述文章描述
+    </p>
+</div>
+<script src="https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
+<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
+<script>
+  $(function () {
+    function Scroll () {
+      this.container = $('#list')
+      this.page = 1
+      this.size = 20
+      this.count = 0
+      this.isEnd = false
+      this.data = []
+      this.timer = null
+    }
+
+    Scroll.prototype.load = function load () {
+      function close () {
+        $('#loading').hide()
+      }
+
+      function start () {
+        $('#loading').show()
+      }
+
+      return {
+        close: close,
+        start: start
+      }
+    }
+    // 获取数据
+    Scroll.prototype.getData = function getData () {
+      if (this.isEnd) {
+        this.data = []
+        this.render()
+        return this
+      }
+      this.load().start()
+      var self = this
+      var search = decodeURIComponent(window.location.search)
+      var pathname = decodeURIComponent(window.location.pathname) + '/article'
+        + search + '&page=' + this.page + '&size=' + this.size
+      !this.isEnd && axios.get(pathname)
+        .then(function (res) {
+          if (res.status === 200) {
+            console.log(res.data)
+            var data = res.data
+            self.data = data.articles
+            self.count = data.count
+            self.isEnd = data.count < (self.page + 1) * self.size
+          }
+          self.load().close()
+          self.render()
+        })
+        .catch(function (err) {
+          self.load().close()
+          console.log(err)
+        })
+      return this
+    }
+    // 渲染到页面
+    Scroll.prototype.render = function render () {
+      var _html = ''
+
+      this.data.forEach(function (item) {
+        _html += '<li id=' + item._id + '>\n' +
+          '            <img src="' + item.image + '">\n' +
+          '            <div>\n' +
+          '                <h4>' + item.title + '</h4>\n' +
+          '                <p>' + $(item.descript).text() + '</p>\n' +
+          '            </div>\n' +
+          '        </li>'
+      })
+      if (this.isEnd || !this.data.length) {
+        $('#notData').show()
+      }
+      this.container.append(_html)
+      return this
+    }
+    // 更改页面 下一页
+    Scroll.prototype.changePage = function changePage () {
+      var isEnd = this.count < (this.page + 1) * this.size
+      if (!isEnd) {
+        this.page++
+        return this
+      }
+      this.isEnd = isEnd
+      return this
+    }
+    // 初始化
+    Scroll.prototype.init = function init () {
+      this.getData()
+      var self = this
+      window.addEventListener('scroll', function () {
+        var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+        if (document.documentElement.scrollHeight + 100 > document.documentElement.clientHeight + scrollTop) {
+          clearTimeout(self.timer)
+          self.timer = setTimeout(function () {
+            self.changePage()
+            self.getData()
+          }, 200)
+        }
+      }, false)
+    }
+    var scroll = new Scroll()
+    scroll.init()
+
+    FastClick.attach(document.body)
+
+    var style = (document.body || document.documentElement).style
+    var animationEnd = (function () {
+      var animEndEventNames = {
+        WebkitAnimation: 'webkitAnimationEnd',
+        animation: 'animationend'
+      }
+      for (var name in animEndEventNames) {
+        if (typeof style[name] === 'string') {
+          return animEndEventNames[name]
+        }
+      }
+    })()
+
+    // 跳转
+    var _className
+    var $article = $('.article-container')
+    $('.list').on('click', 'li', function () {
+      var id = $(this).attr('id')
+      axios.get('/wechat/article/' + id)
+        .then(function (res) {
+          data = res.data
+          console.log(data)
+          _className = 'line' + parseInt(Math.random() * 10) % 2
+          $('.line').addClass(_className)//切换分界线背景
+          $article.css('background', data.backgroundColor)
+          $article.find('h1').text(data.title)
+          $article.find('.time').text(data.date)
+          $article.find('.article-img').attr('src', data.image)
+          $article.find('.article').append(data.descript)
+          $article.removeClass('rightout').addClass('rightin')
+          window.history.pushState(null, '', '')
+        })
+    })
+    window.addEventListener('popstate', function () {
+      $article.removeClass('rightin').addClass('rightout')
+      $('.line').removeClass(_className)
+    }, false)
+  })
+</script>
+</body>
+
+</html>
