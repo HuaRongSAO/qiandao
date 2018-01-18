@@ -3,3 +3,5 @@ node_modules/
 dist/
 project/dist
 project/node_modules/
+database/files/*
+database/mongo/*

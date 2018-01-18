@@ -6,7 +6,7 @@
     "start": "PORT=3000 nodemon ./app/bin/www  --exec babel-node",
     "dist": "gulp dist",
     "server": "PORT=3000 node ./dist/bin/www  ",
-    "deploy":"pm2 ./app/bin/www  "
+    "deploy":"pm2 start ./dist/bin/www --name 'qiandao'"
   },
   "dependencies": {
     "bluebird": "^3.4.7",
