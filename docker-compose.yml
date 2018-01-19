@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   node:
     build: .
@@ -6,15 +6,13 @@ services:
     ports:
       - "80:80"
       - "3000:3000"
-    depends_on:
-      - mongo
-    links:
-      - mongo
+      - "27017:27017"
 
   mongo:
     image: mongo:3
     restart: always
-    ports:
-      - "27017:27017"
     volumes:
-      - '/database/mongo:/data/db'
+      - 'database/mongo:/data/db'
+    depends_on:
+      - node
+    network_mode: "service:node"
