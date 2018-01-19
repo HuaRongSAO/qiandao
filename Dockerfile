@@ -18,8 +18,8 @@ RUN cnpm i && npm run dist
 VOLUME /home/service/dist/public/files
 
 # 容器对外暴露的端口号
-EXPOSE 3000 80
+EXPOSE 3000 80 27017
 
 # 容器启动时执行的命令，类似npm run start
 #CMD ["npm", "start"]
-CMD ["pm2", "start", "dist/bin/www"]
+CMD ["npm", "run", "pro"]
