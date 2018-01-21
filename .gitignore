@@ -3,5 +3,10 @@ node_modules/
 dist/
 project/dist
 project/node_modules/
-database/files/*
-database/mongo/*
+database/mongo/*.wt
+database/mongo/diagnostic.data
+database/mongo/journal
+database/mongo/*.lock
+database/mongo/storage.bson
+database/mongo/WiredTiger
+database/mongo/WiredTiger*

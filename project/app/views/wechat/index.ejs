@@ -123,10 +123,12 @@
     </div>
 </div>
 <div class="list">
+    <% if(!classArray || !classArray.length){ %>
+    <li>暂时没有相关数据</li>
+    <% } %>
     <% classArray&&classArray.forEach(function (item) { %>
     <li><a href="/wechat/classify?classify=<%= item %>"><%= item %></a></li>
     <% }) %>
-
 </div>
 <script src="https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
