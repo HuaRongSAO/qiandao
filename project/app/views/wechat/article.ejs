@@ -87,12 +87,14 @@
             transform: translate3d(100%, 0, 0);
             overflow: auto;
         }
-        .article-img{
+
+        .article-img {
             display: block;
-            width: 80%!important;
-            margin-left: 10%!important;
-            max-width: 100%!important;
+            width: 80% !important;
+            margin-left: 10% !important;
+            max-width: 100% !important;
         }
+
         .article-container h1 {
             font-size: 1.333333rem;
             font-weight: bold;
@@ -279,7 +281,7 @@
 
       this.data.forEach(function (item) {
         _html += '<li id=' + item._id + '>\n' +
-          '            <img src="' + item.image + '">\n' +
+          '            <img src="/website/' + item.image + '">\n' +
           '            <div>\n' +
           '                <h4>' + item.title + '</h4>\n' +
           '                <p>' + $(item.descript).text() + '</p>\n' +
@@ -349,7 +351,7 @@
           $article.css('background', data.backgroundColor)
           $article.find('h1').text(data.title)
           $article.find('.time').text(data.date)
-          $article.find('.article-img').attr('src', data.image)
+          $article.find('.article-img').attr('src', '/website/' + data.image)
           $article.find('.article').append(data.descript)
           $article.removeClass('rightout').addClass('rightin')
           window.history.pushState(null, '', '')
