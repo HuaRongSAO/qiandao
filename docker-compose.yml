@@ -14,7 +14,7 @@ services:
     image: mongo:3
     restart: always
     volumes:
-      - './database/mongo:/data/db'
+      - '/    database/mongo:/data/db'
     depends_on:
       - node
     network_mode: "service:node"
