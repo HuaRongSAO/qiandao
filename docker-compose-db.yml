@@ -1,0 +1,20 @@
+version: '3'
+services:
+  node:
+    build: .
+    restart: always
+    volumes:
+      - './database/files:/home/service/dist/public/files'
+    ports:
+      - "80:80"
+      - "3000:3000"
+      - "27017:27017"
+
+  mongo:
+    image: mongo:3
+    restart: always
+    volumes:
+      - './database/mongo:/data/db'
+    depends_on:
+      - node
+    network_mode: "service:node"
