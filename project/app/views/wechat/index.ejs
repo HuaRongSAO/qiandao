@@ -24,92 +24,117 @@
     <link rel="Shortcut Icon" href="/website/images/logo.gif">
     <link rel="stylesheet" href="/website/libs/reset.css">
     <link href="https://cdn.bootcss.com/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet">
-    <style>
-        html,
-        body {
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
-            padding-top: 13rem;
-            color: #333;
-        }
-
-        li {
-            list-style: none;
-        }
-
-        a {
-            display: block;
-            text-decoration: none;
-            color: #333;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .fix-wrap {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            z-index: 9;
-        }
-
-        .swiper-container {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .banner .swiper-wrapper li {
-            width: 100%;
-            height: 13rem;
-        }
-
-        .banner .swiper-wrapper img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .banner .swiper-pagination {
-            text-align: right;
-        }
-
-        .banner .swiper-pagination-bullet-active {
-            background: #fff
-        }
-
-        .banner .swiper-pagination-bullet {
-            width: .5rem;
-            height: .5rem
-        }
-
-        .list li {
-            position: relative;
-            text-indent: 1em;
-            line-height: 3.733333rem;
-            background: url(/website/images/next-1.png) no-repeat 98% center;
-            background-size: auto 30%;
-        }
-
-        .list li:after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 200%;
-            border-bottom: 1px solid #ccc;
-            transform: scale(.5);
-            transform-origin: 0 0;
-            z-index: 999
-        }
-
-        .list li:active {
-            background-color: #fdfdfd;
-        }
-    </style>
 </head>
+<style>
+    html,
+    body {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        -webkit-overflow-scrolling: touch;
+        -webkit-user-select: none;
+    }
 
+    body {
+        padding-top: 13rem;
+        color: #333;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: #333;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .fix-wrap {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 9;
+    }
+
+    .swiper-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .banner .swiper-wrapper li {
+        width: 100%;
+        height: 13rem;
+    }
+
+    .banner .swiper-wrapper img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .banner .swiper-pagination {
+        text-align: right;
+    }
+
+    .banner .swiper-pagination-bullet-active {
+        background: #fff
+    }
+
+    .banner .swiper-pagination-bullet {
+        width: .5rem;
+        height: .5rem
+    }
+
+    .list {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .list li {
+        position: relative;
+        width: 50%;
+        height: 7rem;
+        background: url(/website/images/class.png) no-repeat center 0.666667rem;
+        background-size: auto 56%;
+    }
+
+    .list li:nth-child(2n):after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 1rem;
+        width: 1px;
+        height: 5rem;
+        background: linear-gradient(to right, #e4e4e4 50%, transparent 50%) no-repeat;
+        background-size: 1px 100%;
+    }
+
+    .list a {
+        -webkit-display: flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -webkit-justify-content: flex-end;
+        justify-content: flex-end;
+        position: absolute;
+        bottom: 0;
+        box-sizing: border-box;
+        vertical-align: bottom;
+        width: 100%;
+        height: 100%;
+        line-height: 2;
+        background: linear-gradient(0deg, #e4e4e4 50%, transparent 50%) no-repeat 0 bottom;
+        background-size: 100% 1px;
+        text-align: center;
+    }
+
+    .list li:active {
+        background-color: #eee;
+    }
+</style>
 <body>
 <div class="fix-wrap">
     <div class="banner swiper-container">
@@ -124,7 +149,7 @@
 </div>
 <div class="list">
     <% if(!classArray || !classArray.length){ %>
-    <li>暂时没有相关数据</li>
+    <div style="text-align: center;width: 100%;padding: 20px 0;">暂时没有相关数据</div>
     <% } %>
     <% classArray&&classArray.forEach(function (item) { %>
     <li><a href="/wechat/classify?classify=<%= item %>"><%= item %></a></li>

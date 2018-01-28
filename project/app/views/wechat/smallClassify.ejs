@@ -82,7 +82,7 @@
 </head>
 
 <body>
-<h3>该大类名称：<%= classify %></h3>
+<h3><%= classify %>:</h3>
 <div class="list">
     <% subClassify && subClassify.forEach(function (item) { %>
     <li><a href="/wechat/classify/subclassify?classify=<%= item.belong %>&subclassify=<%= item.name %>"><%= item.name %></a></li>
